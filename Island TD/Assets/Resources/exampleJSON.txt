@@ -1,5 +1,0 @@
-{
-    "name":"archer",
-    "damage":20,
-    "hp":200
-}
