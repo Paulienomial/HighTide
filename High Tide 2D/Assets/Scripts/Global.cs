@@ -8,6 +8,9 @@ public class Global : MonoBehaviour
     public string gamePhase;// shop, fight etc....
     public GameObject gridPlane;
     public LinkedList<GameObject> defenders;//has warrior scripts attached to them
+    public int shopTier;
+    public int gold;
+    public int unitCap;
 
     void Awake(){
         curr=this;//singleton
@@ -18,6 +21,9 @@ public class Global : MonoBehaviour
     {
         defenders = new LinkedList<GameObject>();
         gamePhase="shop";
+        shopTier=1;
+        gold=10;
+        unitCap=5;
     }
 
     // Update is called once per frame

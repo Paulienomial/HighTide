@@ -23,6 +23,8 @@ public class Warrior : MonoBehaviour
         foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
             if(warrior.name==name){
                 attributes=warrior;
+                gameObject.GetComponent<WarriorRender>().setSprite();
+                return;
             }
         }
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6672912254803306388}
   - component: {fileID: 2132143060979025842}
   - component: {fileID: -199535619608416869}
+  - component: {fileID: -8754230989660033510}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -76,11 +77,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d7c12c146001ac94c9b790e5e04174b5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1e2464a49fcaffe4e9f8bb15b000288d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -103,6 +104,8 @@ MonoBehaviour:
     name: 
     damage: 0
     hp: 0
+    tier: 1
+    price: 3
 --- !u!114 &2132143060979025842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,12 +135,26 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 8.2, y: 8.96}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-8754230989660033510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427604778648480945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99d475d8ce94d2d499ca36858660d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: cf730506729b40047a1a25e695ce0ab6, type: 3}
+  warrior: {fileID: 2427604778648480945}

@@ -11,16 +11,18 @@ public class GridSystem : MonoBehaviour
     public int gridCellSize;
     bool placingPhase;
     GameObject currObject;//object being placed
+    public static GridSystem curr;
+
+
+    void Awake(){
+        curr=this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject d = Instantiate(movable, new Vector3(0f,0f,0f), Quaternion.identity);
-        Global.curr.defenders.AddLast(d);
         Events.curr.onDefenderDrag += snapToGrid; //subscribe observer to subject
         placingPhase=false;
-
-        startPlacingPhase("bounty hunter");
     }
 
     // Update is called once per frame
@@ -32,6 +34,7 @@ public class GridSystem : MonoBehaviour
     }
 
     public void startPlacingPhase(String warriorType){//step 1 when purchasing a unit
+        Debug.Log("Placing: "+warriorType);
         GameObject g = Instantiate(movable, new Vector3(0f,0f,0f), Quaternion.identity);
         g.GetComponent<Warrior>().setWarrior(warriorType);//set g to be a warrior of type warriorType
         if(!placingPhase){
@@ -42,7 +45,8 @@ public class GridSystem : MonoBehaviour
 
     private void clickToPlaceObject(GameObject g){//step 2 when purchasing a unit
         snapToGrid(currObject);
-        if(Input.GetKeyDown(KeyCode.Mouse0)){//place the object
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, gridMask);
+        if(hit.collider!=null && Input.GetKeyDown(KeyCode.Mouse0)){//place the object
             Global.curr.defenders.AddLast(g);
             placingPhase=false;
         }
