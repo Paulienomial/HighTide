@@ -5,6 +5,7 @@ using UnityEngine;
 public class Warrior : MonoBehaviour
 {
     public WarriorAttributes.attr attributes;
+    public Vector3 coordinates;
 
     // Start is called before the first frame update
     void Start()

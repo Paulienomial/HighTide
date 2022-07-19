@@ -668,12 +668,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021848083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1021848086
 BoxCollider2D:
@@ -851,7 +851,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1455674896
 MonoBehaviour:
@@ -915,6 +915,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   gridCellSize: 1
+  placingPhase: 0
+  tileHighlight: {fileID: 1339533664829971683, guid: b3ea4af02fbff9445965917b64abbb9f, type: 3}
 --- !u!114 &1455674900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1393,7 +1395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2427604778648480947, guid: a12649c767efae841a07f5d85fa8567f, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2427604778648480947, guid: a12649c767efae841a07f5d85fa8567f, type: 3}
       propertyPath: m_LocalScale.x

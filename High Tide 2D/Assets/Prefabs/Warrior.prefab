@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2132143060979025842}
   - component: {fileID: -199535619608416869}
   - component: {fileID: -8754230989660033510}
+  - component: {fileID: 7475068606984705221}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 1e2464a49fcaffe4e9f8bb15b000288d, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: b9b7eadcf5d08334089f1424f0d7f444, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 8.2, y: 8.96}
+    oldSize: {x: 1.18, y: 1.18}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
@@ -158,3 +159,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: cf730506729b40047a1a25e695ce0ab6, type: 3}
   warrior: {fileID: 2427604778648480945}
+--- !u!95 &7475068606984705221
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427604778648480945}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d6eb155519ec35d47bb2e39f785e6a84, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

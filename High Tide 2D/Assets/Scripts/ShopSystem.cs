@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using UnityEngine.UI;
 
 public class ShopSystem : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class ShopSystem : MonoBehaviour
             shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
         }
         foreach(WarriorAttributes.attr warrior in shopUnits){
-            Debug.Log(warrior.name);
+            //Debug.Log(warrior.name);
         }
     }
 
@@ -63,6 +64,13 @@ public class ShopSystem : MonoBehaviour
             //change card position
             GameObject currCard = (GameObject)cards[i];
             currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-800f+300f*i,0f,0f);
+
+
+            //Preview image
+            GameObject preview = currCard.transform.Find("Preview").gameObject;
+            string path="Art/Warriors/"+shopUnits.ElementAt(i).name;
+            Sprite mySprite = Resources.Load<Sprite>(path);
+            preview.GetComponent<Image>().sprite=mySprite;
 
             //Name
             GameObject nameText = currCard.transform.Find("Name").gameObject;

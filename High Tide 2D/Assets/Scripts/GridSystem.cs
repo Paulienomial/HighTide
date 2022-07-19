@@ -9,9 +9,13 @@ public class GridSystem : MonoBehaviour
     public GameObject grid;
     public LayerMask gridMask;
     public int gridCellSize;
-    bool placingPhase;
+    public bool placingPhase;
     GameObject currObject;//object being placed
     public static GridSystem curr;
+    public GameObject tileHighlight;
+    GameObject card;
+    bool draggingPhase;
+    Vector3 initPos;
 
 
     void Awake(){
@@ -21,7 +25,11 @@ public class GridSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Events.curr.onDefenderDrag += snapToGrid; //subscribe observer to subject
+        draggingPhase=false;
+        tileHighlight = Instantiate(tileHighlight, new Vector3(20f, 20f, 20f), Quaternion.identity);
+        tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
+        tileHighlight.SetActive(false);
+        Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
         placingPhase=false;
     }
 
@@ -31,25 +39,69 @@ public class GridSystem : MonoBehaviour
         if(placingPhase){
             clickToPlaceObject(currObject);
         }
+        if(Input.GetKeyUp(KeyCode.Mouse0)){
+            if(draggingPhase==true){
+                if(!validPos(currObject)){//if released at invalid pos
+                    currObject.transform.position=initPos;
+                }else{
+                    currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
+                    Debug.Log( "Placed at x: "+currObject.GetComponent<Warrior>().coordinates.x + ", y:" + currObject.GetComponent<Warrior>().coordinates.y);
+                }
+                tileHighlight.SetActive(false);
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=2;
+            }
+            draggingPhase=false;
+        }
     }
 
-    public void startPlacingPhase(String warriorType){//step 1 when purchasing a unit
-        Debug.Log("Placing: "+warriorType);
-        GameObject g = Instantiate(movable, new Vector3(0f,0f,0f), Quaternion.identity);
+    public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
+        GameObject g = Instantiate(movable, calcGridSpot( new Vector3(0f,0f,0f)), Quaternion.identity);
+        g.GetComponent<SpriteRenderer>().sortingOrder=10;
+        tileHighlight.transform.position = g.transform.position;
+        tileHighlight.SetActive(true);
         g.GetComponent<Warrior>().setWarrior(warriorType);//set g to be a warrior of type warriorType
         if(!placingPhase){
             currObject=g;
+            card=c;
             placingPhase=true;
         }
     }
 
     private void clickToPlaceObject(GameObject g){//step 2 when purchasing a unit
         snapToGrid(currObject);
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, gridMask);
+        /*RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, gridMask);
         if(hit.collider!=null && Input.GetKeyDown(KeyCode.Mouse0)){//place the object
             Global.curr.defenders.AddLast(g);
+            tileHighlight.SetActive(false);
+            Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+            placingPhase=false;
+        }*/
+        if( Input.GetKeyDown(KeyCode.Mouse0) ){
+            if(validPos(currObject)){
+                //PURCHASE UNIT
+                g.GetComponent<SpriteRenderer>().sortingOrder=2;
+                g.GetComponent<Warrior>().coordinates = g.transform.position;
+                Debug.Log( "Placed at x: "+g.GetComponent<Warrior>().coordinates.x + ", y:" + g.GetComponent<Warrior>().coordinates.y);
+                Global.curr.defenders.AddLast(g);
+                Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+            }else{
+                Destroy(g);
+                card.gameObject.SetActive(true);
+            }
+            tileHighlight.SetActive(false);
             placingPhase=false;
         }
+    }
+
+    private void dragObject(GameObject g){
+        currObject=g;
+        tileHighlight.SetActive(true);
+        if(draggingPhase==false){
+            draggingPhase=true;
+            initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
+            currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+        }
+        snapToGrid(g);
     }
 
     private void snapToGrid(GameObject g){
@@ -58,18 +110,32 @@ public class GridSystem : MonoBehaviour
         if(hit.collider!=null){//if the mouse is over the grid
             //STEP 1: calc grid spot, based on mouse pos
             Vector3 gridSpot = calcGridSpot(getMousePos());
+            tileHighlight.transform.position = gridSpot;
+            g.transform.position = gridSpot;
             
-            //STEP 2: if another unit already occupoes this grid spot, then don't go there
+            //STEP 2: if another unit already occupies this grid spot, then unable to place
             foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
-                if( gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){
+                if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//invalid spot
+                    tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
                     return;
                 }
             }
+            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
 
             //STEP 3: move to grid spot
-            g.transform.position = gridSpot;
+            
+        }
+    }
+
+    private bool validPos(GameObject g){
+        Vector3 gridSpot = g.transform.position;
+        foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
+            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//invalid spot
+                return false;//invalid grid spot
             }
         }
+        return true;
+    }
 
     private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
         pos.x = calcGridSpotAxis(pos.x);
@@ -87,5 +153,9 @@ public class GridSystem : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(worldPoint);
         mousePos.z = 0f;
         return mousePos;
+    }
+
+    private void highlight(GameObject g){
+        tileHighlight.SetActive(true);
     }
 }

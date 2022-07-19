@@ -21,8 +21,7 @@ public class ShopCard : MonoBehaviour
 
     public void purchaseUnit(){
         if(Global.curr.gold >= warrior.price && Global.curr.defenders.Count<Global.curr.unitCap){
-            Global.curr.gold -= warrior.price;
-            GridSystem.curr.startPlacingPhase(warrior.name);
+            GridSystem.curr.startPlacingPhase(warrior.name, card);
             card.SetActive(false);
             shop.SetActive(false);
         }
