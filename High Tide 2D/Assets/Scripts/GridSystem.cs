@@ -48,14 +48,18 @@ public class GridSystem : MonoBehaviour
                     Debug.Log( "Placed at x: "+currObject.GetComponent<Warrior>().coordinates.x + ", y:" + currObject.GetComponent<Warrior>().coordinates.y);
                 }
                 tileHighlight.SetActive(false);
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=2;
+                grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=3;
             }
             draggingPhase=false;
+        }
+        if(currObject && !validPos(currObject)){
+            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
         }
     }
 
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
-        GameObject g = Instantiate(movable, calcGridSpot( new Vector3(0f,0f,0f)), Quaternion.identity);
+        GameObject g = Instantiate(movable, calcGridSpot( getMousePos() ), Quaternion.identity);
         g.GetComponent<SpriteRenderer>().sortingOrder=10;
         tileHighlight.transform.position = g.transform.position;
         tileHighlight.SetActive(true);
@@ -79,7 +83,7 @@ public class GridSystem : MonoBehaviour
         if( Input.GetKeyDown(KeyCode.Mouse0) ){
             if(validPos(currObject)){
                 //PURCHASE UNIT
-                g.GetComponent<SpriteRenderer>().sortingOrder=2;
+                g.GetComponent<SpriteRenderer>().sortingOrder=3;
                 g.GetComponent<Warrior>().coordinates = g.transform.position;
                 Debug.Log( "Placed at x: "+g.GetComponent<Warrior>().coordinates.x + ", y:" + g.GetComponent<Warrior>().coordinates.y);
                 Global.curr.defenders.AddLast(g);
@@ -89,6 +93,7 @@ public class GridSystem : MonoBehaviour
                 card.gameObject.SetActive(true);
             }
             tileHighlight.SetActive(false);
+            grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
             placingPhase=false;
         }
     }
@@ -105,8 +110,9 @@ public class GridSystem : MonoBehaviour
     }
 
     private void snapToGrid(GameObject g){
+        grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,80,240,120));//transparent blue
+        
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, gridMask);
-
         if(hit.collider!=null){//if the mouse is over the grid
             //STEP 1: calc grid spot, based on mouse pos
             Vector3 gridSpot = calcGridSpot(getMousePos());
@@ -116,7 +122,6 @@ public class GridSystem : MonoBehaviour
             //STEP 2: if another unit already occupies this grid spot, then unable to place
             foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
                 if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//invalid spot
-                    tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
                     return;
                 }
             }
@@ -137,11 +142,11 @@ public class GridSystem : MonoBehaviour
         return true;
     }
 
-    private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
+    /*private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
         pos.x = calcGridSpotAxis(pos.x);
         pos.y = calcGridSpotAxis(pos.y);
         return pos;
-    }
+    }*/
 
     private float calcGridSpotAxis(float f){//return the closest grid spot for a value on the x or y axis
         return f-((f%gridCellSize+gridCellSize)%gridCellSize) + gridCellSize/2f;
@@ -157,5 +162,28 @@ public class GridSystem : MonoBehaviour
 
     private void highlight(GameObject g){
         tileHighlight.SetActive(true);
+    }
+
+    private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
+        float gridX = grid.transform.position.x;
+        float gridWidth = grid.GetComponent<SpriteRenderer>().bounds.size.x;
+        float leftOfGrid = gridX - gridWidth/2f;
+        if(pos.x<leftOfGrid){//if x pos is to the left of grid
+        Debug.Log("Left of grid");
+            pos.x = leftOfGrid+gridCellSize/2f;
+            pos.y = calcGridSpotAxis(pos.y);
+            return pos;
+        }
+
+        float rightOfGrid = gridX + gridWidth/2f;
+        if(pos.x>rightOfGrid){//if x pos is to the left of grid
+            pos.x = rightOfGrid-gridCellSize/2f;
+            pos.y = calcGridSpotAxis(pos.y);
+            return pos;
+        }
+
+        pos.x = calcGridSpotAxis(pos.x);
+        pos.y = calcGridSpotAxis(pos.y);
+        return pos;
     }
 }
