@@ -51,7 +51,7 @@ public class ShopSystem : MonoBehaviour
 
     public void fillShopSelection(int shopTier){
         foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
-            if(warrior.tier<=shopTier){
+            if(warrior.tier<=shopTier && warrior.isFriendly){
                 shopSelection.Add(warrior);
             }
         }

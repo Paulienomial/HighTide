@@ -8,9 +8,13 @@ public class Global : MonoBehaviour
     public string gamePhase;// shop, fight etc....
     public GameObject gridPlane;
     public LinkedList<GameObject> defenders;//has warrior scripts attached to them
+    public LinkedList<GameObject> enemies;//Dynamic list of enemies currently on the battlefield
     public int shopTier;
     public int gold;
     public int unitCap;
+    public int waveNum = 1;
+    public int enemyWaveDeathCount = 1;
+    public bool waveStart = false;
 
     void Awake(){
         curr=this;//singleton
@@ -20,10 +24,12 @@ public class Global : MonoBehaviour
     void Start()
     {
         defenders = new LinkedList<GameObject>();
+        enemies = new LinkedList<GameObject>();
         gamePhase="shop";
         shopTier=1;
         gold=10;
         unitCap=5;
+        waveNum = 1;
     }
 
     // Update is called once per frame
