@@ -291,7 +291,6 @@ MonoBehaviour:
     price: 3
   coordinates: {x: 0, y: 0, z: 0}
   maxHealth: 0
-  hpBar: {fileID: 3328730305338665381}
 --- !u!114 &2132143060979025842
 MonoBehaviour:
   m_ObjectHideFlags: 0

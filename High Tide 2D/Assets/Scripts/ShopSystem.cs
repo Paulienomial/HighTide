@@ -14,6 +14,7 @@ public class ShopSystem : MonoBehaviour
     public LinkedList<WarriorAttributes.attr> shopUnits;
     public ArrayList cards;//will be type GameObject
     public static ShopSystem curr;
+    public bool shopAvailable;
 
     void Awake(){
         curr=this;
@@ -23,6 +24,7 @@ public class ShopSystem : MonoBehaviour
     void Start()
     {
         amountOfUnits=5;
+        shopAvailable=true;
 
         shopSelection = new ArrayList();
         shopUnits = new LinkedList<WarriorAttributes.attr>();
@@ -78,7 +80,7 @@ public class ShopSystem : MonoBehaviour
             if(i>2){
                 k=2;
             }
-            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-740f+272.5f*((i+1)%2), 242f-244.5f*k,0f);
+            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-125f+272.5f*((i+1)%2), 242f-244.5f*k,0f);
 
             //Background
             GameObject backgroundUpper = currCard.transform.Find("BackgroundUpper").gameObject;
@@ -125,10 +127,12 @@ public class ShopSystem : MonoBehaviour
     }
 
     public void showHideShop(){
-        if(shop.activeSelf==false){
-            shop.SetActive(true);
-        }else{
-            shop.SetActive(false);
+        if(shopAvailable){
+            if(shop.activeSelf==false){
+                shop.SetActive(true);
+            }else{
+                shop.SetActive(false);
+            }
         }
     }
 }

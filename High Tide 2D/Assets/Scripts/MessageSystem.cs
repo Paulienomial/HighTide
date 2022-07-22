@@ -17,8 +17,11 @@ public class MessageSystem : MonoBehaviour
     public int step=0;
     public GameObject goldDisplay;
     public GameObject playButton;
+    public GameObject square;
+    public GameObject scroll;
     void Start()
     {
+        //HighlightElement.curr.arrow(square);
         playTutorial();
     }
 
@@ -29,6 +32,7 @@ public class MessageSystem : MonoBehaviour
     }
 
     public void playTutorial(){
+        ShopSystem.curr.shopAvailable=false;
         Global.curr.gold=3;
         messages = new string[8] {
             "WELCOME TO HIGH TIDE",
@@ -41,25 +45,27 @@ public class MessageSystem : MonoBehaviour
             "Click on the play button to start your first fight"
         };
         showMessage(true);
+        HighlightElement.curr.arrow(scroll);
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener( delegate{ nextStep(); } );
     }
     public void nextStep(){
         step++;
-        Debug.Log("Step: "+step);
         if(step==1){//"Your goal is to build an army that will protect this village"
             showMessage();//show the message for the current step in the tutorial
         }
 
         if(step==2){//"3 available gold"
-            HighlightElement.curr.highlight(goldDisplay);
+            HighlightElement.curr.unHighlight();
+            HighlightElement.curr.arrow(goldDisplay);
             showMessage();
         }
 
         if(step==3){//"open shop"
+            ShopSystem.curr.shopAvailable=true;
             showMessage(false);
             HighlightElement.curr.unHighlight();
-            HighlightElement.curr.highlight(shopBtn);
+            HighlightElement.curr.arrow(shopBtn);
             shopBtn.GetComponent<Button>().onClick.AddListener( ()=>{
                 nextStep();
             } );
@@ -68,6 +74,8 @@ public class MessageSystem : MonoBehaviour
         if(step==4){//"purchase and place a unit from the shop"
             showMessage(false);
             HighlightElement.curr.unHighlight();
+            shopBtn.GetComponent<Button>().onClick.RemoveAllListeners();
+            //HighlightElement.curr.arrow(shop);
             Events.curr.onPurchaseDefender += ()=>{
                 if(step==4){
                     nextStep();
@@ -77,24 +85,32 @@ public class MessageSystem : MonoBehaviour
 
         if(step==5){//"click and drag a unit to move it around"
             showMessage(false);
+            //HighlightElement.curr.unHighlight();
             Events.curr.onDropDefender += ()=>{
-                nextStep();
+                if(step==5){
+                    nextStep();
+                }
             };
         }
 
         if(step==6){//"click and drag a unit to move it around"
             showMessage(false);
             Events.curr.onDropDefender += ()=>{
-                nextStep();
+                if(step==6){
+                    nextStep();
+                }
             };
         }
 
         if(step==7){
-            HighlightElement.curr.highlight(playButton);
+            HighlightElement.curr.arrow(playButton);
             showMessage(false);
             playButton.GetComponent<Button>().onClick.AddListener( ()=>{
-                HighlightElement.curr.unHighlight();
-                messageBox.SetActive(false);
+                if(step==7){
+                    HighlightElement.curr.unHighlight();
+                    messageBox.SetActive(false);
+                    step++;
+                }
             } );
         }
     }
@@ -129,7 +145,7 @@ public class MessageSystem : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener( delegate{ hideMessage(); } );
         if(highlight!=null){
-            HighlightElement.curr.highlight(highlight);
+            HighlightElement.curr.arrow(highlight);
         }
         if(func!=null){
             button.onClick.AddListener( delegate{ func(); } );
@@ -142,13 +158,13 @@ public class MessageSystem : MonoBehaviour
 
     public void explainShopBtn(){
         displayMessage("To purchase a unit, open the shop","NEXT",explainShop);
-        HighlightElement.curr.highlight(shopBtn);
+        HighlightElement.curr.arrow(shopBtn);
     }
 
     public void explainShop(){
         HighlightElement.curr.unHighlight();
         displayMessage("Purchase any unit and place it on the grid", "NEXT");
-        HighlightElement.curr.highlight(shop);
+        HighlightElement.curr.arrow(shop);
     }
 
     public void hideMessage(){
