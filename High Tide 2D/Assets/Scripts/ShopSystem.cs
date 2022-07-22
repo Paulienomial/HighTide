@@ -13,6 +13,11 @@ public class ShopSystem : MonoBehaviour
     ArrayList shopSelection;//stores the selection of possible units from curr shop tier
     public LinkedList<WarriorAttributes.attr> shopUnits;
     public ArrayList cards;//will be type GameObject
+    public static ShopSystem curr;
+
+    void Awake(){
+        curr=this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -63,12 +68,33 @@ public class ShopSystem : MonoBehaviour
             cards.Add( Instantiate(unitCard, shop.transform) );
             //change card position
             GameObject currCard = (GameObject)cards[i];
-            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-800f+300f*i,0f,0f);
+            int k=0;
+            if(i==0){
+                k=0;
+            }
+            if(i>0 && i<=2){
+                k=1;
+            }
+            if(i>2){
+                k=2;
+            }
+            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-740f+272.5f*((i+1)%2), 242f-244.5f*k,0f);
 
+            //Background
+            GameObject backgroundUpper = currCard.transform.Find("BackgroundUpper").gameObject;
+            GameObject backgroundLower = currCard.transform.Find("BackgroundLower").gameObject;
+            
+            if(i<=1 || i==4){
+                backgroundUpper.GetComponent<Image>().color = new Color32(178,192,212,255);//dark grey cool
+                backgroundLower.GetComponent<Image>().color = new Color32(218,232,247,255);//light grey cool
+            }else{
+                backgroundUpper.GetComponent<Image>().color = new Color32(255,255,255,255);//white
+                backgroundLower.GetComponent<Image>().color = new Color32(218,225,229,255);//light grey neutral
+            }
 
             //Preview image
             GameObject preview = currCard.transform.Find("Preview").gameObject;
-            string path="Art/Warriors/"+shopUnits.ElementAt(i).name;
+            string path="Art/Warriors/preview"+shopUnits.ElementAt(i).name;
             Sprite mySprite = Resources.Load<Sprite>(path);
             preview.GetComponent<Image>().sprite=mySprite;
 
@@ -78,7 +104,7 @@ public class ShopSystem : MonoBehaviour
 
             //Damage
             GameObject damageText = currCard.transform.Find("Damage").gameObject;
-            damageText.GetComponent<TextMeshProUGUI>().text = "Damage: " + shopUnits.ElementAt(i).damage.ToString();
+            damageText.GetComponent<TextMeshProUGUI>().text = "DMG: " + shopUnits.ElementAt(i).damage.ToString();
 
             //HP
             GameObject hpText = currCard.transform.Find("HP").gameObject;
@@ -94,7 +120,7 @@ public class ShopSystem : MonoBehaviour
             buyButton.GetComponent<ShopCard>().card=currCard;
             buyButton.GetComponent<ShopCard>().shop=shop;
             GameObject buyText = buyButton.transform.Find("BuyText").gameObject;
-            buyText.GetComponent<TextMeshProUGUI>().text = "$ " + shopUnits.ElementAt(i).price.ToString();
+            buyText.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).price.ToString();
         }
     }
 

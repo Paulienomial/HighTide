@@ -46,6 +46,7 @@ public class GridSystem : MonoBehaviour
                 }else{
                     currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
                     Debug.Log( "Placed at x: "+currObject.GetComponent<Warrior>().coordinates.x + ", y:" + currObject.GetComponent<Warrior>().coordinates.y);
+                    Events.curr.dropDefender();//trigger event
                 }
                 tileHighlight.SetActive(false);
                 grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
@@ -88,25 +89,28 @@ public class GridSystem : MonoBehaviour
                 Debug.Log( "Placed at x: "+g.GetComponent<Warrior>().coordinates.x + ", y:" + g.GetComponent<Warrior>().coordinates.y);
                 Global.curr.defenders.AddLast(g);
                 Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+                Events.curr.purchaseDefender();//trigger event
             }else{
                 Destroy(g);
                 card.gameObject.SetActive(true);
             }
-            tileHighlight.SetActive(false);
-            grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+            //tileHighlight.SetActive(false);
+            //grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
             placingPhase=false;
         }
     }
 
     private void dragObject(GameObject g){
-        currObject=g;
-        tileHighlight.SetActive(true);
-        if(draggingPhase==false){
-            draggingPhase=true;
-            initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
-            currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+        if(Global.curr.gamePhase=="shop"){
+            currObject=g;
+            tileHighlight.SetActive(true);
+            if(draggingPhase==false){
+                draggingPhase=true;
+                initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+            }
+            snapToGrid(g);
         }
-        snapToGrid(g);
     }
 
     private void snapToGrid(GameObject g){

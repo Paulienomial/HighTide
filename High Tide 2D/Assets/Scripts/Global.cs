@@ -9,7 +9,7 @@ public class Global : MonoBehaviour
     public GameObject gridPlane;
     public LinkedList<GameObject> defenders;//has warrior scripts attached to them
     public int shopTier;
-    public int gold;
+    public int gold=10;
     public int unitCap;
 
     void Awake(){
@@ -22,7 +22,6 @@ public class Global : MonoBehaviour
         defenders = new LinkedList<GameObject>();
         gamePhase="shop";
         shopTier=1;
-        gold=10;
         unitCap=5;
     }
 
