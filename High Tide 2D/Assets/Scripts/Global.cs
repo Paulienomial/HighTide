@@ -37,4 +37,9 @@ public class Global : MonoBehaviour
     {
         
     }
+
+    public void resetShop()
+    {
+        GetComponent<ShopSystem>().createShop();
+    }
 }

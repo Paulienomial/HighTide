@@ -10,6 +10,8 @@ public class FightManager : MonoBehaviour
     public int damage = 10;
     [SerializeField]
     GameObject city;
+    [SerializeField]
+    GameObject projectile;
     private GameObject target = null;
     LinkedList<GameObject> targetList;
     public bool inCombat = false;
@@ -194,7 +196,8 @@ public class FightManager : MonoBehaviour
             {
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
-                    doDamage();
+                    fireProjectile();
+                    //doDamage();
                     
                 }
                 else
@@ -208,7 +211,8 @@ public class FightManager : MonoBehaviour
                 {
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
-                        doDamage();
+                        fireProjectile();
+                        //doDamage();
                     }
                     else
                     {
@@ -228,6 +232,15 @@ public class FightManager : MonoBehaviour
             inCombat = false;
         }
         
+    }
+
+    void fireProjectile()
+    {
+        if(target != null && isAlive)
+        {
+            GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+            newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
+        }
     }
 
     bool waveComplete()
@@ -304,6 +317,7 @@ public class FightManager : MonoBehaviour
         Global.curr.waveStart = false;
         Global.curr.waveNum++;
         Global.curr.gamePhase = "shop";
+        Global.curr.resetShop();
         foreach (GameObject current in Global.curr.defenders)
         {
             current.transform.position = current.GetComponent<Warrior>().coordinates;
@@ -311,6 +325,5 @@ public class FightManager : MonoBehaviour
             current.GetComponent<FightManager>().isAlive = true;
 
         }
-        //GetComponent<ShopSystem>().createShop();
     }
 }

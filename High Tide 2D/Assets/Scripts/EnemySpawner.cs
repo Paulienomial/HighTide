@@ -37,11 +37,14 @@ public class EnemySpawner : MonoBehaviour
 
     public void startFight()
     {
-        maxEnemies = 5 * Global.curr.waveNum;
-        spawnCount = 0;
-        Global.curr.enemyWaveDeathCount = maxEnemies;
-        Global.curr.waveStart = true;
-        startCoroutines();
+        if (!Global.curr.waveStart)
+        {
+            maxEnemies = 5 * Global.curr.waveNum;
+            spawnCount = 0;
+            Global.curr.enemyWaveDeathCount = maxEnemies;
+            Global.curr.waveStart = true;
+            startCoroutines();
+        }
     }
 
     public void startCoroutines()
