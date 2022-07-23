@@ -16,6 +16,7 @@ public class GridSystem : MonoBehaviour
     GameObject card;
     bool draggingPhase;
     Vector3 initPos;
+    public GameObject shopButton;
 
 
     void Awake(){
@@ -36,6 +37,10 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.G)){
+            Global.curr.gold++;
+        }
+
         if(placingPhase){
             clickToPlaceObject(currObject);
         }
@@ -81,6 +86,7 @@ public class GridSystem : MonoBehaviour
             Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
             placingPhase=false;
         }*/
+
         if( Input.GetKeyDown(KeyCode.Mouse0) ){
             if(validPos(currObject)){
                 //PURCHASE UNIT
@@ -94,7 +100,7 @@ public class GridSystem : MonoBehaviour
                 Destroy(g);
                 card.gameObject.SetActive(true);
             }
-            //tileHighlight.SetActive(false);
+            tileHighlight.SetActive(false);
             //grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
             placingPhase=false;
         }
@@ -173,7 +179,6 @@ public class GridSystem : MonoBehaviour
         float gridWidth = grid.GetComponent<SpriteRenderer>().bounds.size.x;
         float leftOfGrid = gridX - gridWidth/2f;
         if(pos.x<leftOfGrid){//if x pos is to the left of grid
-        Debug.Log("Left of grid");
             pos.x = leftOfGrid+gridCellSize/2f;
             pos.y = calcGridSpotAxis(pos.y);
             return pos;

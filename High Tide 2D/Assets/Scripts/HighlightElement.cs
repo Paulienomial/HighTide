@@ -61,7 +61,6 @@ public class HighlightElement : MonoBehaviour
             float x = screenPoint.x;
             x += arrowAnimation.GetComponent<RectTransform>().rect.width/2f;
             x += 8f;
-            Debug.Log("screenpoint: " + screenPoint);
             float y = screenPoint.y;
             arrowAnimation.GetComponent<RectTransform>().localPosition = new Vector3(x-Screen.width/2f,y-Screen.height/2f,0);
         }
@@ -92,7 +91,6 @@ public class HighlightElement : MonoBehaviour
             float x = screenPoint.x;
             x += arrowAnimation.GetComponent<RectTransform>().rect.width/2f;
             x += 8f;
-            Debug.Log("screenpoint: " + screenPoint);
             float y = screenPoint.y;
             arrowAnimation.GetComponent<RectTransform>().localPosition = new Vector3(x-Screen.width/2f,y-Screen.height/2f,0);
         }

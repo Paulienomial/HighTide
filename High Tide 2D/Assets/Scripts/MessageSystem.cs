@@ -22,7 +22,7 @@ public class MessageSystem : MonoBehaviour
     void Start()
     {
         //HighlightElement.curr.arrow(square);
-        playTutorial();
+        //playTutorial();
     }
 
     // Update is called once per frame

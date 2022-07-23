@@ -11,8 +11,8 @@ public class ShopSystem : MonoBehaviour
     public GameObject unitCard;
     int amountOfUnits;
     ArrayList shopSelection;//stores the selection of possible units from curr shop tier
-    public LinkedList<WarriorAttributes.attr> shopUnits;
-    public ArrayList cards;//will be type GameObject
+    public LinkedList<WarriorAttributes.attr> shopUnits;//the 5 randomm units in the shop
+    public ArrayList cards;//5 cards that display shopUnits
     public static ShopSystem curr;
     public bool shopAvailable;
 
@@ -36,7 +36,9 @@ public class ShopSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.X)){
+            createShop();
+        }
     }
 
     public void createShop(){
@@ -52,11 +54,12 @@ public class ShopSystem : MonoBehaviour
             shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
         }
         foreach(WarriorAttributes.attr warrior in shopUnits){
-            //Debug.Log(warrior.name);
+            Debug.Log(warrior.name);
         }
     }
 
     public void fillShopSelection(int shopTier){
+        shopSelection.Clear();
         foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
             if(warrior.tier<=shopTier){
                 shopSelection.Add(warrior);
@@ -65,6 +68,12 @@ public class ShopSystem : MonoBehaviour
     }
 
     public void createCards(){
+        foreach(GameObject card in cards){//destroy prev cards
+            Destroy(card);
+        }
+        cards.Clear();
+
+        //create cards from shopUnits
         for(int i=0; i<amountOfUnits; i++){
             //instantiate a unitCard as a child of the shop
             cards.Add( Instantiate(unitCard, shop.transform) );
