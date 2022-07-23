@@ -325,5 +325,6 @@ public class FightManager : MonoBehaviour
             current.GetComponent<FightManager>().isAlive = true;
 
         }
+        Global.curr.gold+=10;
     }
 }

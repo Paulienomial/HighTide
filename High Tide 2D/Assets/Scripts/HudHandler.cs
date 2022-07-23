@@ -17,7 +17,7 @@ public class HudHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        pop.text = "Population size: "+global.defenders.Count.ToString()+"/"+global.unitCap;
-        gold.text = "Gold: $"+global.gold.ToString();
+        pop.text = global.defenders.Count.ToString()+"/"+global.unitCap;
+        gold.text = global.gold.ToString();
     }
 }
