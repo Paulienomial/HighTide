@@ -17,4 +17,18 @@ public class Events : MonoBehaviour
             onDefenderDrag(g);//invoke
         }
     }
+
+    public event Action onPurchaseDefender;
+    public void purchaseDefender(){
+        if(onPurchaseDefender!=null){
+            onPurchaseDefender();
+        }
+    }
+
+    public event Action onDropDefender;
+    public void dropDefender(){
+        if(onDropDefender!=null){
+            onDropDefender();
+        }
+    }
 }
