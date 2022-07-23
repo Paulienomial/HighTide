@@ -12,5 +12,7 @@ public class WarriorAttributes : MonoBehaviour
         public int hp=300;
         public int tier=1;
         public int price=3;
+        public bool isFriendly = true;
+        public bool isRanged = false;
     }
 }
