@@ -45,7 +45,7 @@ public class HighlightElement : MonoBehaviour
         if(element.GetComponent<RectTransform>() != null){//if ui elem
             //darken
             darken.SetActive(true);
-            element.transform.parent = top.transform;//put element at top
+            element.transform.SetParent(top.transform);//put element at top
 
             //arrow animation
             float x = element.GetComponent<RectTransform>().localPosition.x;
@@ -75,7 +75,7 @@ public class HighlightElement : MonoBehaviour
         if(element.GetComponent<RectTransform>() != null){//if ui elem
             //darken
             //darken.SetActive(true);
-            element.transform.parent = top.transform;//put element at top
+            element.transform.SetParent(top.transform);//put element at top
 
             //arrow animation
             float x = element.GetComponent<RectTransform>().localPosition.x;
@@ -99,7 +99,7 @@ public class HighlightElement : MonoBehaviour
     public void unHighlight(){
         darken.SetActive(false);
         arrowAnimation.SetActive(false);
-        element.transform.parent = initParent;
+        element.transform.SetParent(initParent);
         element.transform.SetSiblingIndex(initSiblingIndex);
     }
 }
