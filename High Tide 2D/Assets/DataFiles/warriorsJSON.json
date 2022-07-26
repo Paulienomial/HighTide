@@ -11,14 +11,14 @@
       },
       {
           "name": "Archer",
-          "damage": 30,
+          "damage": 40,
           "hp": 200,
           "isRanged": true
       },
         {
           "name": "Lizardman",
-          "damage": 50,
-          "hp": 300,
+          "damage": 30,
+          "hp": 200,
           "isFriendly": false
         }
     ]

@@ -18,7 +18,7 @@ public class ProjectileMover : MonoBehaviour
     {
         if (startMoving)
         {
-            if(target != null)
+            if(target != null && shooter.GetComponent<FightManager>().isAlive)
             {
                 transform.right = target.transform.position - transform.position;
                 transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);

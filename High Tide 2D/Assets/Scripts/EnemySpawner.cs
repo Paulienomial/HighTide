@@ -38,7 +38,14 @@ public class EnemySpawner : MonoBehaviour
     {
         if (!Global.curr.waveStart)
         {
-            maxEnemies = 5 * Global.curr.waveNum;
+            if(Global.curr.waveNum == 1)
+            {
+                maxEnemies = 2;
+            }
+            else
+            {
+                maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
+            }
             spawnCount = 0;
             Global.curr.enemyWaveDeathCount = maxEnemies;
             Global.curr.waveStart = true;
