@@ -334,7 +334,7 @@ public class FightManager : MonoBehaviour
             current.GetComponent<FightManager>().isAlive = true;
             current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
             current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
-
+            current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
 
         }
         Global.curr.gold+=10;

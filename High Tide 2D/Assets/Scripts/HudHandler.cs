@@ -20,7 +20,7 @@ public class HudHandler : MonoBehaviour
     void Update()
     {
         waveNum.text = "WAVE "+Global.curr.waveNum.ToString();
-        //TODO: show city lives
+        lives.text = global.CityHealth.ToString();
         pop.text = global.defenders.Count.ToString()+"/"+global.unitCap;
         gold.text = global.gold.ToString();
     }

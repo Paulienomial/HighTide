@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     private int spawnCount = 0;
     public int maxEnemies;
     public int spawnComplete;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -36,20 +37,22 @@ public class EnemySpawner : MonoBehaviour
 
     public void startFight()
     {
-        if (!Global.curr.waveStart)
-        {
-            if(Global.curr.waveNum == 1)
+        if (Global.curr.startButtonEnabled){
+            if (!Global.curr.waveStart)
             {
-                maxEnemies = 2;
+                if(Global.curr.waveNum == 1)
+                {
+                    maxEnemies = 2;
+                }
+                else
+                {
+                    maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
+                }
+                spawnCount = 0;
+                Global.curr.enemyWaveDeathCount = maxEnemies;
+                Global.curr.waveStart = true;
+                startCoroutines();
             }
-            else
-            {
-                maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
-            }
-            spawnCount = 0;
-            Global.curr.enemyWaveDeathCount = maxEnemies;
-            Global.curr.waveStart = true;
-            startCoroutines();
         }
     }
 

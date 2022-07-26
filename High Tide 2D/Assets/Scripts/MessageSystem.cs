@@ -33,6 +33,8 @@ public class MessageSystem : MonoBehaviour
 
     public void playTutorial(){
         ShopSystem.curr.shopAvailable=false;
+        Global.curr.startButtonEnabled=false;
+        
         Global.curr.gold=3;
         messages = new string[8] {
             "WELCOME TO HIGH TIDE",
@@ -103,6 +105,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         if(step==7){
+            Global.curr.startButtonEnabled=true;
             HighlightElement.curr.arrow(playButton);
             showMessage(false);
             playButton.GetComponent<Button>().onClick.AddListener( ()=>{

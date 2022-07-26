@@ -16,6 +16,8 @@ public class Global : MonoBehaviour
     public int waveNum = 1;
     public int enemyWaveDeathCount = 1;
     public bool waveStart = false;
+    public bool startButtonEnabled=true;//when true, the start button can be used
+
 
     void Awake(){
         curr=this;//singleton
