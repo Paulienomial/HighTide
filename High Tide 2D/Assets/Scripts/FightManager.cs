@@ -106,6 +106,7 @@ public class FightManager : MonoBehaviour
     {
         if (!inCombat && !waveEnd)
         {
+            gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 1);
             float shift = GetComponent<SpriteRenderer>().bounds.size.x;
             if (GetComponent<Warrior>().attributes.isRanged)
             {
@@ -167,7 +168,8 @@ public class FightManager : MonoBehaviour
             if (targetExists && bothAlive && checkFriendlyFire && notAlreadyInCombat)
             {
                 inCombat = true;
-                InvokeRepeating("fight", 0f, 0.75f);
+                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 2);
+                InvokeRepeating("fight", 0.3f, 0.75f);
             }
         }
         else
@@ -190,14 +192,13 @@ public class FightManager : MonoBehaviour
 
     void fight()
     {
-        if(target != null && !waveEnd)
+        if (target != null && !waveEnd)
         {
             if(isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
             {
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
                     fireProjectile();
-                    //doDamage();
                     
                 }
                 else
@@ -212,7 +213,6 @@ public class FightManager : MonoBehaviour
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
                         fireProjectile();
-                        //doDamage();
                     }
                     else
                     {
@@ -223,6 +223,7 @@ public class FightManager : MonoBehaviour
                 {
                     CancelInvoke();
                     inCombat = false;
+                    gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 }
             } 
         }
@@ -230,6 +231,7 @@ public class FightManager : MonoBehaviour
         {
             CancelInvoke();
             inCombat = false;
+            gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
         }
         
     }
@@ -247,9 +249,11 @@ public class FightManager : MonoBehaviour
     {
         if (Global.curr.waveStart)
         {
+            //Debug.Log(Global.curr.enemyWaveDeathCount);
             if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
             {
                 CancelInvoke();
+                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 resetWave();
                 return true;
             }
@@ -271,20 +275,23 @@ public class FightManager : MonoBehaviour
         {
             FightManager victim = target.GetComponent<FightManager>();
             victim.health -= damage;
+            target.GetComponent<HealthBarUpdate>().hpBar.setHealth(victim.health);
 
             if (victim.health <= 0)
             {
                 victim.inCombat = false;
                 inCombat = false;
-                if (!isFriendly)
+                //if (!isFriendly)
                 victim.isAlive = false;
                 CancelInvoke();
+                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 victim.die();
             }
         }
         else
         {
             CancelInvoke();
+            gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
         }
         
     }
@@ -294,6 +301,7 @@ public class FightManager : MonoBehaviour
         if (!isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
+            Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
             Destroy(gameObject);
@@ -322,7 +330,11 @@ public class FightManager : MonoBehaviour
         {
             current.transform.position = current.GetComponent<Warrior>().coordinates;
             current.SetActive(true);
+            current.GetComponent<FightManager>().inCombat = false;
             current.GetComponent<FightManager>().isAlive = true;
+            current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
+            current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
+
 
         }
         Global.curr.gold+=10;

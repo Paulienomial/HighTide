@@ -21,6 +21,7 @@ public class CityHealthManager : MonoBehaviour
     public void takeDamage()
     {
         CityHP--;
+        Global.curr.CityHealth--;
         Debug.Log("City HP = " + CityHP);
         if (CityHP <= 0)
         {

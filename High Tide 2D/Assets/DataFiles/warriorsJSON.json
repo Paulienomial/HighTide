@@ -2,7 +2,7 @@
     "warriors":[
       {
           "name": "Foot soldier",
-          "damage": 30,
+          "damage": 50,
           "hp": 300,
           "tier": 1,
           "price": 3,
@@ -11,14 +11,14 @@
       },
       {
           "name": "Archer",
-          "damage": 50,
+          "damage": 30,
           "hp": 200,
           "isRanged": true
       },
         {
           "name": "Lizardman",
-          "damage": 100,
-          "hp": 250,
+          "damage": 50,
+          "hp": 300,
           "isFriendly": false
         }
     ]
