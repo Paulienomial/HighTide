@@ -20,16 +20,18 @@ public class ShopCard : MonoBehaviour
     }
 
     public void purchaseUnit(){
-        if(Global.curr.gold >= warrior.price && Global.curr.defenders.Count<Global.curr.unitCap){
+        if(Global.curr.gamePhase != "fight"){
+            if(Global.curr.gold >= warrior.price && Global.curr.defenders.Count<Global.curr.unitCap){
             GridSystem.curr.startPlacingPhase(warrior.name, card);
             card.SetActive(false);
             shop.SetActive(false);
-        }
-        if(Global.curr.gold<warrior.price){
-            Debug.Log("Not enough gold");
-        }
-        if(Global.curr.defenders.Count>=Global.curr.unitCap){
-            Debug.Log("Not enough food");
+            }
+            if(Global.curr.gold<warrior.price){
+                Notify.curr.show("Not enough gold");
+            }
+            if(Global.curr.defenders.Count>=Global.curr.unitCap){
+                Notify.curr.show("Unit capacity reached");
+            }
         }
     }
 }

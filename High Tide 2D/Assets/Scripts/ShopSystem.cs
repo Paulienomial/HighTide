@@ -53,9 +53,6 @@ public class ShopSystem : MonoBehaviour
             int unitIndex = Random.Range(0,shopSelection.Count);//select a random unit from the shop selection
             shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
         }
-        foreach(WarriorAttributes.attr warrior in shopUnits){
-            Debug.Log(warrior.name);
-        }
     }
 
     public void fillShopSelection(int shopTier){

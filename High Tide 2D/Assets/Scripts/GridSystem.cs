@@ -37,6 +37,10 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!draggingPhase && ! placingPhase){
+            grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+        }
+
         if(Input.GetKeyDown(KeyCode.G)){
             Global.curr.gold++;
         }
@@ -45,12 +49,11 @@ public class GridSystem : MonoBehaviour
             clickToPlaceObject(currObject);
         }
         if(Input.GetKeyUp(KeyCode.Mouse0)){
-            if(draggingPhase==true){
+            if(currObject!=null && draggingPhase==true){
                 if(!validPos(currObject)){//if released at invalid pos
                     currObject.transform.position=initPos;
                 }else{
                     currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
-                    Debug.Log( "Placed at x: "+currObject.GetComponent<Warrior>().coordinates.x + ", y:" + currObject.GetComponent<Warrior>().coordinates.y);
                     Events.curr.dropDefender();//trigger event
                 }
                 tileHighlight.SetActive(false);
@@ -92,7 +95,6 @@ public class GridSystem : MonoBehaviour
                 //PURCHASE UNIT
                 g.GetComponent<SpriteRenderer>().sortingOrder=3;
                 g.GetComponent<Warrior>().coordinates = g.transform.position;
-                Debug.Log( "Placed at x: "+g.GetComponent<Warrior>().coordinates.x + ", y:" + g.GetComponent<Warrior>().coordinates.y);
                 Global.curr.defenders.AddLast(g);
                 Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
                 Events.curr.purchaseDefender();//trigger event
@@ -107,7 +109,7 @@ public class GridSystem : MonoBehaviour
     }
 
     private void dragObject(GameObject g){
-        if(Global.curr.gamePhase=="shop"){
+        if(Global.curr.gamePhase!="fight"){
             currObject=g;
             tileHighlight.SetActive(true);
             if(draggingPhase==false){

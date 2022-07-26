@@ -36,7 +36,7 @@ public class MessageSystem : MonoBehaviour
         Global.curr.gold=3;
         messages = new string[8] {
             "WELCOME TO HIGH TIDE",
-            "Your goal is to build an army that will protect this village",
+            "Your goal is to build an army that will protect the village",
             "You have 3 availabe gold",
             "To purchase a unit, open the shop",
             "Purchase and place a unit from the shop",
