@@ -6,7 +6,7 @@ public class WarriorRender : MonoBehaviour
 {
     public Sprite sprite;
     public GameObject warrior;
-    Animator animator;
+    public Animator animator;
     AnimatorOverrideController animOverride;
 
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class WarriorRender : MonoBehaviour
             animator.SetInteger("state",2);//do attack animation
         }
         if(Input.GetKeyDown(KeyCode.R)){
-            animator.SetInteger("state",3);//do attack animation
+            animator.SetInteger("state",3);//do dead animation
         }
     }
 

@@ -18,9 +18,15 @@ public class ProjectileMover : MonoBehaviour
     {
         if (startMoving)
         {
-            //transform.LookAt(target.transform.position);
-            transform.right = target.transform.position - transform.position;
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);
+            if(target != null && shooter.GetComponent<FightManager>().isAlive)
+            {
+                transform.right = target.transform.position - transform.position;
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         
     }
@@ -34,14 +40,17 @@ public class ProjectileMover : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D target)
     {
-        if (target.GetComponent<Warrior>() != null)
+        if (target.GetComponent<Warrior>() != null && target != null && shooter.GetComponent<FightManager>().isAlive)
         {
             if (!target.GetComponent<Warrior>().attributes.isFriendly)
             {
                 Debug.Log("Archer hit");
                 startMoving = false;
+                if(target != null && shooter.GetComponent<FightManager>().isAlive)
+                {
+                    shooter.GetComponent<FightManager>().doDamage();
+                }
                 Destroy(gameObject);
-                shooter.GetComponent<FightManager>().doDamage();
             }
         }
     }

@@ -27,12 +27,12 @@ public class Warrior : MonoBehaviour
             if(warrior.name==name){
                 //set the attributes
                 attributes=warrior;
-                maxHealth=attributes.hp;//<----1
+                maxHealth = attributes.hp;
                 //set the renderer
                 gameObject.GetComponent<WarriorRender>().setSprite();
                 //set the max health for the hp bar
                 hpBar = gameObject.GetComponent<HealthBarUpdate>().hpBar;
-                hpBar.setMaxHealth(maxHealth);//<----2
+                hpBar.setMaxHealth(maxHealth);
                 return;
             }
         }

@@ -12,6 +12,7 @@ public class Global : MonoBehaviour
     public int shopTier;
     public int gold=10;
     public int unitCap;
+    public int CityHealth = 10;
     public int waveNum = 1;
     public int enemyWaveDeathCount = 1;
     public bool waveStart = false;
