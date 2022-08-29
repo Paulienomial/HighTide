@@ -8,7 +8,7 @@ public class GridSystem : MonoBehaviour
     public GameObject movable;
     public GameObject grid;
     public LayerMask gridMask;
-    public int gridCellSize;
+    public float gridCellSize;
     public bool placingPhase;
     GameObject currObject;//object being placed
     public static GridSystem curr;
@@ -189,14 +189,26 @@ public class GridSystem : MonoBehaviour
         return null;//no defenders to merge with
     }
 
-    /*private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
-        pos.x = calcGridSpotAxis(pos.x);
-        pos.y = calcGridSpotAxis(pos.y);
-        return pos;
+    /*private float calcGridSpotAxis(float f){//return the closest grid spot for a value on the x or y axis
+        return f-((f%gridCellSize+gridCellSize)%gridCellSize) + gridCellSize/2f;//f - f%gridCellSize + gridCellSize/2
     }*/
 
-    private float calcGridSpotAxis(float f){//return the closest grid spot for a value on the x or y axis
-        return f-((f%gridCellSize+gridCellSize)%gridCellSize) + gridCellSize/2f;
+    private float calcGridSpotY(float f){
+        float gridY = grid.transform.position.y;
+        float gridHeight = grid.GetComponent<SpriteRenderer>().bounds.size.y;
+        float botOfGrid = gridY - gridHeight/2f;
+        float offset=mod(botOfGrid,gridCellSize);
+        float a = f+offset;
+        return f-(mod(a,gridCellSize)) + gridCellSize/2f;
+    }
+
+    private float calcGridSpotX(float f){
+        float gridX = grid.transform.position.x;
+        float gridWidth = grid.GetComponent<SpriteRenderer>().bounds.size.x;
+        float leftOfGrid = gridX - gridWidth/2f;
+        float offset=mod(leftOfGrid,gridCellSize);
+        float a = f+offset;
+        return f-(mod(a,gridCellSize)) + gridCellSize/2f;
     }
 
     public static Vector3 getMousePos(){
@@ -233,19 +245,23 @@ public class GridSystem : MonoBehaviour
         float leftOfGrid = gridX - gridWidth/2f;
         if(pos.x<leftOfGrid){//if x pos is to the left of grid
             pos.x = leftOfGrid+gridCellSize/2f;
-            pos.y = calcGridSpotAxis(pos.y);
+            pos.y = calcGridSpotY(pos.y);
             return pos;
         }
 
         float rightOfGrid = gridX + gridWidth/2f;
         if(pos.x>rightOfGrid){//if x pos is to the left of grid
             pos.x = rightOfGrid-gridCellSize/2f;
-            pos.y = calcGridSpotAxis(pos.y);
+            pos.y = calcGridSpotY(pos.y);
             return pos;
         }
 
-        pos.x = calcGridSpotAxis(pos.x);
-        pos.y = calcGridSpotAxis(pos.y);
+        pos.x = calcGridSpotX(pos.x);
+        pos.y = calcGridSpotY(pos.y);
         return pos;
+    }
+
+    public float mod(float a, float b){
+        return (a%b + b)%b;
     }
 }
