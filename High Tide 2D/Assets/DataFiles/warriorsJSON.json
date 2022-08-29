@@ -7,19 +7,27 @@
           "tier": 1,
           "price": 3,
           "isFriendly": true,
-          "isRanged": false
+          "isRanged": false,
+          "mergeCount":1
       },
       {
           "name": "Archer",
           "damage": 40,
           "hp": 200,
-          "isRanged": true
+          "isRanged": true,
+          "isFriendly":true
       },
-        {
-          "name": "Lizardman",
-          "damage": 30,
-          "hp": 200,
-          "isFriendly": false
-        }
+      {
+        "name": "Farmer",
+        "damage": 20,
+        "hp": 150,
+        "isFriendly": true
+      },
+      {
+        "name": "Lizardman",
+        "damage": 30,
+        "hp": 200,
+        "isFriendly": false
+      }
     ]
 }

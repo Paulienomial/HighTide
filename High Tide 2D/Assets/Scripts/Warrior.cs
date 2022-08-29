@@ -7,6 +7,7 @@ public class Warrior : MonoBehaviour
     public WarriorAttributes.attr attributes;
     public Vector3 coordinates;
     public int maxHealth;
+    public bool diedLastWave=false;
     private HealthBar hpBar;
 
     // Start is called before the first frame update
@@ -26,7 +27,16 @@ public class Warrior : MonoBehaviour
         foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
             if(warrior.name==name){
                 //set the attributes
-                attributes=warrior;
+                //attributes = new WarriorAttributes.attr(warrior);
+                attributes=warrior.clone();
+                /*attributes.name = warrior.name;
+                attributes.damage = warrior.damage;
+                attributes.hp = warrior.hp;
+                attributes.tier = warrior.tier;
+                attributes.price = warrior.price;
+                attributes.isFriendly = warrior.isFriendly;
+                attributes.isRanged = warrior.isRanged;
+                attributes.mergeCount = warrior.mergeCount;*/
                 maxHealth = attributes.hp;
                 //set the renderer
                 gameObject.GetComponent<WarriorRender>().setSprite();

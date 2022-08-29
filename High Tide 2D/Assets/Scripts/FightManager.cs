@@ -305,10 +305,12 @@ public class FightManager : MonoBehaviour
             inCombat = false;
             deleteEnemy();
             Destroy(gameObject);
+            //gameObject.SetActive(false);
         }
         else
         {
             inCombat = false;
+            gameObject.GetComponent<Warrior>().diedLastWave=true;
             gameObject.SetActive(false);
         }
     }
@@ -321,22 +323,25 @@ public class FightManager : MonoBehaviour
 
     void resetWave()
     {
-        Debug.Log("Resetting Wave");
-        Global.curr.waveStart = false;
-        Global.curr.waveNum++;
-        Global.curr.gamePhase = "shop";
-        Global.curr.resetShop();
-        foreach (GameObject current in Global.curr.defenders)
-        {
-            current.transform.position = current.GetComponent<Warrior>().coordinates;
-            current.SetActive(true);
-            current.GetComponent<FightManager>().inCombat = false;
-            current.GetComponent<FightManager>().isAlive = true;
-            current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
-            current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
-            current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
+        if(!Global.curr.gameOver){
+            Debug.Log("Resetting Wave");
+            Global.curr.waveStart = false;
+            Global.curr.waveNum++;
+            Global.curr.gamePhase = "shop";
+            Global.curr.resetShop();
+            foreach (GameObject current in Global.curr.defenders)
+            {
+                current.transform.position = current.GetComponent<Warrior>().coordinates;
+                current.SetActive(true);
+                current.GetComponent<FightManager>().inCombat = false;
+                current.GetComponent<FightManager>().isAlive = true;
+                current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
+                current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
+                current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
 
+            }
+            Global.curr.gold+=10;
+            Events.curr.waveComplete();//trigger wave complete event
         }
-        Global.curr.gold+=10;
     }
 }

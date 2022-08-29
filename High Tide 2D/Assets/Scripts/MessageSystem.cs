@@ -19,10 +19,15 @@ public class MessageSystem : MonoBehaviour
     public GameObject playButton;
     public GameObject square;
     public GameObject scroll;
+    public static MessageSystem curr;//singleton
+
+    void Awake(){
+        curr=this;
+    }
     void Start()
     {
         //HighlightElement.curr.arrow(square);
-        playTutorial();
+        //playTutorial();
     }
 
     // Update is called once per frame

@@ -17,6 +17,8 @@ public class Global : MonoBehaviour
     public int enemyWaveDeathCount = 1;
     public bool waveStart = false;
     public bool startButtonEnabled=true;//when true, the start button can be used
+    public bool gameOver=false;
+    public int maxMergeCount=6;//max units combine into one unit
 
 
     void Awake(){
@@ -30,7 +32,7 @@ public class Global : MonoBehaviour
         enemies = new LinkedList<GameObject>();
         gamePhase="shop";
         shopTier=1;
-        unitCap=5;
+        unitCap=10;
         waveNum = 1;
     }
 

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class CityHealthManager : MonoBehaviour
 {
-    [SerializeField]
-    public int CityHP = 1;
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -20,10 +17,12 @@ public class CityHealthManager : MonoBehaviour
 
     public void takeDamage()
     {
-        CityHP--;
-        Global.curr.CityHealth--;
-        Debug.Log("City HP = " + CityHP);
-        if (CityHP <= 0)
+        
+        //CityHP--;
+        if(Global.curr.CityHealth>0){
+            Global.curr.CityHealth--;
+        }
+        if (Global.curr.CityHealth <= 0)
         {
             gameOver();
         }
@@ -31,7 +30,8 @@ public class CityHealthManager : MonoBehaviour
 
     void gameOver()
     {
-        Debug.Log("CITY DESTROYED");
-        Application.Quit();
+        Global.curr.startButtonEnabled=false;
+        Global.curr.gameOver=true;
+        MessageSystem.curr.showMessage("Game over");
     }
 }

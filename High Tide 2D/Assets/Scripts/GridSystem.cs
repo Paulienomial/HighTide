@@ -14,7 +14,7 @@ public class GridSystem : MonoBehaviour
     public static GridSystem curr;
     public GameObject tileHighlight;
     GameObject card;
-    bool draggingPhase;
+    public bool draggingPhase;
     Vector3 initPos;
     public GameObject shopButton;
 
@@ -31,6 +31,9 @@ public class GridSystem : MonoBehaviour
         tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
         tileHighlight.SetActive(false);
         Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
+        Events.curr.onStopDefenderDrag += hideGrid;
+        Events.curr.onStopDefenderDrag += dragFalse;
+        Events.curr.onStopDefenderDrag += mergeDrop;
         placingPhase=false;
     }
 
@@ -50,6 +53,7 @@ public class GridSystem : MonoBehaviour
         }
         if(Input.GetKeyUp(KeyCode.Mouse0)){
             if(currObject!=null && draggingPhase==true){
+                draggingPhase=false;
                 if(!validPos(currObject)){//if released at invalid pos
                     currObject.transform.position=initPos;
                 }else{
@@ -60,7 +64,6 @@ public class GridSystem : MonoBehaviour
                 grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
                 currObject.GetComponent<SpriteRenderer>().sortingOrder=3;
             }
-            draggingPhase=false;
         }
         if(currObject && !validPos(currObject)){
             tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
@@ -91,11 +94,16 @@ public class GridSystem : MonoBehaviour
         }*/
 
         if( Input.GetKeyDown(KeyCode.Mouse0) ){
-            if(validPos(currObject)){
+            if(validPos(currObject)){//if valid placement
+                GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
+                if(mergeWith!=null){
+                    mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
+                }else{//else add a new defender
+                    g.GetComponent<SpriteRenderer>().sortingOrder=3;
+                    g.GetComponent<Warrior>().coordinates = g.transform.position;
+                    Global.curr.defenders.AddLast(g);
+                }
                 //PURCHASE UNIT
-                g.GetComponent<SpriteRenderer>().sortingOrder=3;
-                g.GetComponent<Warrior>().coordinates = g.transform.position;
-                Global.curr.defenders.AddLast(g);
                 Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
                 Events.curr.purchaseDefender();//trigger event
             }else{
@@ -110,14 +118,16 @@ public class GridSystem : MonoBehaviour
 
     private void dragObject(GameObject g){
         if(Global.curr.gamePhase!="fight"){
-            currObject=g;
-            tileHighlight.SetActive(true);
+            HighlightSelected.curr.select(g);
             if(draggingPhase==false){
-                draggingPhase=true;
+                currObject=g;
+                tileHighlight.SetActive(true);
                 initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
+                draggingPhase=true;
                 currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+            }else{
+                snapToGrid(g);
             }
-            snapToGrid(g);
         }
     }
 
@@ -147,11 +157,36 @@ public class GridSystem : MonoBehaviour
     private bool validPos(GameObject g){
         Vector3 gridSpot = g.transform.position;
         foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
-            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//invalid spot
+            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//same spot
+                if(canMerge(g, defender)){
+                    return true;
+                }
                 return false;//invalid grid spot
             }
         }
         return true;
+    }
+
+    public bool canMerge(GameObject g1, GameObject g2){
+        WarriorAttributes.attr a1 = g1.GetComponent<Warrior>().attributes;
+        WarriorAttributes.attr a2 = g2.GetComponent<Warrior>().attributes;
+        if(a1.name==a2.name && a1.mergeCount+a2.mergeCount<=Global.curr.maxMergeCount){
+            return true;
+        }
+        return false;
+    }
+
+    public GameObject getMergeDefender(){//merge if possible and return the defender that was merged with, else return null
+        GameObject g = currObject;
+        Vector3 gridSpot = g.transform.position;
+        foreach(GameObject defender in Global.curr.defenders){//cycle through all defenders
+            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//same spot
+                if(canMerge(g, defender)){//can merge with unit at same spot      
+                    return defender;
+                }
+            }
+        }
+        return null;//no defenders to merge with
     }
 
     /*private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos
@@ -174,6 +209,22 @@ public class GridSystem : MonoBehaviour
 
     private void highlight(GameObject g){
         tileHighlight.SetActive(true);
+    }
+
+    private void hideGrid(GameObject g){
+        tileHighlight.SetActive(false);
+        grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+    }
+
+    private void dragFalse(GameObject g){
+        draggingPhase=false;
+    }
+
+    private void mergeDrop(GameObject g){
+        GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
+        if(mergeWith!=null){
+            mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
+        }
     }
 
     private Vector3 calcGridSpot(Vector3 pos){//calculate the nearest grid spot to the given pos

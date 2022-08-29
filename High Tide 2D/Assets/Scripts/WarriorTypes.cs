@@ -34,4 +34,13 @@ public class WarriorTypes : MonoBehaviour
     {
         
     }
+
+    public WarriorAttributes.attr find(string n){
+        foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
+            if(warrior.name==n){
+                return warrior;
+            }
+        }
+        return null;
+    }
 }
