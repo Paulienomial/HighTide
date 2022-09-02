@@ -41,14 +41,8 @@ public class WarriorRender : MonoBehaviour
         foreach(string state in animationStates){
             string clipPath = "Art/Animation/"+gameObject.GetComponent<Warrior>().attributes.name+"/"+state;//Eg: Art/Animation/foot soldier/idle
             AnimationClip clip = Resources.Load<AnimationClip>(clipPath);
-            if(state=="attack"){
-
-            }
             if(clip!=null){
                 animOverride[state] = clip;
-                if(state=="attack"){
-                    //setAnimStateLength(animator);
-                }
             }
         }
     }

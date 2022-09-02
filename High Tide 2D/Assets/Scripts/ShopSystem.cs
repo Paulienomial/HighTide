@@ -15,6 +15,7 @@ public class ShopSystem : MonoBehaviour
     public ArrayList cards;//5 cards that display shopUnits
     public static ShopSystem curr;
     public bool shopAvailable;
+    public bool shopOpen=false;
 
     void Awake(){
         curr=this;
@@ -53,15 +54,12 @@ public class ShopSystem : MonoBehaviour
             int unitIndex = Random.Range(0,shopSelection.Count);//select a random unit from the shop selection
             shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
         }
-        foreach(WarriorAttributes.attr warrior in shopUnits){
-            Debug.Log(warrior.name);
-        }
     }
 
     public void fillShopSelection(int shopTier){
         shopSelection.Clear();
         foreach(WarriorAttributes.attr warrior in WarriorTypes.curr.wList.warriors){
-            if(warrior.tier<=shopTier && warrior.isFriendly){
+            if(warrior.tier<=shopTier && warrior.isFriendly && warrior.name!="Farmer"){
                 shopSelection.Add(warrior);
             }
         }
@@ -89,10 +87,11 @@ public class ShopSystem : MonoBehaviour
             if(i>2){
                 k=2;
             }
-            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-125f+272.5f*((i+1)%2), 242f-244.5f*k,0f);
+            //currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(-125f+272.5f*((i+1)%2), 242f-244.5f*k,0f);
+            currCard.GetComponent<RectTransform>().anchoredPosition= new Vector3(100+1720f/5f*(i+1f)-1720f/5f/2f, 0f,0f);
 
             //Background
-            GameObject backgroundUpper = currCard.transform.Find("BackgroundUpper").gameObject;
+            /*GameObject backgroundUpper = currCard.transform.Find("BackgroundUpper").gameObject;
             GameObject backgroundLower = currCard.transform.Find("BackgroundLower").gameObject;
             
             if(i<=1 || i==4){
@@ -101,10 +100,11 @@ public class ShopSystem : MonoBehaviour
             }else{
                 backgroundUpper.GetComponent<Image>().color = new Color32(255,255,255,255);//white
                 backgroundLower.GetComponent<Image>().color = new Color32(218,225,229,255);//light grey neutral
-            }
+            }*/
 
             //Preview image
-            GameObject preview = currCard.transform.Find("Preview").gameObject;
+            GameObject previewBackground = currCard.transform.Find("PreviewBackground").gameObject;
+            GameObject preview = previewBackground.transform.Find("Preview").gameObject;
             string path="Art/Warriors/preview"+shopUnits.ElementAt(i).name;
             Sprite mySprite = Resources.Load<Sprite>(path);
             preview.GetComponent<Image>().sprite=mySprite;
@@ -114,23 +114,32 @@ public class ShopSystem : MonoBehaviour
             nameText.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).name;
 
             //Damage
-            GameObject damageText = currCard.transform.Find("Damage").gameObject;
-            damageText.GetComponent<TextMeshProUGUI>().text = "DMG: " + shopUnits.ElementAt(i).damage.ToString();
+            GameObject dmgIcon = currCard.transform.Find("dmgIcon").gameObject;
+            GameObject damageText = dmgIcon.transform.Find("Damage").gameObject;
+            damageText.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).damage.ToString();
 
             //HP
-            GameObject hpText = currCard.transform.Find("HP").gameObject;
-            hpText.GetComponent<TextMeshProUGUI>().text = "HP: " + shopUnits.ElementAt(i).hp.ToString();
+            GameObject hpIcon = currCard.transform.Find("hpIcon").gameObject;
+            GameObject hpText = hpIcon.transform.Find("HP").gameObject;
+            hpText.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).hp.ToString();
 
             //Tier
-            GameObject tierText = currCard.transform.Find("Tier").gameObject;
+            GameObject tierBackground = currCard.transform.Find("TierBackground").gameObject;
+            GameObject tierText = tierBackground.transform.Find("Tier").gameObject;
             tierText.GetComponent<TextMeshProUGUI>().text = "Tier: " + shopUnits.ElementAt(i).tier.ToString();
+
+            //Description
+            GameObject description = currCard.transform.Find("para").gameObject;
+            description.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).description;
 
             //Buy button
             GameObject buyButton = currCard.transform.Find("BuyButton").gameObject;
             buyButton.GetComponent<ShopCard>().warrior=shopUnits.ElementAt(i);
             buyButton.GetComponent<ShopCard>().card=currCard;
             buyButton.GetComponent<ShopCard>().shop=shop;
-            GameObject buyText = buyButton.transform.Find("BuyText").gameObject;
+
+            GameObject goldBackground = currCard.transform.Find("GoldBackground").gameObject;
+            GameObject buyText = goldBackground.transform.Find("BuyText").gameObject;
             buyText.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).price.ToString();
         }
     }
@@ -138,8 +147,10 @@ public class ShopSystem : MonoBehaviour
     public void showHideShop(){
         if(shopAvailable){
             if(shop.activeSelf==false){
+                shopOpen=true;
                 shop.SetActive(true);
             }else{
+                shopOpen=false;
                 shop.SetActive(false);
             }
         }

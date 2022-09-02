@@ -14,7 +14,16 @@ public class Events : MonoBehaviour
     public event Action<GameObject> onDefenderDrag;//subject
     public void defenderDrag(GameObject g){
         if(onDefenderDrag!=null){
-            onDefenderDrag(g);//invoke
+            if(g!=null){
+                onDefenderDrag(g);//invoke
+            }
+        }
+    }
+
+    public event Action<GameObject> onStopDefenderDrag;
+    public void stopDefenderDrag(GameObject g){
+        if(onStopDefenderDrag!=null){
+            onStopDefenderDrag(g);
         }
     }
 
@@ -29,6 +38,27 @@ public class Events : MonoBehaviour
     public void dropDefender(){
         if(onDropDefender!=null){
             onDropDefender();
+        }
+    }
+
+    public event Action onWaveComplete;
+    public void waveComplete(){
+        if(onWaveComplete!=null){
+            onWaveComplete();
+        }
+    }
+
+    public event Action onHoverCity;
+    public void hoverCity(){
+        if(onHoverCity!=null){
+            onHoverCity();
+        }
+    }
+
+    public event Action onNotHoverCity;
+    public void notHoverCity(){
+        if(onNotHoverCity!=null){
+            onNotHoverCity();
         }
     }
 }

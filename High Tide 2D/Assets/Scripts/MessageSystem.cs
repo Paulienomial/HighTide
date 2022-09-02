@@ -19,10 +19,15 @@ public class MessageSystem : MonoBehaviour
     public GameObject playButton;
     public GameObject square;
     public GameObject scroll;
+    public static MessageSystem curr;//singleton
+
+    void Awake(){
+        curr=this;
+    }
     void Start()
     {
         //HighlightElement.curr.arrow(square);
-        playTutorial();
+        //playTutorial();
     }
 
     // Update is called once per frame
@@ -33,10 +38,12 @@ public class MessageSystem : MonoBehaviour
 
     public void playTutorial(){
         ShopSystem.curr.shopAvailable=false;
+        Global.curr.startButtonEnabled=false;
+        
         Global.curr.gold=3;
         messages = new string[8] {
             "WELCOME TO HIGH TIDE",
-            "Your goal is to build an army that will protect this village",
+            "Your goal is to build an army that will protect the village",
             "You have 3 availabe gold",
             "To purchase a unit, open the shop",
             "Purchase and place a unit from the shop",
@@ -103,6 +110,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         if(step==7){
+            Global.curr.startButtonEnabled=true;
             HighlightElement.curr.arrow(playButton);
             showMessage(false);
             playButton.GetComponent<Button>().onClick.AddListener( ()=>{
