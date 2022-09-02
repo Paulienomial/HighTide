@@ -110,10 +110,9 @@ public class HighlightSelected : MonoBehaviour
             GameObject hpText = hpIcon.transform.Find("HP").gameObject;
             hpText.GetComponent<TextMeshProUGUI>().text = currWarrior.hp.ToString();
 
-            //Tier
-            GameObject tierBackground = currCard.transform.Find("TierBackground").gameObject;
-            GameObject tierText = tierBackground.transform.Find("Tier").gameObject;
-            tierText.GetComponent<TextMeshProUGUI>().text = "Tier: " + currWarrior.tier.ToString();
+            //Description
+            GameObject description = currCard.transform.Find("para").gameObject;
+            description.GetComponent<TextMeshProUGUI>().text = currWarrior.description;
         }
     }
 

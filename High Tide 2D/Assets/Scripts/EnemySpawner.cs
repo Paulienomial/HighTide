@@ -25,8 +25,8 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator spawnEnemy(float delay, GameObject enemyType)
     {
         yield return new WaitForSeconds(delay);
-        GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(7f, 8.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
-        newSpawn.GetComponent<Warrior>().setWarrior("Lizardman");
+        GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(6f, 6.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
+        newSpawn.GetComponent<Warrior>().setWarrior("Pokey boy");
         Global.curr.enemies.AddLast(newSpawn);
         spawnCount++;
         if (spawnCount < maxEnemies)

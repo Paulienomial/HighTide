@@ -35,7 +35,16 @@
         "hp": 200,
         "isFriendly": false,
         "attacksound": "enemymelee",
-        "description":"Beware, this lizard seems angry"
+        "description":"Beware, this lizard seems angry",
+        "tier":999
+      },
+      {
+        "name": "Pokey boy",
+        "damage": 30,
+        "hp": 200,
+        "isFriendly": false,
+        "attacksound": "enemymelee",
+        "description":"Beware, he pokes"
       }
     ]
 }

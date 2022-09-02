@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
-    [SerializeField]
-    public int health = 100;
-    [SerializeField]
-    public int damage = 10;
+    //[SerializeField]
+    //public int health = 100;
+    //[SerializeField]
+    //public int damage = 10;
     [SerializeField]
     GameObject city;
     [SerializeField]
@@ -15,20 +15,26 @@ public class FightManager : MonoBehaviour
     private GameObject target = null;
     LinkedList<GameObject> targetList;
     public bool inCombat = false;
-    public bool isFriendly = true;
+    //public bool isFriendly = true;
     public bool isAlive = true;
     public bool waveEnd = false;
     private bool facingRight = true;
     public bool projectileInAir = false;
     public bool waveLost = false;
+    //Fix met attributes wat nie update nie
+    public WarriorAttributes.attr a;
 
     SpriteRenderer r;
     // Start is called before the first frame update
     void Start()
     {
-        isFriendly = gameObject.GetComponent<Warrior>().attributes.isFriendly;
+        //
+        a = gameObject.GetComponent<Warrior>().attributes;
+
+        //hierdie werk nie, want dit word net by start gecall en dan update die vals nie
+        /*isFriendly = gameObject.GetComponent<Warrior>().attributes.isFriendly;
         health = gameObject.GetComponent<Warrior>().attributes.hp;
-        damage = gameObject.GetComponent<Warrior>().attributes.damage;
+        damage = gameObject.GetComponent<Warrior>().attributes.damage;*/
         r = GetComponent<SpriteRenderer>();
     }
 
@@ -49,7 +55,7 @@ public class FightManager : MonoBehaviour
     void findTarget()
     {
         
-        if (isFriendly)
+        if (a.isFriendly)
         {
             targetList = Global.curr.enemies;
         }
@@ -61,7 +67,7 @@ public class FightManager : MonoBehaviour
         if (targetList.Count == 0)
         {
            // Debug.Log("No Targets");
-            if (!isFriendly)
+            if (!a.isFriendly)
             {
                 target = city;
             }
@@ -75,7 +81,7 @@ public class FightManager : MonoBehaviour
             {
                 if (current != null)
                 {
-                    if (!isFriendly)
+                    if (!a.isFriendly)
                     {
                         flag = current.GetComponent<FightManager>().isAlive;
                     }
@@ -97,7 +103,7 @@ public class FightManager : MonoBehaviour
 
             }
             target = bestTarget;
-            if (target == null && !isFriendly)
+            if (target == null && !a.isFriendly)
             {
                 target = city;
             }
@@ -135,7 +141,7 @@ public class FightManager : MonoBehaviour
                     r.flipX = true;
                 }
             }
-            if (isFriendly)
+            if (a.isFriendly)
             {
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), 0.5f * Time.deltaTime);
             }
@@ -159,7 +165,7 @@ public class FightManager : MonoBehaviour
         if (opponent.GetComponent<Warrior>() != null && !waveEnd) //Checking that target is a warrior and not the grid since grid also has a Rigidbody and thus triggers this
         {
             bool bothAlive = true;
-            if (!isFriendly)
+            if (!a.isFriendly)
             {
                 bothAlive = opponent.GetComponent<FightManager>().isAlive;
             }
@@ -197,7 +203,7 @@ public class FightManager : MonoBehaviour
     {
         if (target != null && !waveEnd)
         {
-            if(isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
+            if(a.isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
             {
                 if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                 {
@@ -286,14 +292,14 @@ public class FightManager : MonoBehaviour
         if (isAlive && !waveEnd && target != null && target.GetComponent<FightManager>().isAlive)
         {
             FightManager victim = target.GetComponent<FightManager>();
-            victim.health -= damage;
-            target.GetComponent<Warrior>().attributes.hp -= damage;
+            victim.a.hp -= a.damage;
+            //target.GetComponent<Warrior>().attributes.hp -= a.damage;
 
-            if (victim.health <= 0)
+            if (victim.a.hp <= 0)
             {
                 victim.inCombat = false;
                 inCombat = false;
-                //if (!isFriendly)
+                //if (!a.isFriendly)
                 victim.isAlive = false;
                 CancelInvoke();
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
@@ -310,7 +316,7 @@ public class FightManager : MonoBehaviour
 
     public void die()
     {
-        if (!isFriendly)
+        if (!a.isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
             Debug.Log(Global.curr.enemyWaveDeathCount);
@@ -359,7 +365,7 @@ public class FightManager : MonoBehaviour
                 current.GetComponent<FightManager>().isAlive = true;
                 current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                //current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
-                current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
+                current.GetComponent<FightManager>().a.hp = current.GetComponent<Warrior>().maxHealth;
                 current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
 
             }
