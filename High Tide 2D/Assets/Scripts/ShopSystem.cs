@@ -145,6 +145,7 @@ public class ShopSystem : MonoBehaviour
     }
 
     public void showHideShop(){
+        AudioScript.curr.playButtonClickSound();
         if(shopAvailable){
             if(shop.activeSelf==false){
                 shopOpen=true;

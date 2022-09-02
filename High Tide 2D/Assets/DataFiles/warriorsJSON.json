@@ -9,6 +9,7 @@
           "isFriendly": true,
           "isRanged": false,
           "mergeCount":1,
+          "attacksound": "sword",
           "description":"Basic melee unit"
       },
       {
@@ -17,6 +18,7 @@
           "hp": 200,
           "isRanged": true,
           "isFriendly":true,
+          "attacksound": "bow",
           "description":"Basic ranged unit"
       },
       {
@@ -24,6 +26,7 @@
         "damage": 20,
         "hp": 150,
         "isFriendly": true,
+        "attacksound": "sword",
         "description":"+2 gold after wave for each surviving farmer"
       },
       {
@@ -31,6 +34,7 @@
         "damage": 30,
         "hp": 200,
         "isFriendly": false,
+        "attacksound": "enemymelee",
         "description":"Beware, this lizard seems angry"
       }
     ]
