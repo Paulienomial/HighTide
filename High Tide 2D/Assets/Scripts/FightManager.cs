@@ -107,7 +107,7 @@ public class FightManager : MonoBehaviour
         if (!inCombat && !waveEnd)
         {
             gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 1);
-            float shift = GetComponent<SpriteRenderer>().bounds.size.x;
+            float shift = GetComponent<Collider2D>().bounds.size.x;
             if (GetComponent<Warrior>().attributes.isRanged)
             {
                 if (Vector2.Distance(transform.position, target.transform.position) <= 3)
@@ -174,7 +174,7 @@ public class FightManager : MonoBehaviour
         }
         else
         {
-            if (opponent.GetComponent<CityHealthManager>() != null)
+            if (opponent.GetComponent<CityHealthManager>() != null &&  !GetComponent<Warrior>().attributes.isFriendly)
             {
                 opponent.GetComponent<CityHealthManager>().takeDamage();
                 if (Global.curr.enemyWaveDeathCount == 1)

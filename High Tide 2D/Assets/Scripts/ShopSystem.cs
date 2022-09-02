@@ -128,6 +128,10 @@ public class ShopSystem : MonoBehaviour
             GameObject tierText = tierBackground.transform.Find("Tier").gameObject;
             tierText.GetComponent<TextMeshProUGUI>().text = "Tier: " + shopUnits.ElementAt(i).tier.ToString();
 
+            //Description
+            GameObject description = currCard.transform.Find("para").gameObject;
+            description.GetComponent<TextMeshProUGUI>().text = shopUnits.ElementAt(i).description;
+
             //Buy button
             GameObject buyButton = currCard.transform.Find("BuyButton").gameObject;
             buyButton.GetComponent<ShopCard>().warrior=shopUnits.ElementAt(i);

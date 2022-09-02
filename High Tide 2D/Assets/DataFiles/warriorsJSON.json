@@ -8,26 +8,30 @@
           "price": 3,
           "isFriendly": true,
           "isRanged": false,
-          "mergeCount":1
+          "mergeCount":1,
+          "description":"Basic melee unit"
       },
       {
           "name": "Archer",
           "damage": 40,
           "hp": 200,
           "isRanged": true,
-          "isFriendly":true
+          "isFriendly":true,
+          "description":"Basic ranged unit"
       },
       {
         "name": "Farmer",
         "damage": 20,
         "hp": 150,
-        "isFriendly": true
+        "isFriendly": true,
+        "description":"+2 gold after wave for each surviving farmer"
       },
       {
         "name": "Lizardman",
         "damage": 30,
         "hp": 200,
-        "isFriendly": false
+        "isFriendly": false,
+        "description":"Beware, this lizard seems angry"
       }
     ]
 }

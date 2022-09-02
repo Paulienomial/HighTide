@@ -27,6 +27,7 @@ public class WarriorAttributes : MonoBehaviour
             c.isFriendly=isFriendly;
             c.isRanged=isRanged;
             c.mergeCount=mergeCount;
+            c.description=description;
 
             return c;
         }
@@ -38,5 +39,6 @@ public class WarriorAttributes : MonoBehaviour
         public bool isFriendly = true;
         public bool isRanged = false;
         public int mergeCount=1;//amount of units combine to make this unit
+        public string description = "Basic melee unit";
     }
 }

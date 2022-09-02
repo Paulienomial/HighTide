@@ -47,4 +47,14 @@ public class Warrior : MonoBehaviour
             }
         }
     }
+
+    public int getLevel(){
+        if(attributes.mergeCount<3){
+            return 1;
+        }else if(attributes.mergeCount<6){
+            return 2;
+        }else{
+            return 3;
+        }
+    }
 }

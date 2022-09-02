@@ -17,6 +17,10 @@ public class GridSystem : MonoBehaviour
     public bool draggingPhase;
     Vector3 initPos;
     public GameObject shopButton;
+    public float cellSizePixels=32f;
+    public float characterPixels=20f;//character width and height dimensions in pixels
+    public float pixelsPerunit=18.9f;
+    float verticalOffset;
 
 
     void Awake(){
@@ -35,6 +39,12 @@ public class GridSystem : MonoBehaviour
         Events.curr.onStopDefenderDrag += dragFalse;
         Events.curr.onStopDefenderDrag += mergeDrop;
         placingPhase=false;
+
+        gridCellSize = cellSizePixels/pixelsPerunit;
+
+        tileHighlight.transform.localScale = new Vector3(gridCellSize, gridCellSize, gridCellSize);
+
+        verticalOffset = (-1f*(cellSizePixels/pixelsPerunit/2f)+(characterPixels/pixelsPerunit/2f));//align to bottom
     }
 
     // Update is called once per frame
@@ -72,6 +82,7 @@ public class GridSystem : MonoBehaviour
 
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
         GameObject g = Instantiate(movable, calcGridSpot( getMousePos() ), Quaternion.identity);
+        HighlightSelected.curr.select(g);
         g.GetComponent<SpriteRenderer>().sortingOrder=10;
         tileHighlight.transform.position = g.transform.position;
         tileHighlight.SetActive(true);
@@ -117,8 +128,9 @@ public class GridSystem : MonoBehaviour
     }
 
     private void dragObject(GameObject g){
+        if(g==null) return;
+        HighlightSelected.curr.select(g);
         if(Global.curr.gamePhase!="fight"){
-            HighlightSelected.curr.select(g);
             if(draggingPhase==false){
                 currObject=g;
                 tileHighlight.SetActive(true);
@@ -139,11 +151,12 @@ public class GridSystem : MonoBehaviour
             //STEP 1: calc grid spot, based on mouse pos
             Vector3 gridSpot = calcGridSpot(getMousePos());
             tileHighlight.transform.position = gridSpot;
+            gridSpot.y += verticalOffset;//align to bottom
             g.transform.position = gridSpot;
             
             //STEP 2: if another unit already occupies this grid spot, then unable to place
             foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
-                if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//invalid spot
+                if( defender!=g && sameSpot(g, defender) ){//invalid spot
                     return;
                 }
             }
@@ -157,7 +170,7 @@ public class GridSystem : MonoBehaviour
     private bool validPos(GameObject g){
         Vector3 gridSpot = g.transform.position;
         foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
-            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//same spot
+            if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){
                     return true;
                 }
@@ -171,6 +184,7 @@ public class GridSystem : MonoBehaviour
         WarriorAttributes.attr a1 = g1.GetComponent<Warrior>().attributes;
         WarriorAttributes.attr a2 = g2.GetComponent<Warrior>().attributes;
         if(a1.name==a2.name && a1.mergeCount+a2.mergeCount<=Global.curr.maxMergeCount){
+            Debug.Log("Can merge");
             return true;
         }
         return false;
@@ -180,13 +194,23 @@ public class GridSystem : MonoBehaviour
         GameObject g = currObject;
         Vector3 gridSpot = g.transform.position;
         foreach(GameObject defender in Global.curr.defenders){//cycle through all defenders
-            if( defender!=g && gridSpot.x == calcGridSpot(defender.transform.position).x && gridSpot.y == calcGridSpot(defender.transform.position).y ){//same spot
+            if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){//can merge with unit at same spot      
                     return defender;
                 }
             }
         }
         return null;//no defenders to merge with
+    }
+
+    public bool sameSpot(GameObject g1, GameObject g2){
+        if(g1==null || g2==null) return false;
+        float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
+        if( Math.Abs(g1.transform.position.x-g2.transform.position.x)<tolerance && Math.Abs(g1.transform.position.y-g2.transform.position.y)<tolerance ){//same spot
+            Debug.Log("Same spot");
+            return true;        
+        }
+        return false;
     }
 
     /*private float calcGridSpotAxis(float f){//return the closest grid spot for a value on the x or y axis
@@ -233,9 +257,11 @@ public class GridSystem : MonoBehaviour
     }
 
     private void mergeDrop(GameObject g){
-        GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
-        if(mergeWith!=null){
-            mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
+        if(currObject!=null){
+            GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
+            if(mergeWith!=null){
+                mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
+            }
         }
     }
 
