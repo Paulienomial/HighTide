@@ -41,6 +41,7 @@ public class PauseScript : MonoBehaviour
         PlayerPrefs.SetFloat("mainvol", Global.curr.MainVolume);
         PlayerPrefs.SetFloat("fxvol", Global.curr.FXVolume);
         PlayerPrefs.SetFloat("musicvol", Global.curr.MusicVolume);
+        resumeGame();
         SceneManager.LoadScene("SampleScene");
     }
 
