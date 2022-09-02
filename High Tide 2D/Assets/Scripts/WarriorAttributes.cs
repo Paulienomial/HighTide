@@ -28,6 +28,7 @@ public class WarriorAttributes : MonoBehaviour
             c.isRanged=isRanged;
             c.mergeCount=mergeCount;
             c.attacksound = attacksound;
+            c.description=description;
 
             return c;
         }
@@ -40,5 +41,6 @@ public class WarriorAttributes : MonoBehaviour
         public bool isRanged = false;
         public int mergeCount=1;//amount of units combine to make this unit
         public string attacksound;
+        public string description = "Basic melee unit";
     }
 }

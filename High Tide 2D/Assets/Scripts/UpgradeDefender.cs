@@ -19,7 +19,7 @@ public class UpgradeDefender : MonoBehaviour
         
     }
 
-    public void merge(GameObject g){
+    public void merge(GameObject g){//merge g into this unit
         //upgrade the unit
         WarriorAttributes.attr myAttr = gameObject.GetComponent<Warrior>().attributes;
         WarriorAttributes.attr otherAttr = g.GetComponent<Warrior>().attributes;
@@ -50,10 +50,14 @@ public class UpgradeDefender : MonoBehaviour
 
         //remove old unit from defenders list, if it was on the list
         if(Global.curr.defenders.Contains(g)){
+            Debug.Log("Removed old defender");
             Global.curr.defenders.Remove(g);
         }
 
         //destroy other unit
         Destroy(g);
+
+        //show this unit at currently selected
+        HighlightSelected.curr.select(gameObject);
     }
 }

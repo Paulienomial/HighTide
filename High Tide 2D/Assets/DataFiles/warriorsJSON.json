@@ -9,7 +9,8 @@
           "isFriendly": true,
           "isRanged": false,
           "mergeCount":1,
-          "attacksound": "sword"
+          "attacksound": "sword",
+          "description":"Basic melee unit"
       },
       {
           "name": "Archer",
@@ -17,21 +18,24 @@
           "hp": 200,
           "isRanged": true,
           "isFriendly":true,
-          "attacksound": "bow"
+          "attacksound": "bow",
+          "description":"Basic ranged unit"
       },
       {
         "name": "Farmer",
         "damage": 20,
         "hp": 150,
         "isFriendly": true,
-        "attacksound": "sword"
+        "attacksound": "sword",
+        "description":"+2 gold after wave for each surviving farmer"
       },
       {
         "name": "Lizardman",
         "damage": 30,
         "hp": 200,
         "isFriendly": false,
-        "attacksound": "enemymelee"
+        "attacksound": "enemymelee",
+        "description":"Beware, this lizard seems angry"
       }
     ]
 }
