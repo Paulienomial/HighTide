@@ -8,26 +8,30 @@
           "price": 3,
           "isFriendly": true,
           "isRanged": false,
-          "mergeCount":1
+          "mergeCount":1,
+          "attacksound": "sword"
       },
       {
           "name": "Archer",
           "damage": 40,
           "hp": 200,
           "isRanged": true,
-          "isFriendly":true
+          "isFriendly":true,
+          "attacksound": "bow"
       },
       {
         "name": "Farmer",
         "damage": 20,
         "hp": 150,
-        "isFriendly": true
+        "isFriendly": true,
+        "attacksound": "sword"
       },
       {
         "name": "Lizardman",
         "damage": 30,
         "hp": 200,
-        "isFriendly": false
+        "isFriendly": false,
+        "attacksound": "enemymelee"
       }
     ]
 }

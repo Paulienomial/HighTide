@@ -20,6 +20,8 @@ public class FightManager : MonoBehaviour
     public bool waveEnd = false;
     private bool facingRight = true;
     public bool projectileInAir = false;
+    public bool waveLost = false;
+
     SpriteRenderer r;
     // Start is called before the first frame update
     void Start()
@@ -107,7 +109,7 @@ public class FightManager : MonoBehaviour
         if (!inCombat && !waveEnd)
         {
             gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 1);
-            float shift = GetComponent<SpriteRenderer>().bounds.size.x;
+            float shift = GetComponent<Collider2D>().bounds.size.x;
             if (GetComponent<Warrior>().attributes.isRanged)
             {
                 if (Vector2.Distance(transform.position, target.transform.position) <= 3)
@@ -174,8 +176,9 @@ public class FightManager : MonoBehaviour
         }
         else
         {
-            if (opponent.GetComponent<CityHealthManager>() != null)
+            if (opponent.GetComponent<CityHealthManager>() != null && !GetComponent<Warrior>().attributes.isFriendly)
             {
+                waveLost = true;
                 opponent.GetComponent<CityHealthManager>().takeDamage();
                 if (Global.curr.enemyWaveDeathCount == 1)
                 {
@@ -196,6 +199,10 @@ public class FightManager : MonoBehaviour
         {
             if(isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
             {
+                if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
+                {
+                    AudioScript.curr.playAttackSound(this.gameObject);
+                }
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
                     fireProjectile();
@@ -210,6 +217,10 @@ public class FightManager : MonoBehaviour
             {
                 if (target.GetComponent<FightManager>().isAlive && !waveEnd)
                 {
+                    if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
+                    {
+                        AudioScript.curr.playAttackSound(this.gameObject);
+                    }
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
                         fireProjectile();
@@ -240,6 +251,7 @@ public class FightManager : MonoBehaviour
     {
         if(target != null && isAlive)
         {
+            AudioScript.curr.playAttackSound(this.gameObject);
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }
@@ -275,7 +287,7 @@ public class FightManager : MonoBehaviour
         {
             FightManager victim = target.GetComponent<FightManager>();
             victim.health -= damage;
-            target.GetComponent<HealthBarUpdate>().hpBar.setHealth(victim.health);
+            target.GetComponent<Warrior>().attributes.hp -= damage;
 
             if (victim.health <= 0)
             {
@@ -325,6 +337,16 @@ public class FightManager : MonoBehaviour
     {
         if(!Global.curr.gameOver){
             Debug.Log("Resetting Wave");
+            AudioScript.curr.stopBattleTheme();
+            if (waveLost)
+            {
+                AudioScript.curr.playWaveFailedAndMain();
+            }
+            else
+            {
+                AudioScript.curr.playVictoryAndMain();
+            }
+            waveLost = false;
             Global.curr.waveStart = false;
             Global.curr.waveNum++;
             Global.curr.gamePhase = "shop";
@@ -336,8 +358,9 @@ public class FightManager : MonoBehaviour
                 current.GetComponent<FightManager>().inCombat = false;
                 current.GetComponent<FightManager>().isAlive = true;
                 current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
-                current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
+               //current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
                 current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
+                current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
 
             }
             Global.curr.gold+=10;

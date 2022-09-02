@@ -57,6 +57,7 @@ public class GridSystem : MonoBehaviour
                 if(!validPos(currObject)){//if released at invalid pos
                     currObject.transform.position=initPos;
                 }else{
+                    AudioScript.curr.playPlaceWarrior();
                     currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
                     Events.curr.dropDefender();//trigger event
                 }

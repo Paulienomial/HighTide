@@ -40,7 +40,12 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {
-                if(Global.curr.waveNum == 1)
+                AudioScript.curr.stopMainTheme();
+                AudioScript.curr.playButtonClickSound();
+                AudioScript.curr.playBattleHornSound();
+                AudioScript.curr.playBattleTheme();
+
+                if (Global.curr.waveNum == 1)
                 {
                     maxEnemies = 2;
                 }

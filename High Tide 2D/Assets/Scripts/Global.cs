@@ -19,6 +19,10 @@ public class Global : MonoBehaviour
     public bool startButtonEnabled=true;//when true, the start button can be used
     public bool gameOver=false;
     public int maxMergeCount=6;//max units combine into one unit
+    public float MainVolume = 0.5f;//To be able to save player's volume changes.
+    public float FXVolume = 0.5f;
+    public float MusicVolume = 0.5f;
+    public bool gamePaused = false;
 
 
     void Awake(){
