@@ -13,6 +13,7 @@ public class HighlightSelected : MonoBehaviour
     public GameObject warriorInfo;
     public static HighlightSelected curr;
     bool warriorSelected;
+    public TextMeshProUGUI sellText;
 
     void Awake(){
         curr=this;
@@ -40,7 +41,6 @@ public class HighlightSelected : MonoBehaviour
         if(lastSelected!=g){
             warriorSelected=false;
             if(g.GetComponent<CityHighlight>()){
-                Debug.Log("Selecting city");
                 high(g);
                 showCityInfo();
             }else if (g.GetComponent<Warrior>()){
@@ -62,9 +62,17 @@ public class HighlightSelected : MonoBehaviour
     public void deselect(){
         warriorSelected=false;
         lastSelected=null;
-        highlight.SetActive(false);
+        if(highlight!=null){
+            highlight.SetActive(false);
+        }
         warriorInfo.SetActive(false);
         cityInfo.SetActive(false);
+    }
+
+    public void deselectIfClickAnywhereElse(){
+        if(ShopSystem.curr.shopOpen==false && GridSystem.curr.justPlacedObject==false){
+            deselect();
+        }
     }
 
     public void showCityInfo(){
@@ -113,6 +121,15 @@ public class HighlightSelected : MonoBehaviour
             //Description
             GameObject description = currCard.transform.Find("para").gameObject;
             description.GetComponent<TextMeshProUGUI>().text = currWarrior.description;
+
+            //Sell button
+            GameObject sell = currCard.transform.Find("Sell").gameObject;
+            if(Global.curr.gamePhase=="shop"){
+                sell.SetActive(true);
+            }else{
+                sell.SetActive(false);
+            }
+            sellText.text = "+" + SellWarrior.getSellPrice().ToString();
         }
     }
 

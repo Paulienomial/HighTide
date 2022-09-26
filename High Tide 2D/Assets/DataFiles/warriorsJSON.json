@@ -10,7 +10,9 @@
           "isRanged": false,
           "mergeCount":1,
           "attacksound": "sword",
-          "description":"Basic melee unit"
+          "description":"Basic melee unit",
+          "bounty":1,
+          "cityDamage":1
       },
       {
           "name": "Archer",

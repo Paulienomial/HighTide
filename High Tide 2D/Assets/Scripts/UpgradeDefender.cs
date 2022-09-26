@@ -23,7 +23,6 @@ public class UpgradeDefender : MonoBehaviour
         //upgrade the unit
         WarriorAttributes.attr myAttr = gameObject.GetComponent<Warrior>().attributes;
         WarriorAttributes.attr otherAttr = g.GetComponent<Warrior>().attributes;
-        Debug.Log(g.GetComponent<Warrior>().attributes.mergeCount);
 
         gameObject.GetComponent<Warrior>().attributes.mergeCount+=g.GetComponent<Warrior>().attributes.mergeCount;
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount<3){//1,2
@@ -39,9 +38,23 @@ public class UpgradeDefender : MonoBehaviour
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount>=3 && gameObject.GetComponent<Warrior>().attributes.mergeCount<6){
             levelText.text="2";
+            if(gameObject.GetComponent<Warrior>().attributes.name=="Farmer"){
+                gameObject.GetComponent<Warrior>().attributes.description = "+4 gold after wave for each surviving farmer";
+            }
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount==6){
             levelText.text="3";
+            if(gameObject.GetComponent<Warrior>().attributes.name=="Farmer"){
+                gameObject.GetComponent<Warrior>().attributes.description = "+6 gold after wave for each surviving farmer";
+            }
+        }
+
+        if(gameObject.GetComponent<Warrior>().attributes.mergeCount==3){//upgrade to level 2
+            AnimationController.curr.play("lvl2Upgrade", new Vector3(g.transform.position.x,g.transform.position.y-.5f,0f),"","tadaTrumpet",1,"image");
+        }else if(gameObject.GetComponent<Warrior>().attributes.mergeCount==6){//upgrade to level 3
+            AnimationController.curr.play("lvl3Upgrade", new Vector3(g.transform.position.x,g.transform.position.y-.65f,0f),"","happyTrumpet",2,"image");
+        }else{
+            AudioSystem.curr.createAndPlaySound("ping"+Random.Range(4,7).ToString(), 10f);//merge sound
         }
 
         gameObject.GetComponent<Warrior>().attributes.damage+=g.GetComponent<Warrior>().attributes.damage/2;
@@ -50,7 +63,6 @@ public class UpgradeDefender : MonoBehaviour
 
         //remove old unit from defenders list, if it was on the list
         if(Global.curr.defenders.Contains(g)){
-            Debug.Log("Removed old defender");
             Global.curr.defenders.Remove(g);
         }
 

@@ -48,4 +48,11 @@ public class Warrior : MonoBehaviour
             return 3;
         }
     }
+
+    public void setHealth(int h){
+        attributes.hp=h;
+        maxHealth=h;
+        hpBar = gameObject.GetComponent<HealthBarUpdate>().hpBar;
+        hpBar.setMaxHealth(h);
+    }
 }

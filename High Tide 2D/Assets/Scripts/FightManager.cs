@@ -186,14 +186,16 @@ public class FightManager : MonoBehaviour
             {
                 waveLost = true;
                 opponent.GetComponent<CityHealthManager>().takeDamage();
-                if (Global.curr.enemyWaveDeathCount == 1)
+                if (Global.curr.enemyWaveDeathCount == 1)//if last enemy to damage city
                 {
                     die();
+                    CityUpgrade.curr.playDamageAnimation(a.cityDamage);
                     waveComplete();
                 }
-                else
+                else //if not last enemy to damage city
                 {
                     die();
+                    CityUpgrade.curr.playDamageAnimation(a.cityDamage);
                 }
             }
         }
@@ -219,7 +221,7 @@ public class FightManager : MonoBehaviour
                     doDamage();
                 }    
             }
-            else
+            else//enemy
             {
                 if (target.GetComponent<FightManager>().isAlive && !waveEnd)
                 {
@@ -273,6 +275,8 @@ public class FightManager : MonoBehaviour
                 CancelInvoke();
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 resetWave();
+                Debug.Log("wave complete");
+                WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
             }
             else
@@ -292,7 +296,16 @@ public class FightManager : MonoBehaviour
         if (isAlive && !waveEnd && target != null && target.GetComponent<FightManager>().isAlive)
         {
             FightManager victim = target.GetComponent<FightManager>();
-            victim.a.hp -= a.damage;
+            int damageDealt = a.damage;
+            if( (victim.a.hp-a.damage)<0 ){//if the damage will cause victim's health to fall below zero
+                damageDealt=victim.a.hp;
+                victim.a.hp=0;
+            }else{
+                victim.a.hp -= a.damage;
+            }
+            if(victim.a.isFriendly==false){
+                WaveBarController.curr.setHealth(WaveBarController.curr.getHealth()-damageDealt);
+            }
             //target.GetComponent<Warrior>().attributes.hp -= a.damage;
 
             if (victim.a.hp <= 0)
@@ -322,6 +335,9 @@ public class FightManager : MonoBehaviour
             Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
+            if(!waveLost){
+                playGoldAnimation(a.bounty);
+            }
             Destroy(gameObject);
             //gameObject.SetActive(false);
         }
@@ -342,7 +358,7 @@ public class FightManager : MonoBehaviour
     void resetWave()
     {
         if(!Global.curr.gameOver){
-            Debug.Log("Resetting Wave");
+            //Debug.Log("Resetting Wave");
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
             {
@@ -355,6 +371,8 @@ public class FightManager : MonoBehaviour
             waveLost = false;
             Global.curr.waveStart = false;
             Global.curr.waveNum++;
+            WaveBarController.curr.setText("Wave "+Global.curr.waveNum);
+            WaveBarController.curr.setTopText("Next wave:");
             Global.curr.gamePhase = "shop";
             Global.curr.resetShop();
             foreach (GameObject current in Global.curr.defenders)
@@ -369,8 +387,15 @@ public class FightManager : MonoBehaviour
                 current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
 
             }
-            Global.curr.gold+=10;
+            //Global.curr.gold+=10;
             Events.curr.waveComplete();//trigger wave complete event
         }
+    }
+
+    void playGoldAnimation(int b){
+        /*GameObject goldAnim = Instantiate(goldAnimation, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), Quaternion.identity);
+        goldAnim.GetComponentInChildren<GoldAnimation>().play(b);*/
+        AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+"+a.bounty.ToString(), "coinFlip", 3);
+        Global.curr.gold+=a.bounty;
     }
 }
