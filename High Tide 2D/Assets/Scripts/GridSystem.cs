@@ -35,10 +35,13 @@ public class GridSystem : MonoBehaviour
         tileHighlight = Instantiate(tileHighlight, new Vector3(20f, 20f, 20f), Quaternion.identity);
         tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
         tileHighlight.SetActive(false);
-        Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
+        /*Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
         Events.curr.onStopDefenderDrag += hideGrid;
         Events.curr.onStopDefenderDrag += dragFalse;
-        Events.curr.onStopDefenderDrag += mergeDrop;
+        Events.curr.onStopDefenderDrag += mergeDrop;*/
+
+        Events.curr.onDefenderDrag += defenderDrag; //subscribe observer to subject
+        Events.curr.onStopDefenderDrag += stopDefenderDrag;
         placingPhase=false;
 
         gridCellSize = cellSizePixels/pixelsPerunit;
@@ -51,28 +54,40 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //check if mouse down on placing object, but not yet up
-        if(justPlacedObject==true){
-            if(Input.GetKeyUp(KeyCode.Mouse0)){
-                justPlacedObject=false;
-            }
-        }
-
-        //if not placing or dragging, the hide grid
-        if(!draggingPhase && ! placingPhase){
-            grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
-        }
-
         if(Input.GetKeyDown(KeyCode.G)){
             Global.curr.gold+=100;
         }
 
-        //start placing object
-        if(placingPhase){
-            clickToPlaceObject(currObject);
+        if(Global.curr.gamePhase=="shop"){
+            //check if mouse down on placing object, but not yet up
+            if(justPlacedObject==true){
+                if(Input.GetKeyUp(KeyCode.Mouse0)){
+                    justPlacedObject=false;
+                }
+            }
+
+            //if not placing or dragging, then hide grid
+            if(!draggingPhase && ! placingPhase){
+                grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+            }
+
+            //start placing object
+            if(placingPhase){
+                clickToPlaceObject(currObject);
+            }
+
+            //if at invalid pos, then highlight red
+            if(currObject && !validPos(currObject)){
+                tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
+            }
+
+            //if at valid pos, then highlight green
+            if(currObject && validPos(currObject)){
+                tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
+            }
         }
 
-        //if mouse lift while dragging an object
+        /*//if mouse lift while dragging an object
         if(Input.GetKeyUp(KeyCode.Mouse0)){
             if(currObject!=null && draggingPhase==true){
                 draggingPhase=false;
@@ -86,26 +101,19 @@ public class GridSystem : MonoBehaviour
                 }
                 tileHighlight.SetActive(false);
                 grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=18;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10018;
             }
-        }
-        if(currObject && !validPos(currObject)){
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
-        }
-        if(currObject && validPos(currObject)){
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
-        }
+        }*/
     }
 
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
         GameObject g = Instantiate(movable, calcGridSpot( getMousePos() ), Quaternion.identity);
         HighlightSelected.curr.select(g);
-        g.GetComponent<SpriteRenderer>().sortingOrder=20;
+        g.GetComponent<SpriteRenderer>().sortingOrder=10020;
         tileHighlight.transform.position = g.transform.position;
         tileHighlight.SetActive(true);
         g.GetComponent<Warrior>().setWarrior(warriorType);//set g to be a warrior of type warriorType
         if(!placingPhase){
-            Debug.Log("Not placing phase");
             currObject=g;
             card=c;
             placingPhase=true;
@@ -137,7 +145,7 @@ public class GridSystem : MonoBehaviour
                         Destroy(g);
                         card.gameObject.SetActive(true);
                     }else{
-                        g.GetComponent<SpriteRenderer>().sortingOrder=18;
+                        g.GetComponent<SpriteRenderer>().sortingOrder=10018;
                         g.GetComponent<Warrior>().coordinates = g.transform.position;
                         Global.curr.defenders.AddLast(g);
                         //PURCHASE UNIT
@@ -156,19 +164,59 @@ public class GridSystem : MonoBehaviour
         }
     }
 
+    private void defenderDrag(GameObject g){
+        select(g);
+        if(Global.curr.gamePhase=="shop"){
+            dragObject(g);
+            checkIfRelease(g);
+        }
+    }
+
+    private void checkIfRelease(GameObject g){
+        if(Input.GetKeyUp(KeyCode.Mouse0)){
+            if(currObject!=null && draggingPhase==true){
+                draggingPhase=false;
+                if(!validPos(currObject)){//if released at invalid pos
+                    currObject.transform.position=initPos;
+                }else{//merge defender
+                    AudioScript.curr.playPlaceWarrior();
+                    currObject.GetComponent<Warrior>().coordinates = new Vector3(currObject.transform.position.x, currObject.transform.position.y, 0f);
+                    Events.curr.dropDefender();//trigger event
+                }
+                tileHighlight.SetActive(false);
+                grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10018;
+            }
+        }
+    }
+
+    private void stopDefenderDrag(GameObject g){
+        if(Global.curr.gamePhase=="shop"){
+            hideGrid(g);
+            dragFalse(g);
+            mergeDrop(g);
+        }
+    }
+
+    private void select(GameObject g){
+        if(g!=null){
+            HighlightSelected.curr.select(g);
+        }
+    }
+
     private void dragObject(GameObject g){
         if(g==null){
             //Debug.Log("g is null");
             return;
         }
-        HighlightSelected.curr.select(g);
+        //HighlightSelected.curr.select(g);
         if(Global.curr.gamePhase!="fight"){
             if(draggingPhase==false){
                 currObject=g;
                 tileHighlight.SetActive(true);
                 initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
                 draggingPhase=true;
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=20;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10020;
             }else{
                 snapToGrid(g);
             }
@@ -192,7 +240,7 @@ public class GridSystem : MonoBehaviour
                     return;
                 }
             }
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
+            //tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
 
             //STEP 3: move to grid spot
             
@@ -207,14 +255,12 @@ public class GridSystem : MonoBehaviour
                 if(canMerge(g, defender)){
                     return true;
                 }
-                Debug.Log("Defender at same spot as other");
                 return false;//invalid grid spot
             }
         }
 
         //if at a open spot, check if the unit cap allows it
         if(Global.curr.defenders.Count > Global.curr.unitCap){
-            Debug.Log("Too many defenders");
             return false;
         }
         return true;

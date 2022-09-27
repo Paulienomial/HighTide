@@ -68,7 +68,9 @@ public class CityUpgrade : MonoBehaviour
                 upgradePopPrice*=2;
                 upgradeText.text = "+" + popUpgradeAmount.ToString();
                 priceText.text = upgradePopPrice.ToString();
+                //play upgrade animation
                 AudioSystem.curr.createAndPlaySound("fanfareCityLvl2");
+                AnimationController.curr.createAndPlay("cityUpgradeLvl2", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
                 //set animator
                 animator.SetInteger("state",2);
                 //set sprite
@@ -76,7 +78,9 @@ public class CityUpgrade : MonoBehaviour
             }else if(upgradeCount==6){//upgrade to level 3
                 //hide upgrade button
                 upgradeButton.SetActive(false);
-                AudioSystem.curr.createAndPlaySound("fanfareCityLvl3");
+                //AudioSystem.curr.createAndPlaySound("fanfareCityLvl3");
+                //play upgrade animation
+                AnimationController.curr.createAndPlay("cityUpgradeLvl3", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
                 //set animator
                 animator.SetInteger("state",3);
                 //set sprite

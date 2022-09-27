@@ -23,11 +23,17 @@ public class AudioCreator : MonoBehaviour
         }
     }
 
-    public void createAndPlaySound(string name, float pitch=1f){
+    public void createAndPlaySound(string name, float pitch=1f, float volume=.5f){
+        if(name=="fanfareCityLvl3"){
+            Debug.Log("asdfsdf");
+            volume=1f;
+        }
+
         AudioClip audioClip = Resources.Load("Audio/" + name) as AudioClip;
         if(audioClip!=null){
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.pitch = pitch;
+            audioSource.volume = volume;
             audioSource.clip = audioClip;
             audioSource.Play();
             startedPlaying=true;

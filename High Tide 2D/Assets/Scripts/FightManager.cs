@@ -299,12 +299,25 @@ public class FightManager : MonoBehaviour
         {
             FightManager victim = target.GetComponent<FightManager>();
             int damageDealt = a.damage;
+            Debug.Log("Victim hp before: "+victim.a.hp);
             if( (victim.a.hp-a.damage)<0 ){//if the damage will cause victim's health to fall below zero
                 damageDealt=victim.a.hp;
                 victim.a.hp=0;
+                if(a.isFriendly==false){
+                    Debug.Log("Enemy doing damage");
+                }else{
+                    Debug.Log("Friendly doing damage");
+                }
             }else{
                 victim.a.hp -= a.damage;
+                if(a.isFriendly==false){
+                    Debug.Log("Enemy doing damage");
+                }else{
+                    Debug.Log("Friendly doing damage");
+                }
             }
+            Debug.Log("Victim hp after: "+victim.a.hp);
+            Debug.Log("damage dealt: "+damageDealt);
             if(victim.a.isFriendly==false){
                 WaveBarController.curr.setHealth(WaveBarController.curr.getHealth()-damageDealt);
             }

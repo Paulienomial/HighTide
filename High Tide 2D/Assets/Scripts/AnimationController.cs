@@ -30,4 +30,12 @@ public class AnimationController : MonoBehaviour
             g.GetComponent<ImageAnimation>().play(animationName, audioName, audioCount);
         }
     }
+
+    public void createAndPlay(string animationName, Vector3 pos){
+        if(animationName=="cityUpgradeLvl2"){
+            play("cityUpgrade", pos, "", "fanfareCityLvl2", 1, "image");
+        }else if(animationName=="cityUpgradeLvl3"){
+            play("cityUpgrade", pos, "", "fanfareCityLvl3", 1, "image");
+        }
+    }
 }
