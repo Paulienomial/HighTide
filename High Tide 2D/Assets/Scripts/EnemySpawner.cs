@@ -60,7 +60,7 @@ public class EnemySpawner : MonoBehaviour
                     maxEnemies = 10;
                 }else{
                     //maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
-                    maxEnemies = 2+Global.curr.waveNum;
+                    maxEnemies = 1+Global.curr.waveNum;
                 }
 
                 WaveBarController.curr.setMaxHealth(calcCombinedHP("Pokey boy", maxEnemies, Global.curr.waveNum));
@@ -120,17 +120,9 @@ public class EnemySpawner : MonoBehaviour
 
         float a=10f; //the horizontal asimptote
         float r=.05f; //the rate of increase
-        Debug.Log("Wave num: "+waveNum);
-        Debug.Log("a: "+a);
-        Debug.Log("r: "+r);
 
         float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
         float multiplier = (n * Mathf.Atan( r *((float)waveNum - 1f ))) + 1f;
-        
-        Debug.Log("Wave num: "+waveNum);
-        Debug.Log("a: "+a);
-        Debug.Log("r: "+r);
-        Debug.Log("Multiplier: "+multiplier);
 
         return multiplier;
     }

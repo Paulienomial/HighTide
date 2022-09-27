@@ -51,36 +51,42 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //check if mouse down on placing object, but not yet up
         if(justPlacedObject==true){
             if(Input.GetKeyUp(KeyCode.Mouse0)){
                 justPlacedObject=false;
             }
         }
 
+        //if not placing or dragging, the hide grid
         if(!draggingPhase && ! placingPhase){
             grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
         }
 
         if(Input.GetKeyDown(KeyCode.G)){
-            Global.curr.gold++;
+            Global.curr.gold+=100;
         }
 
+        //start placing object
         if(placingPhase){
             clickToPlaceObject(currObject);
         }
+
+        //if mouse lift while dragging an object
         if(Input.GetKeyUp(KeyCode.Mouse0)){
             if(currObject!=null && draggingPhase==true){
                 draggingPhase=false;
                 if(!validPos(currObject)){//if released at invalid pos
+                    Debug.Log("Released at invalid pos");
                     currObject.transform.position=initPos;
-                }else{
+                }else{//merge defender
                     AudioScript.curr.playPlaceWarrior();
-                    currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
+                    currObject.GetComponent<Warrior>().coordinates = new Vector3(currObject.transform.position.x, currObject.transform.position.y, 0f);
                     Events.curr.dropDefender();//trigger event
                 }
                 tileHighlight.SetActive(false);
                 grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=3;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=18;
             }
         }
         if(currObject && !validPos(currObject)){
@@ -94,11 +100,12 @@ public class GridSystem : MonoBehaviour
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
         GameObject g = Instantiate(movable, calcGridSpot( getMousePos() ), Quaternion.identity);
         HighlightSelected.curr.select(g);
-        g.GetComponent<SpriteRenderer>().sortingOrder=10;
+        g.GetComponent<SpriteRenderer>().sortingOrder=20;
         tileHighlight.transform.position = g.transform.position;
         tileHighlight.SetActive(true);
         g.GetComponent<Warrior>().setWarrior(warriorType);//set g to be a warrior of type warriorType
         if(!placingPhase){
+            Debug.Log("Not placing phase");
             currObject=g;
             card=c;
             placingPhase=true;
@@ -130,7 +137,7 @@ public class GridSystem : MonoBehaviour
                         Destroy(g);
                         card.gameObject.SetActive(true);
                     }else{
-                        g.GetComponent<SpriteRenderer>().sortingOrder=3;
+                        g.GetComponent<SpriteRenderer>().sortingOrder=18;
                         g.GetComponent<Warrior>().coordinates = g.transform.position;
                         Global.curr.defenders.AddLast(g);
                         //PURCHASE UNIT
@@ -150,7 +157,10 @@ public class GridSystem : MonoBehaviour
     }
 
     private void dragObject(GameObject g){
-        if(g==null) return;
+        if(g==null){
+            //Debug.Log("g is null");
+            return;
+        }
         HighlightSelected.curr.select(g);
         if(Global.curr.gamePhase!="fight"){
             if(draggingPhase==false){
@@ -158,7 +168,7 @@ public class GridSystem : MonoBehaviour
                 tileHighlight.SetActive(true);
                 initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
                 draggingPhase=true;
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=20;
             }else{
                 snapToGrid(g);
             }
@@ -191,15 +201,20 @@ public class GridSystem : MonoBehaviour
 
     private bool validPos(GameObject g){
         Vector3 gridSpot = g.transform.position;
+        //first check merge conditions
         foreach(GameObject defender in Global.curr.defenders){
             if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){
                     return true;
                 }
+                Debug.Log("Defender at same spot as other");
                 return false;//invalid grid spot
             }
         }
-        if(Global.curr.defenders.Count>=Global.curr.unitCap){
+
+        //if at a open spot, check if the unit cap allows it
+        if(Global.curr.defenders.Count > Global.curr.unitCap){
+            Debug.Log("Too many defenders");
             return false;
         }
         return true;
@@ -280,7 +295,7 @@ public class GridSystem : MonoBehaviour
     }
 
     private void mergeDrop(GameObject g){
-        if(currObject!=null){
+        if(currObject!=null && Global.curr.gamePhase=="shop"){
             GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
             if(mergeWith!=null){
                 mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)

@@ -23,6 +23,7 @@ public class FightManager : MonoBehaviour
     public bool waveLost = false;
     //Fix met attributes wat nie update nie
     public WarriorAttributes.attr a;
+    float movespeed=.75f;
 
     SpriteRenderer r;
     // Start is called before the first frame update
@@ -66,10 +67,10 @@ public class FightManager : MonoBehaviour
 
         if (targetList.Count == 0)
         {
-           // Debug.Log("No Targets");
             if (!a.isFriendly)
             {
                 target = city;
+                movespeed=2f;
             }
         }
         else
@@ -97,7 +98,7 @@ public class FightManager : MonoBehaviour
                     }
                     else
                     {
-                        //Debug.Log("Ignoring dead target");
+                        //ignoring dead target
                     }
                 }
 
@@ -106,6 +107,7 @@ public class FightManager : MonoBehaviour
             if (target == null && !a.isFriendly)
             {
                 target = city;
+                movespeed=2f;
             }
         }
     }
@@ -120,7 +122,7 @@ public class FightManager : MonoBehaviour
             {
                 if (Vector2.Distance(transform.position, target.transform.position) <= 3)
                 {
-                    //Debug.Log("Archer engaging");
+                    //archer engaging
                     engageCombat(target);
                 }
             }
@@ -143,11 +145,11 @@ public class FightManager : MonoBehaviour
             }
             if (a.isFriendly)
             {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), 0.5f * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), movespeed * Time.deltaTime);
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shift, target.transform.position.y), 0.5f * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shift, target.transform.position.y), movespeed * Time.deltaTime);
             }
         }
     }
@@ -269,13 +271,13 @@ public class FightManager : MonoBehaviour
     {
         if (Global.curr.waveStart)
         {
-            //Debug.Log(Global.curr.enemyWaveDeathCount);
+            
             if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
             {
                 CancelInvoke();
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 resetWave();
-                Debug.Log("wave complete");
+                Global.curr.gold+=2;
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
             }
@@ -332,7 +334,6 @@ public class FightManager : MonoBehaviour
         if (!a.isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
-            Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
             if(!waveLost){
@@ -358,7 +359,6 @@ public class FightManager : MonoBehaviour
     void resetWave()
     {
         if(!Global.curr.gameOver){
-            //Debug.Log("Resetting Wave");
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
             {
@@ -375,9 +375,11 @@ public class FightManager : MonoBehaviour
             WaveBarController.curr.setTopText("Next wave:");
             Global.curr.gamePhase = "shop";
             Global.curr.resetShop();
+            Debug.Log("Defenders count: "+Global.curr.defenders.Count);
             foreach (GameObject current in Global.curr.defenders)
             {
                 current.transform.position = current.GetComponent<Warrior>().coordinates;
+                Debug.Log("resetting defender, coordinates:" + current.transform.position);
                 current.SetActive(true);
                 current.GetComponent<FightManager>().inCombat = false;
                 current.GetComponent<FightManager>().isAlive = true;
@@ -387,7 +389,6 @@ public class FightManager : MonoBehaviour
                 current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
 
             }
-            //Global.curr.gold+=10;
             Events.curr.waveComplete();//trigger wave complete event
         }
     }

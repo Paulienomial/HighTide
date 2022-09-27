@@ -106,7 +106,6 @@ public class AudioScript : MonoBehaviour
 
     public void playAttackSound(GameObject type)
     {
-        //Debug.Log("Attack type is " + type.GetComponent<Warrior>().attributes.attacksound);
         if(type.GetComponent<Warrior>().attributes.attacksound == "sword")
         {
 

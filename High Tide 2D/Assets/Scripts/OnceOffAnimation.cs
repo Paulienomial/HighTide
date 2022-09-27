@@ -29,7 +29,6 @@ public class OnceOffAnimation : MonoBehaviour
             minInclusive=1;
             maxExclusive=audioCount+1;
             audioSuffix = Random.Range(minInclusive, maxExclusive).ToString();
-            Debug.Log("Rand num:" +audioSuffix);
         }
 
         AudioSystem.curr.createAndPlaySound(audioName+ audioSuffix );
