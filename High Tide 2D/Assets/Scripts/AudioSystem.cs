@@ -19,7 +19,7 @@ public class AudioSystem : MonoBehaviour
     }
 
     public void createAndPlaySound(string sound, float pitch=1f){
-        GameObject a = Instantiate(audioCreator, new Vector3(999f,0,0), Quaternion.identity);
+        GameObject a = Instantiate(audioCreator, new Vector3(0,5f,0), Quaternion.identity);
         a.GetComponent<AudioCreator>().createAndPlaySound(sound, pitch);
     }
 }

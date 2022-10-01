@@ -35,10 +35,13 @@ public class GridSystem : MonoBehaviour
         tileHighlight = Instantiate(tileHighlight, new Vector3(20f, 20f, 20f), Quaternion.identity);
         tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
         tileHighlight.SetActive(false);
-        Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
+        /*Events.curr.onDefenderDrag += dragObject; //subscribe observer to subject
         Events.curr.onStopDefenderDrag += hideGrid;
         Events.curr.onStopDefenderDrag += dragFalse;
-        Events.curr.onStopDefenderDrag += mergeDrop;
+        Events.curr.onStopDefenderDrag += mergeDrop;*/
+
+        Events.curr.onDefenderDrag += defenderDrag; //subscribe observer to subject
+        Events.curr.onStopDefenderDrag += stopDefenderDrag;
         placingPhase=false;
 
         gridCellSize = cellSizePixels/pixelsPerunit;
@@ -51,50 +54,63 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(justPlacedObject==true){
-            if(Input.GetKeyUp(KeyCode.Mouse0)){
-                justPlacedObject=false;
+        if(Input.GetKeyDown(KeyCode.G)){
+            Global.curr.gold+=100;
+        }
+
+        if(Global.curr.gamePhase=="shop"){
+            //check if mouse down on placing object, but not yet up
+            if(justPlacedObject==true){
+                if(Input.GetKeyUp(KeyCode.Mouse0)){
+                    Events.curr.purchaseDefender();//trigger event
+                    justPlacedObject=false;
+                }
+            }
+
+            //if not placing or dragging, then hide grid
+            if(!draggingPhase && ! placingPhase){
+                grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+            }
+
+            //start placing object
+            if(placingPhase){
+                clickToPlaceObject(currObject);
+            }
+
+            //if at invalid pos, then highlight red
+            if(currObject && !validPos(currObject)){
+                tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
+            }
+
+            //if at valid pos, then highlight green
+            if(currObject && validPos(currObject)){
+                tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
             }
         }
 
-        if(!draggingPhase && ! placingPhase){
-            grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
-        }
-
-        if(Input.GetKeyDown(KeyCode.G)){
-            Global.curr.gold++;
-        }
-
-        if(placingPhase){
-            clickToPlaceObject(currObject);
-        }
+        /*//if mouse lift while dragging an object
         if(Input.GetKeyUp(KeyCode.Mouse0)){
             if(currObject!=null && draggingPhase==true){
                 draggingPhase=false;
                 if(!validPos(currObject)){//if released at invalid pos
+                    Debug.Log("Released at invalid pos");
                     currObject.transform.position=initPos;
-                }else{
+                }else{//merge defender
                     AudioScript.curr.playPlaceWarrior();
-                    currObject.GetComponent<Warrior>().coordinates = currObject.transform.position;
+                    currObject.GetComponent<Warrior>().coordinates = new Vector3(currObject.transform.position.x, currObject.transform.position.y, 0f);
                     Events.curr.dropDefender();//trigger event
                 }
                 tileHighlight.SetActive(false);
                 grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=3;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10018;
             }
-        }
-        if(currObject && !validPos(currObject)){
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
-        }
-        if(currObject && validPos(currObject)){
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
-        }
+        }*/
     }
 
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
         GameObject g = Instantiate(movable, calcGridSpot( getMousePos() ), Quaternion.identity);
         HighlightSelected.curr.select(g);
-        g.GetComponent<SpriteRenderer>().sortingOrder=10;
+        g.GetComponent<SpriteRenderer>().sortingOrder=10020;
         tileHighlight.transform.position = g.transform.position;
         tileHighlight.SetActive(true);
         g.GetComponent<Warrior>().setWarrior(warriorType);//set g to be a warrior of type warriorType
@@ -123,19 +139,19 @@ public class GridSystem : MonoBehaviour
                     mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
                     //PURCHASE UNIT
                     Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                    Events.curr.purchaseDefender();//trigger event
+                    //Events.curr.purchaseDefender();//trigger event
                 }else{//if in a open valid grid spot
                     if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
                         Notify.curr.show("Unit capacity reached");
                         Destroy(g);
                         card.gameObject.SetActive(true);
                     }else{
-                        g.GetComponent<SpriteRenderer>().sortingOrder=3;
+                        g.GetComponent<SpriteRenderer>().sortingOrder=10018;
                         g.GetComponent<Warrior>().coordinates = g.transform.position;
                         Global.curr.defenders.AddLast(g);
                         //PURCHASE UNIT
                         Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                        Events.curr.purchaseDefender();//trigger event
+                        //Events.curr.purchaseDefender();//trigger event
                     }
                 }
                 
@@ -149,16 +165,62 @@ public class GridSystem : MonoBehaviour
         }
     }
 
+    private void defenderDrag(GameObject g){
+        select(g);
+        if(Global.curr.gamePhase=="shop"){
+            dragObject(g);
+            checkIfRelease(g);
+        }
+    }
+
+    private void checkIfRelease(GameObject g){
+        if(Input.GetKeyUp(KeyCode.Mouse0)){
+            if(currObject!=null && draggingPhase==true){
+                draggingPhase=false;
+                if(!validPos(currObject)){//if released at invalid pos
+                    currObject.transform.position=initPos;
+                }else{//merge defender
+                    if(!sameSpot(initPos, currObject.transform.position)){//if position changed with dragging
+                        Events.curr.draggedNewSpot();
+                    }
+                    AudioScript.curr.playPlaceWarrior();
+                    currObject.GetComponent<Warrior>().coordinates = new Vector3(currObject.transform.position.x, currObject.transform.position.y, 0f);
+                    Events.curr.dropDefender();//trigger event
+                }
+                tileHighlight.SetActive(false);
+                grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10018;
+            }
+        }
+    }
+
+    private void stopDefenderDrag(GameObject g){
+        if(Global.curr.gamePhase=="shop"){
+            hideGrid(g);
+            dragFalse(g);
+            mergeDrop(g);
+        }
+    }
+
+    private void select(GameObject g){
+        if(g!=null){
+            HighlightSelected.curr.select(g);
+        }
+    }
+
     private void dragObject(GameObject g){
-        if(g==null) return;
-        HighlightSelected.curr.select(g);
+        if(g==null){
+            //Debug.Log("g is null");
+            return;
+        }
+        //HighlightSelected.curr.select(g);
         if(Global.curr.gamePhase!="fight"){
             if(draggingPhase==false){
                 currObject=g;
                 tileHighlight.SetActive(true);
                 initPos=new Vector3(g.transform.position.x, g.transform.position.y, g.transform.position.z);
                 draggingPhase=true;
-                currObject.GetComponent<SpriteRenderer>().sortingOrder=10;
+                currObject.GetComponent<SpriteRenderer>().sortingOrder=10020;
             }else{
                 snapToGrid(g);
             }
@@ -182,7 +244,7 @@ public class GridSystem : MonoBehaviour
                     return;
                 }
             }
-            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
+            //tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
 
             //STEP 3: move to grid spot
             
@@ -191,6 +253,7 @@ public class GridSystem : MonoBehaviour
 
     private bool validPos(GameObject g){
         Vector3 gridSpot = g.transform.position;
+        //first check merge conditions
         foreach(GameObject defender in Global.curr.defenders){
             if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){
@@ -199,7 +262,9 @@ public class GridSystem : MonoBehaviour
                 return false;//invalid grid spot
             }
         }
-        if(Global.curr.defenders.Count>=Global.curr.unitCap){
+
+        //if at a open spot, check if the unit cap allows it
+        if(Global.curr.defenders.Count > Global.curr.unitCap){
             return false;
         }
         return true;
@@ -231,6 +296,17 @@ public class GridSystem : MonoBehaviour
         if(g1==null || g2==null) return false;
         float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
         if( Math.Abs(g1.transform.position.x-g2.transform.position.x)<tolerance && Math.Abs(g1.transform.position.y-g2.transform.position.y)<tolerance ){//same spot
+            return true;        
+        }
+        return false;
+    }
+
+    public bool sameSpot(Vector3 v1, Vector3 v2){
+        if(v1==null || v2==null) return false;
+        float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
+        Debug.Log("Init pos: "+v1);
+        Debug.Log("Dropped pos: "+v2);
+        if( Math.Abs(v1.x-v2.x)<tolerance && Math.Abs(v1.y-v2.y)<tolerance ){//same spot
             return true;        
         }
         return false;
@@ -280,7 +356,7 @@ public class GridSystem : MonoBehaviour
     }
 
     private void mergeDrop(GameObject g){
-        if(currObject!=null){
+        if(currObject!=null && Global.curr.gamePhase=="shop"){
             GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
             if(mergeWith!=null){
                 mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)

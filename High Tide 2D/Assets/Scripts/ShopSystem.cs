@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class ShopSystem : MonoBehaviour
 {
     public GameObject shop;
+    public GameObject cardsContainer;
     public GameObject unitCard;
     int amountOfUnits;
     ArrayList shopSelection;//stores the selection of possible units from curr shop tier
@@ -51,8 +52,13 @@ public class ShopSystem : MonoBehaviour
         shopUnits.Clear();
         fillShopSelection(Global.curr.shopTier);//the total amount of units that is of the curr shop tier or lower
         for(int i=0; i<amountOfUnits; i++){
-            int unitIndex = Random.Range(0,shopSelection.Count);//select a random unit from the shop selection
-            shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
+            if(i==0 && Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(i).GetComponent<Warrior>().attributes.name!="Farmer"){
+                //for the tutorial level, we make it so the first unit in the shop on wave 2 will be the one that was placed in the tutorial
+                shopUnits.AddLast(Global.curr.defenders.ElementAt(i).GetComponent<Warrior>().attributes);
+            }else{
+                int unitIndex = Random.Range(0,shopSelection.Count);//select a random unit from the shop selection
+                shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list
+            }
         }
     }
 
@@ -74,7 +80,7 @@ public class ShopSystem : MonoBehaviour
         //create cards from shopUnits
         for(int i=0; i<amountOfUnits; i++){
             //instantiate a unitCard as a child of the shop
-            cards.Add( Instantiate(unitCard, shop.transform) );
+            cards.Add( Instantiate(unitCard, cardsContainer.transform) );
             //change card position
             GameObject currCard = (GameObject)cards[i];
             int k=0;
@@ -150,10 +156,18 @@ public class ShopSystem : MonoBehaviour
             if(shop.activeSelf==false){
                 shopOpen=true;
                 shop.SetActive(true);
+                showMergeTutorialTip();
             }else{
                 shopOpen=false;
                 shop.SetActive(false);
             }
+        }
+    }
+
+    public void showMergeTutorialTip(){
+        if(Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(0).GetComponent<Warrior>().attributes.name!="Farmer"){
+            //Tutorial.curr.displayTip("You can combine two units of the same type by dragging them on top of each other");
+            //Highlight.curr.outlineAnimate((GameObject)cards[0]);
         }
     }
 }

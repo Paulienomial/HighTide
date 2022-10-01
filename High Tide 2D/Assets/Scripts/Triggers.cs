@@ -33,7 +33,7 @@ public class Triggers : MonoBehaviour
             //Debug.Log("not dragging");
             //raycast to warrior prefab
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, defenderMask);
-            if(hit.collider!=null){
+            if(hit.collider!=null && ShopSystem.curr.shopOpen==false){
                 if(Input.GetKeyDown(KeyCode.Mouse0)){
                     //start dragging
                     //Debug.Log("start dragging");

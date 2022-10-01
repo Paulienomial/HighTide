@@ -104,30 +104,6 @@ public class AudioScript : MonoBehaviour
         waveFailed.volume = vol;
     }
 
-    public void playAttackSound(GameObject type)
-    {
-        //Debug.Log("Attack type is " + type.GetComponent<Warrior>().attributes.attacksound);
-        if(type.GetComponent<Warrior>().attributes.attacksound == "sword")
-        {
-
-            playSwordAttackSound();
-        }
-        else
-        {
-            if (type.GetComponent<Warrior>().attributes.attacksound == "bow")
-            {
-                playBowAttackSound();
-            }
-            else
-            {
-                if (type.GetComponent<Warrior>().attributes.attacksound == "enemymelee")
-                {
-                    playEnemyMeleeSound();
-                }
-            }
-        }
-    }
-
     public void playButtonClickSound()
     {
         buttonSound.Play();

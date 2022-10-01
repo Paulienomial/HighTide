@@ -18,12 +18,14 @@ public class FightManager : MonoBehaviour
     public bool waveLost = false;
     public bool unitPaused = false;
     public WarriorAttributes.attr a;
+    float fastforwardMovespeed;
 
     SpriteRenderer r;
     void Start()
     {
         a = gameObject.GetComponent<Warrior>().attributes;
         r = GetComponent<SpriteRenderer>();
+        fastforwardMovespeed = a.moveSpeed*2;
     }
 
     // Update is called once per frame
@@ -53,6 +55,7 @@ public class FightManager : MonoBehaviour
             {
                 //If unit is enemy and there are no friendy units on the battlefield, unit targets the city.
                 target = city;
+                a.moveSpeed = fastforwardMovespeed;
             }
         }
         else
@@ -81,7 +84,7 @@ public class FightManager : MonoBehaviour
                     }
                     else
                     {
-                        //Debug.Log("Ignoring dead target");
+                        //ignoring dead target
                     }
                 }
 
@@ -90,6 +93,7 @@ public class FightManager : MonoBehaviour
             if (target == null && !a.isFriendly)
             {
                 target = city;
+                a.moveSpeed = fastforwardMovespeed;
             }
         }
     }
@@ -108,6 +112,7 @@ public class FightManager : MonoBehaviour
                     //If the current unit is ranged, this IF makes it stop when the target is in range of it's attacks.
                     if (Vector2.Distance(transform.position, target.transform.position) <= 3)
                     {
+                        //archer engaging
                         engageCombat(target);
                     }
                 }
@@ -117,11 +122,11 @@ public class FightManager : MonoBehaviour
                 if (a.isFriendly)
                 {
                     //Ensures that friendly unit will always be on the left and enemy unit on the right.
-                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shiftX, target.transform.position.y + shiftY), 0.5f * Time.deltaTime);
+                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shiftX, target.transform.position.y + shiftY), a.moveSpeed * Time.deltaTime);
                 }
                 else
                 {
-                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shiftX, target.transform.position.y + shiftY), 0.5f * Time.deltaTime);
+                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shiftX, target.transform.position.y + shiftY), a.moveSpeed * Time.deltaTime);
                 }
             }
         }
@@ -185,7 +190,8 @@ public class FightManager : MonoBehaviour
             {
                 if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                 {
-                    AudioScript.curr.playAttackSound(this.gameObject);
+                    //AudioScript.curr.playAttackSound(this.gameObject);
+                    playAttackSound();
                 }
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
@@ -204,7 +210,8 @@ public class FightManager : MonoBehaviour
                 {
                     if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                     {
-                        AudioScript.curr.playAttackSound(this.gameObject);
+                        //AudioScript.curr.playAttackSound(this.gameObject);
+                        playAttackSound();
                     }
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
@@ -238,8 +245,8 @@ public class FightManager : MonoBehaviour
     {
         if (target != null && isAlive && !unitPaused)
         {
-            Debug.Log("Projectile instantiated");
-            AudioScript.curr.playAttackSound(this.gameObject);
+            //AudioScript.curr.playAttackSound(this.gameObject);
+            playAttackSound();
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }
@@ -328,7 +335,6 @@ public class FightManager : MonoBehaviour
         if (!a.isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
-            Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
             if (!waveLost)
@@ -393,5 +399,10 @@ public class FightManager : MonoBehaviour
         AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+" + a.bounty.ToString(), "coinFlip", 3);
         Global.curr.gold += a.bounty;
         StatScreens.curr.enemyGold += a.bounty;
+    }
+
+    void playAttackSound(){
+        Debug.Log("Play attack sound: "+a.attackSound);
+        AudioSystem.curr.createAndPlaySound(a.attackSound);
     }
 }

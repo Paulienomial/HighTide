@@ -24,6 +24,7 @@ public class HighlightSelected : MonoBehaviour
         highlight = Instantiate(highlightPrefab, new Vector3(0,0,0), Quaternion.identity);
         highlight.SetActive(false);
         cityInfo.SetActive(false);
+        warriorInfo.SetActive(false);
     }
 
     // Update is called once per frame

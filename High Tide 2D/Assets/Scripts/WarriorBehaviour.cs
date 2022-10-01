@@ -19,7 +19,9 @@ public class WarriorBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Global.curr.gamePhase == "fight"){
+            setDrawOrder();
+        }
     }
 
     private void afterWave(){
@@ -46,5 +48,13 @@ public class WarriorBehaviour : MonoBehaviour
 
             gameObject.GetComponent<Warrior>().diedLastWave=false;
         }
+    }
+
+    void setDrawOrder(){
+        float y = gameObject.transform.position.y;
+        //y -= GridSystem.curr.grid.GetComponent<SpriteRenderer>().bounds.y/2-.1f;
+        y -= 5f; // ensure negative y value, max y=0, min y=-10
+        int sortingOrder = Mathf.FloorToInt(y*-1000); //multiply y with 1000 and get and int from that, min int=0, max int=10 000
+        gameObject.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;//use that int for the sorting order, aka order in layer
     }
 }

@@ -2,52 +2,52 @@
     "warriors":[
       {
           "name": "Foot soldier",
-          "damage": 50,
-          "hp": 300,
+          "damage": 20,
+          "hp": 500,
           "tier": 1,
           "price": 3,
           "isFriendly": true,
           "isRanged": false,
           "mergeCount":1,
-          "attacksound": "sword",
           "description":"Basic melee unit",
           "bounty":1,
-          "cityDamage":1
+          "cityDamage":1,
+          "moveSpeed":1,
+          "attackSound": "sword",
+          "attackSoundAmount":1
       },
       {
           "name": "Archer",
-          "damage": 40,
-          "hp": 200,
+          "damage": 45,
+          "hp": 100,
           "isRanged": true,
           "isFriendly":true,
-          "attacksound": "bow",
-          "description":"Basic ranged unit"
+          "description":"Basic ranged unit",
+          "attackSound": "bow"
       },
       {
         "name": "Farmer",
-        "damage": 20,
-        "hp": 150,
+        "damage": 35,
+        "hp": 180,
         "isFriendly": true,
-        "attacksound": "sword",
-        "description":"+2 gold after wave for each surviving farmer"
+        "description":"+2 gold after wave for each surviving farmer",
+        "moveSpeed":0.5
       },
       {
         "name": "Lizardman",
         "damage": 30,
         "hp": 200,
         "isFriendly": false,
-        "attacksound": "enemymelee",
         "description":"Beware, this lizard seems angry",
         "tier":999
       },
       {
         "name": "Pokey boy",
-        "damage": 30,
-        "hp": 200,
-        "isRanged": true,
+        "damage": 40,
+        "hp": 250,
         "isFriendly": false,
-        "attacksound": "enemymelee",
-        "description":"Beware, he pokes"
+        "description":"Beware, he pokes",
+        "attackSound": "poke"
       }
     ]
 }
