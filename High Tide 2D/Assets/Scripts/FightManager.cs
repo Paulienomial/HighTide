@@ -106,7 +106,7 @@ public class FightManager : MonoBehaviour
             {
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 1); //Playing walk animation
                 float shiftX = GetComponent<Collider2D>().bounds.size.x; //Calculating how far a unit should be from it's target's centre in order to stop right in front of the target.
-                float shiftY = Random.Range(GetComponent<Collider2D>().bounds.size.y / 1.2f * -1, GetComponent<Collider2D>().bounds.size.y / 1.2f); //Calculating shift so units won't always stand on top of each other when fighting same enemy
+                float shiftY = Random.Range(GetComponent<Collider2D>().bounds.size.y / .7f * -1, GetComponent<Collider2D>().bounds.size.y / .7f); //Calculating shift so units won't always stand on top of each other when fighting same enemy
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
                     //If the current unit is ranged, this IF makes it stop when the target is in range of it's attacks.
@@ -403,6 +403,6 @@ public class FightManager : MonoBehaviour
 
     void playAttackSound(){
         Debug.Log("Play attack sound: "+a.attackSound);
-        AudioSystem.curr.createAndPlaySound(a.attackSound);
+        AudioSystem.curr.createAndPlaySound(a.attackSound, Random.Range(0.9f, 1.1f));
     }
 }

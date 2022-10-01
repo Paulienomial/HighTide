@@ -210,7 +210,7 @@ public class oldFightManager : MonoBehaviour
             {
                 if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                 {
-                    AudioScript.curr.playAttackSound(this.gameObject);
+                    //AudioScript.curr.playAttackSound(this.gameObject);
                 }
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
@@ -228,7 +228,7 @@ public class oldFightManager : MonoBehaviour
                 {
                     if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                     {
-                        AudioScript.curr.playAttackSound(this.gameObject);
+                        //AudioScript.curr.playAttackSound(this.gameObject);
                     }
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
@@ -261,7 +261,7 @@ public class oldFightManager : MonoBehaviour
         if (target != null && isAlive)
         {
             Debug.Log("PROJECTILE BRAH");
-            AudioScript.curr.playAttackSound(this.gameObject);
+            //AudioScript.curr.playAttackSound(this.gameObject);
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }

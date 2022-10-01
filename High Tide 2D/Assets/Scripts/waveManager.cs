@@ -34,6 +34,7 @@ public class waveManager : MonoBehaviour
             {
                 CancelInvoke();
                 resetWave();
+                Global.curr.gold+=2;
                 Debug.Log("wave complete");
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
@@ -70,7 +71,11 @@ public class waveManager : MonoBehaviour
             Global.curr.waveNum++;
             WaveBarController.curr.setText("Wave " + Global.curr.waveNum);
             WaveBarController.curr.setTopText("Next wave:");
+            //set gamephase to shop
             Global.curr.gamePhase = "shop";
+            Global.curr.shopButton.SetActive(true);
+            Global.curr.playButton.SetActive(true);
+            //////////////////////////
             Global.curr.resetShop();
             foreach (GameObject current in Global.curr.defenders)
             {

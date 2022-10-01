@@ -54,7 +54,8 @@ public class ShopSystem : MonoBehaviour
         for(int i=0; i<amountOfUnits; i++){
             if(i==0 && Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(i).GetComponent<Warrior>().attributes.name!="Farmer"){
                 //for the tutorial level, we make it so the first unit in the shop on wave 2 will be the one that was placed in the tutorial
-                shopUnits.AddLast(Global.curr.defenders.ElementAt(i).GetComponent<Warrior>().attributes);
+                WarriorAttributes.attr a = WarriorTypes.curr.find(Global.curr.defenders.ElementAt(i).GetComponent<Warrior>().attributes.name);
+                shopUnits.AddLast(a);
             }else{
                 int unitIndex = Random.Range(0,shopSelection.Count);//select a random unit from the shop selection
                 shopUnits.AddLast( (WarriorAttributes.attr)shopSelection[unitIndex] );//add that unit to the shopUnits list

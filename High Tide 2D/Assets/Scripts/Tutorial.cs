@@ -36,7 +36,8 @@ public class Tutorial : MonoBehaviour
     void Start()
     {
         messageBox.SetActive(false);
-        playTutorial();
+
+        //playTutorial();
     }
 
     // Update is called once per frame
