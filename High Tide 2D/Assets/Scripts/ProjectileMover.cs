@@ -18,12 +18,24 @@ public class ProjectileMover : MonoBehaviour
     {
         if (startMoving)
         {
-            if(target != null && shooter.GetComponent<FightManager>().isAlive)
+            if(target != null && shooter != null)
             {
-                transform.right = target.transform.position - transform.position;
-                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);
+                if (shooter.GetComponent<FightManager>().isAlive)
+                {
+                    transform.right = target.transform.position - transform.position;
+                    transform.position = Vector2.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
             else
+            {
+                Destroy(gameObject);
+            }
+
+            if(target == null || !target.GetComponent<FightManager>().isAlive)
             {
                 Destroy(gameObject);
             }
@@ -40,9 +52,9 @@ public class ProjectileMover : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D target)
     {
-        if (target.GetComponent<Warrior>() != null && target != null && shooter.GetComponent<FightManager>().isAlive)
+        if (target.GetComponent<Warrior>() != null && target != null && shooter.GetComponent<FightManager>().isAlive && shooter.GetComponent<Warrior>() != null)
         {
-            if (!target.GetComponent<Warrior>().attributes.isFriendly)
+            if (shooter.GetComponent<Warrior>().attributes.isFriendly && !target.GetComponent<Warrior>().attributes.isFriendly || !shooter.GetComponent<Warrior>().attributes.isFriendly && target.GetComponent<Warrior>().attributes.isFriendly)
             {
                 //Debug.Log("Archer hit");
                 startMoving = false;
