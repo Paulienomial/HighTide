@@ -29,6 +29,8 @@ public class WarriorAttributes : MonoBehaviour
             c.mergeCount=mergeCount;
             c.attacksound = attacksound;
             c.description=description;
+            c.bounty=bounty;
+            c.cityDamage=cityDamage;
 
             return c;
         }
@@ -42,5 +44,7 @@ public class WarriorAttributes : MonoBehaviour
         public int mergeCount=1;//amount of units combine to make this unit
         public string attacksound;
         public string description = "Basic melee unit";
+        public int bounty=1;//bounty for killing a unit
+        public int cityDamage=1;
     }
 }

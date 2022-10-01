@@ -4,26 +4,13 @@ OS: 'Windows 10  (10.0.19043) 64bit Professional' Language: 'en' Physical Memory
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
 
 COMMAND LINE ARGUMENTS:
-<<<<<<< Updated upstream
-E:\Program Files\Unity Editor\2021.3.4f1\Editor\Unity.exe
-=======
 C:\Program Files\Unity\Hub\Editor\2021.3.4f1\Editor\Unity.exe
->>>>>>> Stashed changes
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-<<<<<<< Updated upstream
-E:/HighTide/HighTide/High Tide 2D
--logFile
-Logs/AssetImportWorker0.log
--srvPort
-54369
-Successfully changed project path to: E:/HighTide/HighTide/High Tide 2D
-E:/HighTide/HighTide/High Tide 2D
-=======
 E:/High Tide Github Rep/HighTide/High Tide 2D
 -logFile
 Logs/AssetImportWorker0.log
@@ -31,7 +18,6 @@ Logs/AssetImportWorker0.log
 65414
 Successfully changed project path to: E:/High Tide Github Rep/HighTide/High Tide 2D
 E:/High Tide Github Rep/HighTide/High Tide 2D
->>>>>>> Stashed changes
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -61,19 +47,11 @@ E:/High Tide Github Rep/HighTide/High Tide 2D
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-<<<<<<< Updated upstream
-Refreshing native plugins compatible for Editor in 106.71 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Initialize engine version: 2021.3.4f1 (cb45f9cae8b7)
-[Subsystems] Discovering subsystems at path E:/Program Files/Unity Editor/2021.3.4f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path E:/HighTide/HighTide/High Tide 2D/Assets
-=======
 Refreshing native plugins compatible for Editor in 112.93 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.3.4f1 (cb45f9cae8b7)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.3.4f1/Editor/Data/Resources/UnitySubsystems
 [Subsystems] Discovering subsystems at path E:/High Tide Github Rep/HighTide/High Tide 2D/Assets
->>>>>>> Stashed changes
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
@@ -82,24 +60,6 @@ Direct3D:
     VRAM:     8119 MB
     Driver:   30.0.21020.2
 Initialize mono
-<<<<<<< Updated upstream
-Mono path[0] = 'E:/Program Files/Unity Editor/2021.3.4f1/Editor/Data/Managed'
-Mono path[1] = 'E:/Program Files/Unity Editor/2021.3.4f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'E:/Program Files/Unity Editor/2021.3.4f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56964
-Begin MonoManager ReloadAssembly
-Registering precompiled unity dll's ...
-Register platform support module: E:/Program Files/Unity Editor/2021.3.4f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.005536 seconds.
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 105.52 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.718 seconds
-Domain Reload Profiling:
-	ReloadAssembly (719ms)
-		BeginReloadAssembly (80ms)
-=======
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.3.4f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.3.4f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.3.4f1/Editor/Data/MonoBleedingEdge/etc'
@@ -118,28 +78,11 @@ Mono: successfully reloaded assembly
 Domain Reload Profiling:
 	ReloadAssembly (857ms)
 		BeginReloadAssembly (98ms)
->>>>>>> Stashed changes
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-<<<<<<< Updated upstream
-		EndReloadAssembly (513ms)
-			LoadAssemblies (78ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (119ms)
-			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (31ms)
-			SetupLoadedEditorAssemblies (307ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (8ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (106ms)
-				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (139ms)
-				ProcessInitializeOnLoadMethodAttributes (53ms)
-=======
 		EndReloadAssembly (612ms)
 			LoadAssemblies (95ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
@@ -154,27 +97,12 @@ Domain Reload Profiling:
 				BeforeProcessingInitializeOnLoad (1ms)
 				ProcessInitializeOnLoadAttributes (126ms)
 				ProcessInitializeOnLoadMethodAttributes (59ms)
->>>>>>> Stashed changes
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-<<<<<<< Updated upstream
-Registered in 0.006934 seconds.
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 105.69 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.299 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1300ms)
-		BeginReloadAssembly (131ms)
-=======
 Registered in 0.006675 seconds.
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image E:\High Tide Github Rep\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
@@ -188,32 +116,10 @@ Mono: successfully reloaded assembly
 Domain Reload Profiling:
 	ReloadAssembly (1607ms)
 		BeginReloadAssembly (254ms)
->>>>>>> Stashed changes
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (7ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-<<<<<<< Updated upstream
-			CreateAndSetChildDomain (23ms)
-		EndReloadAssembly (1042ms)
-			LoadAssemblies (93ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (283ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (68ms)
-			SetupLoadedEditorAssemblies (544ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (106ms)
-				BeforeProcessingInitializeOnLoad (108ms)
-				ProcessInitializeOnLoadAttributes (272ms)
-				ProcessInitializeOnLoadMethodAttributes (50ms)
-				AfterProcessingInitializeOnLoad (4ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
-=======
 			CreateAndSetChildDomain (142ms)
 		EndReloadAssembly (1208ms)
 			LoadAssemblies (102ms)
@@ -233,24 +139,16 @@ Domain Reload Profiling:
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (9ms)
->>>>>>> Stashed changes
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
 Refreshing native plugins compatible for Editor in 0.89 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-<<<<<<< Updated upstream
-Unloading 4103 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 38 unused Assets / (55.7 KB). Loaded Objects now: 4559.
-Memory consumption went from 153.9 MB to 153.9 MB.
-Total: 4.860100 ms (FindLiveObjects: 0.518400 ms CreateObjectMapping: 0.156600 ms MarkObjects: 4.077100 ms  DeleteObjects: 0.106900 ms)
-=======
 Unloading 4114 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 38 unused Assets / (55.8 KB). Loaded Objects now: 4572.
 Memory consumption went from 154.2 MB to 154.2 MB.
 Total: 4.912600 ms (FindLiveObjects: 0.435300 ms CreateObjectMapping: 0.116800 ms MarkObjects: 4.231900 ms  DeleteObjects: 0.126400 ms)
->>>>>>> Stashed changes
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -264,45 +162,6 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-<<<<<<< Updated upstream
-  Time since last request: 176360.056762 seconds.
-  path: Assets/Prefabs/UnitCard.prefab
-  artifactKey: Guid(51a6baa0b211ddd48badf5bd289e8c74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/UnitCard.prefab using Guid(51a6baa0b211ddd48badf5bd289e8c74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8f2a2ef44aa496846416b5b0eb47ab23') in 0.105901 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Prefabs/Projectile.prefab
-  artifactKey: Guid(506f9025daea2ab429a397906ec3d037) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/Projectile.prefab using Guid(506f9025daea2ab429a397906ec3d037) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bd12f36a99c26d0461d28107719cc469') in 0.080605 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Prefabs/highlightElem.prefab
-  artifactKey: Guid(cd88e8b6809e7e743844ff2cce510ea7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/highlightElem.prefab using Guid(cd88e8b6809e7e743844ff2cce510ea7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '995743ea0ec54baef4403bc2a5e9acfa') in 0.014487 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000046 seconds.
-  path: Assets/Prefabs/UnitCard 1.prefab
-  artifactKey: Guid(afef51b601321e546accdfd14d5e1b87) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/UnitCard 1.prefab using Guid(afef51b601321e546accdfd14d5e1b87) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5bf6c976ef14452f0c616269618ba507') in 0.024455 seconds 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.008006 seconds.
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.03 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.775 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1775ms)
-		BeginReloadAssembly (143ms)
-=======
   Time since last request: 58805.614022 seconds.
   path: Assets/Scripts/EnemySpawner.cs
   artifactKey: Guid(4d7354c681beb96438bc6c15a2f70eaf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
@@ -323,29 +182,10 @@ Mono: successfully reloaded assembly
 Domain Reload Profiling:
 	ReloadAssembly (1277ms)
 		BeginReloadAssembly (165ms)
->>>>>>> Stashed changes
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (8ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-<<<<<<< Updated upstream
-			CreateAndSetChildDomain (42ms)
-		EndReloadAssembly (1519ms)
-			LoadAssemblies (623ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (311ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (59ms)
-			SetupLoadedEditorAssemblies (455ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (16ms)
-				SetLoadedEditorAssemblies (1ms)
-				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (95ms)
-				ProcessInitializeOnLoadAttributes (283ms)
-				ProcessInitializeOnLoadMethodAttributes (54ms)
-				AfterProcessingInitializeOnLoad (4ms)
-=======
 			CreateAndSetChildDomain (48ms)
 		EndReloadAssembly (986ms)
 			LoadAssemblies (109ms)
@@ -419,26 +259,16 @@ Domain Reload Profiling:
 				ProcessInitializeOnLoadAttributes (274ms)
 				ProcessInitializeOnLoadMethodAttributes (63ms)
 				AfterProcessingInitializeOnLoad (12ms)
->>>>>>> Stashed changes
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (12ms)
 Platform modules already initialized, skipping
-<<<<<<< Updated upstream
-Refreshing native plugins compatible for Editor in 2.32 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4079 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 26 unused Assets / (25.4 KB). Loaded Objects now: 4568.
-Memory consumption went from 156.4 MB to 156.3 MB.
-Total: 3.811400 ms (FindLiveObjects: 0.323000 ms CreateObjectMapping: 0.099700 ms MarkObjects: 3.357500 ms  DeleteObjects: 0.030000 ms)
-=======
 Refreshing native plugins compatible for Editor in 2.77 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 4090 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 25 unused Assets / (24.6 KB). Loaded Objects now: 4578.
 Memory consumption went from 152.3 MB to 152.3 MB.
 Total: 4.383200 ms (FindLiveObjects: 0.439800 ms CreateObjectMapping: 0.129400 ms MarkObjects: 3.767500 ms  DeleteObjects: 0.044800 ms)
->>>>>>> Stashed changes
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -453,20 +283,6 @@ AssetImportParameters requested are different than current active one (requested
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-<<<<<<< Updated upstream
-Registered in 0.006112 seconds.
-Begin MonoManager ReloadAssembly
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
-Symbol file LoadedFromMemory doesn't match image E:\HighTide\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.43 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.191 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1192ms)
-		BeginReloadAssembly (145ms)
-=======
 Registered in 0.006104 seconds.
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image E:\High Tide Github Rep\HighTide\High Tide 2D\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
@@ -480,39 +296,10 @@ Mono: successfully reloaded assembly
 Domain Reload Profiling:
 	ReloadAssembly (1202ms)
 		BeginReloadAssembly (152ms)
->>>>>>> Stashed changes
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (8ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-<<<<<<< Updated upstream
-			CreateAndSetChildDomain (40ms)
-		EndReloadAssembly (937ms)
-			LoadAssemblies (101ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (285ms)
-			ReleaseScriptCaches (2ms)
-			RebuildScriptCaches (60ms)
-			SetupLoadedEditorAssemblies (429ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (14ms)
-				SetLoadedEditorAssemblies (1ms)
-				RefreshPlugins (2ms)
-				BeforeProcessingInitializeOnLoad (89ms)
-				ProcessInitializeOnLoadAttributes (270ms)
-				ProcessInitializeOnLoadMethodAttributes (48ms)
-				AfterProcessingInitializeOnLoad (5ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (12ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 3.81 ms, found 4 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4079 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 25 unused Assets / (24.8 KB). Loaded Objects now: 4571.
-Memory consumption went from 156.4 MB to 156.3 MB.
-Total: 5.689400 ms (FindLiveObjects: 0.484000 ms CreateObjectMapping: 0.135900 ms MarkObjects: 5.033200 ms  DeleteObjects: 0.034500 ms)
-=======
 			CreateAndSetChildDomain (41ms)
 		EndReloadAssembly (926ms)
 			LoadAssemblies (106ms)
@@ -659,7 +446,6 @@ Unloading 4090 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 25 unused Assets / (25.7 KB). Loaded Objects now: 4587.
 Memory consumption went from 152.3 MB to 152.3 MB.
 Total: 5.238900 ms (FindLiveObjects: 0.413100 ms CreateObjectMapping: 0.108300 ms MarkObjects: 4.666500 ms  DeleteObjects: 0.049500 ms)
->>>>>>> Stashed changes
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 

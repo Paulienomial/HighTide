@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CityUpgrade : MonoBehaviour
 {
     public static CityUpgrade curr;
     int upgradePopPrice=5;//price of population upgrade
-    int popUpgradeAmount=3;//the amount of added population when you upgrade the population
+    int popUpgradeAmount=2;//the amount of added population when you upgrade the population
     int maxUnitCap=24;
     public GameObject cityObject;
     public Sprite city2;
@@ -17,9 +18,11 @@ public class CityUpgrade : MonoBehaviour
     public int lvl2PopSize=13;
     public int lvl3PopSize=16;
     public Animator animator;
+    public TextMeshProUGUI upgradeText;
     
     void Awake(){
         curr=this;
+        upgradeText.text = "+" + popUpgradeAmount.ToString();
     }
     
     // Start is called before the first frame update
@@ -32,10 +35,19 @@ public class CityUpgrade : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.U)){
-            upgradePop();
+            upgradePop(0);
+        }
+        if(Input.GetKeyDown(KeyCode.B)){
+            playDamageAnimation(1);
         }
     }
 
+    public void upgradePop(int price){
+        int oldPrice=upgradePopPrice;
+        upgradePopPrice=price;
+        upgradePop();
+        upgradePopPrice=oldPrice;
+    }
     public void upgradePop(){
         if(Global.curr.gold>=upgradePopPrice && Global.curr.unitCap<maxUnitCap){//if you can afford the upgrade
             Global.curr.gold-=upgradePopPrice;
@@ -64,5 +76,11 @@ public class CityUpgrade : MonoBehaviour
         }else{
             Notify.curr.show("Not enough gold");
         }
+    }
+
+    public void playDamageAnimation(int damageTaken){
+        animator.Play("buildingDamage");
+        AudioSystem.curr.createAndPlaySound("axe"+ Random.Range(1,3).ToString() );
+        AnimationController.curr.play("cityDamage", new Vector3(cityHighlight.transform.position.x,cityHighlight.transform.position.y,cityHighlight.transform.position.z), "-"+damageTaken.ToString());
     }
 }

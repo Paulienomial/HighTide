@@ -10,7 +10,7 @@ public class Global : MonoBehaviour
     public LinkedList<GameObject> defenders;//has warrior scripts attached to them
     public LinkedList<GameObject> enemies;//Dynamic list of enemies currently on the battlefield
     public int shopTier;
-    public int gold=10;
+    public int gold=8;
     public int unitCap;
     public int CityHealth = 10;
     public int waveNum = 1;
@@ -36,7 +36,7 @@ public class Global : MonoBehaviour
         enemies = new LinkedList<GameObject>();
         gamePhase="shop";
         shopTier=1;
-        unitCap=10;
+        unitCap=3;
         waveNum = 1;
     }
 

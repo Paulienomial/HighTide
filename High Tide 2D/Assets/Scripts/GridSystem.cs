@@ -21,6 +21,7 @@ public class GridSystem : MonoBehaviour
     public float characterPixels=20f;//character width and height dimensions in pixels
     public float pixelsPerunit=18.9f;
     float verticalOffset;
+    public bool justPlacedObject=false;
 
 
     void Awake(){
@@ -50,6 +51,12 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(justPlacedObject==true){
+            if(Input.GetKeyUp(KeyCode.Mouse0)){
+                justPlacedObject=false;
+            }
+        }
+
         if(!draggingPhase && ! placingPhase){
             grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
         }
@@ -79,6 +86,9 @@ public class GridSystem : MonoBehaviour
         if(currObject && !validPos(currObject)){
             tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(255,21,21,255));//red
         }
+        if(currObject && validPos(currObject)){
+            tileHighlight.GetComponent<SpriteRenderer>().color=(Color)(new Color32(21,255,21,255));//green
+        }
     }
 
     public void startPlacingPhase(String warriorType, GameObject c){//step 1 when purchasing a unit
@@ -106,18 +116,29 @@ public class GridSystem : MonoBehaviour
         }*/
 
         if( Input.GetKeyDown(KeyCode.Mouse0) ){
+            justPlacedObject=true;
             if(validPos(currObject)){//if valid placement
                 GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
                 if(mergeWith!=null){
                     mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
-                }else{//else add a new defender
-                    g.GetComponent<SpriteRenderer>().sortingOrder=3;
-                    g.GetComponent<Warrior>().coordinates = g.transform.position;
-                    Global.curr.defenders.AddLast(g);
+                    //PURCHASE UNIT
+                    Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+                    Events.curr.purchaseDefender();//trigger event
+                }else{//if in a open valid grid spot
+                    if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
+                        Notify.curr.show("Unit capacity reached");
+                        Destroy(g);
+                        card.gameObject.SetActive(true);
+                    }else{
+                        g.GetComponent<SpriteRenderer>().sortingOrder=3;
+                        g.GetComponent<Warrior>().coordinates = g.transform.position;
+                        Global.curr.defenders.AddLast(g);
+                        //PURCHASE UNIT
+                        Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+                        Events.curr.purchaseDefender();//trigger event
+                    }
                 }
-                //PURCHASE UNIT
-                Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                Events.curr.purchaseDefender();//trigger event
+                
             }else{
                 Destroy(g);
                 card.gameObject.SetActive(true);
@@ -170,13 +191,16 @@ public class GridSystem : MonoBehaviour
 
     private bool validPos(GameObject g){
         Vector3 gridSpot = g.transform.position;
-        foreach(GameObject defender in Global.curr.defenders){//if a unit is already in the spot, then don't go there
+        foreach(GameObject defender in Global.curr.defenders){
             if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){
                     return true;
                 }
                 return false;//invalid grid spot
             }
+        }
+        if(Global.curr.defenders.Count>=Global.curr.unitCap){
+            return false;
         }
         return true;
     }
@@ -185,7 +209,6 @@ public class GridSystem : MonoBehaviour
         WarriorAttributes.attr a1 = g1.GetComponent<Warrior>().attributes;
         WarriorAttributes.attr a2 = g2.GetComponent<Warrior>().attributes;
         if(a1.name==a2.name && a1.mergeCount+a2.mergeCount<=Global.curr.maxMergeCount){
-            Debug.Log("Can merge");
             return true;
         }
         return false;
@@ -208,7 +231,6 @@ public class GridSystem : MonoBehaviour
         if(g1==null || g2==null) return false;
         float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
         if( Math.Abs(g1.transform.position.x-g2.transform.position.x)<tolerance && Math.Abs(g1.transform.position.y-g2.transform.position.y)<tolerance ){//same spot
-            Debug.Log("Same spot");
             return true;        
         }
         return false;

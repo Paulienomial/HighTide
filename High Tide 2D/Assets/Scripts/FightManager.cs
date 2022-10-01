@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
-<<<<<<< Updated upstream
-    [SerializeField]
-    public int health = 100;
-    [SerializeField]
-    public int damage = 10;
-=======
->>>>>>> Stashed changes
     [SerializeField]
     GameObject city;
     [SerializeField]
@@ -18,31 +11,18 @@ public class FightManager : MonoBehaviour
     private GameObject target = null;
     LinkedList<GameObject> targetList;
     public bool inCombat = false;
-<<<<<<< Updated upstream
-    public bool isFriendly = true;
-=======
->>>>>>> Stashed changes
     public bool isAlive = true;
     public bool waveEnd = false;
     private bool facingRight = true;
     public bool projectileInAir = false;
     public bool waveLost = false;
-<<<<<<< Updated upstream
-=======
     public bool unitPaused = false;
     public WarriorAttributes.attr a;
->>>>>>> Stashed changes
 
     SpriteRenderer r;
     void Start()
     {
-<<<<<<< Updated upstream
-        isFriendly = gameObject.GetComponent<Warrior>().attributes.isFriendly;
-        health = gameObject.GetComponent<Warrior>().attributes.hp;
-        damage = gameObject.GetComponent<Warrior>().attributes.damage;
-=======
         a = gameObject.GetComponent<Warrior>().attributes;
->>>>>>> Stashed changes
         r = GetComponent<SpriteRenderer>();
     }
 
@@ -62,22 +42,6 @@ public class FightManager : MonoBehaviour
 
     void findTarget()
     {
-<<<<<<< Updated upstream
-        
-        if (isFriendly)
-        {
-            targetList = Global.curr.enemies;
-        }
-        else
-        {
-            targetList = Global.curr.defenders;
-        }
-
-        if (targetList.Count == 0)
-        {
-           // Debug.Log("No Targets");
-            if (!isFriendly)
-=======
 
         setTargetList();
 
@@ -86,7 +50,6 @@ public class FightManager : MonoBehaviour
             //There are no potential targets for this unit
 
             if (!a.isFriendly)
->>>>>>> Stashed changes
             {
                 //If unit is enemy and there are no friendy units on the battlefield, unit targets the city.
                 target = city;
@@ -102,7 +65,7 @@ public class FightManager : MonoBehaviour
             {
                 if (current != null)
                 {
-                    if (!isFriendly)
+                    if (!a.isFriendly)
                     {
                         flag = current.GetComponent<FightManager>().isAlive;
                     }
@@ -124,7 +87,7 @@ public class FightManager : MonoBehaviour
 
             }
             target = bestTarget;
-            if (target == null && !isFriendly)
+            if (target == null && !a.isFriendly)
             {
                 target = city;
             }
@@ -161,17 +124,6 @@ public class FightManager : MonoBehaviour
                     transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shiftX, target.transform.position.y + shiftY), 0.5f * Time.deltaTime);
                 }
             }
-<<<<<<< Updated upstream
-            if (isFriendly)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), 0.5f * Time.deltaTime);
-            }
-            else
-            {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shift, target.transform.position.y), 0.5f * Time.deltaTime);
-            }
-=======
->>>>>>> Stashed changes
         }
     }
 
@@ -188,7 +140,7 @@ public class FightManager : MonoBehaviour
         if (opponent.GetComponent<Warrior>() != null && !waveEnd) //Checking that target is a warrior and not the grid since grid also has a Rigidbody and thus triggers this
         {
             bool bothAlive = true;
-            if (!isFriendly)
+            if (!a.isFriendly)
             {
                 bothAlive = opponent.GetComponent<FightManager>().isAlive;
             }
@@ -209,23 +161,17 @@ public class FightManager : MonoBehaviour
             {
                 waveLost = true;
                 opponent.GetComponent<CityHealthManager>().takeDamage();
-<<<<<<< Updated upstream
-                if (Global.curr.enemyWaveDeathCount == 1)
-                {
-                    die();
-                    waveComplete();
-=======
                 StatScreens.curr.lostLives++;
                 if (Global.curr.enemyWaveDeathCount == 1)//if last enemy to damage city
                 {
                     die();
                     CityUpgrade.curr.playDamageAnimation(a.cityDamage);
                     waveManager.curr.waveComplete();
->>>>>>> Stashed changes
                 }
-                else
+                else //if not last enemy to damage city
                 {
                     die();
+                    CityUpgrade.curr.playDamageAnimation(a.cityDamage);
                 }
             }
         }
@@ -235,11 +181,7 @@ public class FightManager : MonoBehaviour
     {
         if (target != null && !waveEnd && !unitPaused)
         {
-<<<<<<< Updated upstream
-            if(isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
-=======
             if (a.isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
->>>>>>> Stashed changes
             {
                 if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                 {
@@ -256,7 +198,7 @@ public class FightManager : MonoBehaviour
                     doDamage();
                 }
             }
-            else
+            else//enemy
             {
                 if (target.GetComponent<FightManager>().isAlive && !waveEnd && !unitPaused && target.GetComponent<CityHealthManager>() == null)
                 {
@@ -303,42 +245,11 @@ public class FightManager : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-    bool waveComplete()
-    {
-        if (Global.curr.waveStart)
-        {
-            //Debug.Log(Global.curr.enemyWaveDeathCount);
-            if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
-            {
-                CancelInvoke();
-                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
-                resetWave();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else 
-        {
-            return false;
-        }
-        
-    }
-
-=======
->>>>>>> Stashed changes
     public void doDamage()
     {
         if (isAlive && !waveEnd && target != null && target.GetComponent<FightManager>().isAlive && !unitPaused)
         {
             FightManager victim = target.GetComponent<FightManager>();
-<<<<<<< Updated upstream
-            victim.health -= damage;
-            target.GetComponent<Warrior>().attributes.hp -= damage;
-=======
             int damageDealt = a.damage;
             if ((victim.a.hp - a.damage) < 0)
             {//if the damage will cause victim's health to fall below zero
@@ -353,13 +264,12 @@ public class FightManager : MonoBehaviour
             {
                 WaveBarController.curr.setHealth(WaveBarController.curr.getHealth() - damageDealt);
             }
->>>>>>> Stashed changes
 
-            if (victim.health <= 0)
+            if (victim.a.hp <= 0)
             {
                 victim.inCombat = false;
                 inCombat = false;
-                //if (!isFriendly)
+                //if (!a.isFriendly)
                 victim.isAlive = false;
                 CancelInvoke();
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
@@ -415,19 +325,16 @@ public class FightManager : MonoBehaviour
 
     public void die()
     {
-        if (!isFriendly)
+        if (!a.isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
             Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
-<<<<<<< Updated upstream
-=======
             if (!waveLost)
             {
                 playGoldAnimation(a.bounty);
             }
->>>>>>> Stashed changes
             Destroy(gameObject);
             //gameObject.SetActive(false);
         }
@@ -447,16 +354,6 @@ public class FightManager : MonoBehaviour
 
     void setTargetList()
     {
-<<<<<<< Updated upstream
-        if(!Global.curr.gameOver){
-            Debug.Log("Resetting Wave");
-            AudioScript.curr.stopBattleTheme();
-            if (waveLost)
-            {
-                AudioScript.curr.playWaveFailedAndMain();
-            }
-            else
-=======
         if (a.isFriendly)
         {
             //Current unit is friendly and therefore chooses target from list of enemies
@@ -474,35 +371,10 @@ public class FightManager : MonoBehaviour
         if (transform.position.x - target.transform.position.x < 0) //Ensuring that the unit always faces the direction it is moving.
         {
             if (!facingRight)
->>>>>>> Stashed changes
             {
                 facingRight = true;
                 r.flipX = false;
             }
-<<<<<<< Updated upstream
-            waveLost = false;
-            Global.curr.waveStart = false;
-            Global.curr.waveNum++;
-            Global.curr.gamePhase = "shop";
-            Global.curr.resetShop();
-            foreach (GameObject current in Global.curr.defenders)
-            {
-                current.transform.position = current.GetComponent<Warrior>().coordinates;
-                current.SetActive(true);
-                current.GetComponent<FightManager>().inCombat = false;
-                current.GetComponent<FightManager>().isAlive = true;
-                current.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
-               //current.GetComponent<HealthBarUpdate>().hpBar.setHealth(current.GetComponent<Warrior>().maxHealth);
-                current.GetComponent<FightManager>().health = current.GetComponent<Warrior>().maxHealth;
-                current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
-
-            }
-            Global.curr.gold+=10;
-            Events.curr.waveComplete();//trigger wave complete event
-        }
-    }
-}
-=======
         }
         else
         {
@@ -523,4 +395,3 @@ public class FightManager : MonoBehaviour
         StatScreens.curr.enemyGold += a.bounty;
     }
 }
->>>>>>> Stashed changes

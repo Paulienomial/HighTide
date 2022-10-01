@@ -10,7 +10,9 @@
           "isRanged": false,
           "mergeCount":1,
           "attacksound": "sword",
-          "description":"Basic melee unit"
+          "description":"Basic melee unit",
+          "bounty":1,
+          "cityDamage":1
       },
       {
           "name": "Archer",
@@ -35,9 +37,6 @@
         "hp": 200,
         "isFriendly": false,
         "attacksound": "enemymelee",
-<<<<<<< Updated upstream
-        "description":"Beware, this lizard seems angry"
-=======
         "description":"Beware, this lizard seems angry",
         "tier":999
       },
@@ -49,7 +48,6 @@
         "isFriendly": false,
         "attacksound": "enemymelee",
         "description":"Beware, he pokes"
->>>>>>> Stashed changes
       }
     ]
 }

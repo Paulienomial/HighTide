@@ -21,16 +21,13 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.M)){
+            AudioScript.curr.playBattleTheme();
+        }
     }
 
     private IEnumerator spawnEnemy(float delay, GameObject enemyType)
     {
-<<<<<<< Updated upstream
-        yield return new WaitForSeconds(delay);
-        GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(7f, 8.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
-        newSpawn.GetComponent<Warrior>().setWarrior("Lizardman");
-=======
         groupCounter++;
         if (groupCounter >= 3)
         {
@@ -50,7 +47,6 @@ public class EnemySpawner : MonoBehaviour
         w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
         w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
 
->>>>>>> Stashed changes
         Global.curr.enemies.AddLast(newSpawn);
         spawnCount++;
         if (spawnCount < maxEnemies)
@@ -64,12 +60,9 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {
-<<<<<<< Updated upstream
-=======
                 groupCounter = 0;
                 WaveBarController.curr.setTopText("Current wave:");
 
->>>>>>> Stashed changes
                 AudioScript.curr.stopMainTheme();
                 AudioScript.curr.playButtonClickSound();
                 AudioScript.curr.playBattleHornSound();
@@ -78,11 +71,16 @@ public class EnemySpawner : MonoBehaviour
                 if (Global.curr.waveNum == 1)
                 {
                     maxEnemies = 2;
+                }else if(Global.curr.waveNum == 8){
+                    maxEnemies = 10;
+                }else{
+                    //maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
+                    maxEnemies = 2+Global.curr.waveNum;
                 }
-                else
-                {
-                    maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
-                }
+
+                WaveBarController.curr.setMaxHealth(calcCombinedHP("Pokey boy", maxEnemies, Global.curr.waveNum));
+                WaveBarController.curr.setHealth( calcCombinedHP("Pokey boy", maxEnemies, Global.curr.waveNum) );
+
                 spawnCount = 0;
                 Global.curr.enemyWaveDeathCount = maxEnemies;
                 Global.curr.waveStart = true;
@@ -98,5 +96,65 @@ public class EnemySpawner : MonoBehaviour
             Global.curr.gamePhase = "fight";
             StartCoroutine(spawnEnemy(spawnDelay, enemy));
         }
+    }
+
+    int calcNewDamage(int dmg, int waveNum){
+        float multiplier = calcDamageMultiplier(waveNum);
+        float damageF = multiplier * dmg;
+        int damage = (int)(Mathf.Round(damageF));
+        return damage;
+    }
+
+    float calcDamageMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
+    {
+        //**** EQUATION ****//
+        // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
+        //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
+
+        float a=8f; //the horizontal asimptote
+        float r=.05f; //the rate of increase
+
+        float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
+        float multiplier = (n * Mathf.Atan( r *((float)waveNum - 1f ))) + 1f;
+        
+        return multiplier;
+    }
+
+    int calcNewHealth(int dmg, int waveNum){
+        float multiplier = calcHealthMultiplier(waveNum);
+        float damageF = multiplier * dmg;
+        int damage = (int)(Mathf.Round(damageF));
+        return damage;
+    }
+
+    float calcHealthMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
+    {
+        //**** EQUATION ****//
+        // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
+        //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
+
+        float a=10f; //the horizontal asimptote
+        float r=.05f; //the rate of increase
+        Debug.Log("Wave num: "+waveNum);
+        Debug.Log("a: "+a);
+        Debug.Log("r: "+r);
+
+        float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
+        float multiplier = (n * Mathf.Atan( r *((float)waveNum - 1f ))) + 1f;
+        
+        Debug.Log("Wave num: "+waveNum);
+        Debug.Log("a: "+a);
+        Debug.Log("r: "+r);
+        Debug.Log("Multiplier: "+multiplier);
+
+        return multiplier;
+    }
+
+    int calcCombinedHP(string warriorName, int amount, int waveNum){
+        int baseHP = WarriorTypes.curr.find(warriorName).hp;
+        int warriorHP = calcNewHealth(baseHP, waveNum);
+        int combinedHP = warriorHP*amount;
+
+        return combinedHP;
     }
 }

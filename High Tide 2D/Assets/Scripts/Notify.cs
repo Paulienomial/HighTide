@@ -32,7 +32,7 @@ public class Notify : MonoBehaviour
             show("Awesome!");
         }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("notifyShow")){
-            Debug.Log("playing notify");
+            //Debug.Log("playing notify");
             // Avoid any reload.
         }
     }
