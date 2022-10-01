@@ -17,7 +17,7 @@ public class MessageSystem : MonoBehaviour
     public int step=0;
     public GameObject goldDisplay;
     public GameObject playButton;
-    public GameObject square;
+    public GameObject nextBtn;
     public GameObject scroll;
     public static MessageSystem curr;//singleton
 
@@ -26,7 +26,6 @@ public class MessageSystem : MonoBehaviour
     }
     void Start()
     {
-        //HighlightElement.curr.arrow(square);
         //playTutorial();
     }
 
@@ -37,6 +36,7 @@ public class MessageSystem : MonoBehaviour
     }
 
     public void playTutorial(){
+        HighlightElement.curr.arrow(nextBtn);
         ShopSystem.curr.shopAvailable=false;
         Global.curr.startButtonEnabled=false;
         
@@ -51,7 +51,7 @@ public class MessageSystem : MonoBehaviour
             "Click and drag a unit to move it around",
             "Click on the play button to start your first fight"
         };
-        showMessage(true);
+        displayMessage(true);
         HighlightElement.curr.arrow(scroll);
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener( delegate{ nextStep(); } );
@@ -59,18 +59,18 @@ public class MessageSystem : MonoBehaviour
     public void nextStep(){
         step++;
         if(step==1){//"Your goal is to build an army that will protect this village"
-            showMessage();//show the message for the current step in the tutorial
+            displayMessage();//show the message for the current step in the tutorial
         }
 
         if(step==2){//"3 available gold"
             HighlightElement.curr.unHighlight();
             HighlightElement.curr.arrow(goldDisplay);
-            showMessage();
+            displayMessage();
         }
 
         if(step==3){//"open shop"
             ShopSystem.curr.shopAvailable=true;
-            showMessage(false);
+            displayMessage(false);
             HighlightElement.curr.unHighlight();
             HighlightElement.curr.arrow(shopBtn);
             shopBtn.GetComponent<Button>().onClick.AddListener( ()=>{
@@ -79,7 +79,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         if(step==4){//"purchase and place a unit from the shop"
-            showMessage(false);
+            displayMessage(false);
             HighlightElement.curr.unHighlight();
             shopBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             //HighlightElement.curr.arrow(shop);
@@ -91,7 +91,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         if(step==5){//"click and drag a unit to move it around"
-            showMessage(false);
+            displayMessage(false);
             //HighlightElement.curr.unHighlight();
             Events.curr.onDropDefender += ()=>{
                 if(step==5){
@@ -101,7 +101,7 @@ public class MessageSystem : MonoBehaviour
         }
 
         if(step==6){//"click and drag a unit to move it around"
-            showMessage(false);
+            displayMessage(false);
             Events.curr.onDropDefender += ()=>{
                 if(step==6){
                     nextStep();
@@ -112,7 +112,7 @@ public class MessageSystem : MonoBehaviour
         if(step==7){
             Global.curr.startButtonEnabled=true;
             HighlightElement.curr.arrow(playButton);
-            showMessage(false);
+            displayMessage(false);
             playButton.GetComponent<Button>().onClick.AddListener( ()=>{
                 if(step==7){
                     HighlightElement.curr.unHighlight();
@@ -123,59 +123,15 @@ public class MessageSystem : MonoBehaviour
         }
     }
 
-    public void showMessage(string m){
+    public void displayMessage(string m, bool showButton=true){
         messageBox.SetActive(true);
         message.text=m;
-    }
-
-    public void showMessage(bool showButton=true){
-        messageBox.SetActive(true);
-        message.text=messages[step];
         button.gameObject.SetActive(showButton);
     }
 
-    public void messageBaseFunction(string mText, string bText){
+    public void displayMessage(bool showButton=true){
         messageBox.SetActive(true);
-        message.text=mText;
-        buttonText.text=bText;
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener( delegate{ hideMessage(); } );
-    }
-
-    //paramaters:
-    //message to be displayed
-    //button text to be displayed
-    //the game object to highlight along with the current message
-    public void displayMessage(string mText, string bText="NEXT", Action func=null, GameObject highlight=null){
-        messageBox.SetActive(true);
-        message.text=mText;
-        buttonText.text=bText;
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener( delegate{ hideMessage(); } );
-        if(highlight!=null){
-            HighlightElement.curr.arrow(highlight);
-        }
-        if(func!=null){
-            button.onClick.AddListener( delegate{ func(); } );
-        }
-    }
-
-    public void explainGoal(){
-        displayMessage("Your goal is to build an army that will protect this village","NEXT",explainShopBtn);
-    }
-
-    public void explainShopBtn(){
-        displayMessage("To purchase a unit, open the shop","NEXT",explainShop);
-        HighlightElement.curr.arrow(shopBtn);
-    }
-
-    public void explainShop(){
-        HighlightElement.curr.unHighlight();
-        displayMessage("Purchase any unit and place it on the grid", "NEXT");
-        HighlightElement.curr.arrow(shop);
-    }
-
-    public void hideMessage(){
-        messageBox.SetActive(false);
+        message.text=messages[step];
+        button.gameObject.SetActive(showButton);
     }
 }

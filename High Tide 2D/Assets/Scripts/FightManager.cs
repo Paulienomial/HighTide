@@ -23,7 +23,7 @@ public class FightManager : MonoBehaviour
     public bool waveLost = false;
     //Fix met attributes wat nie update nie
     public WarriorAttributes.attr a;
-    float movespeed=.75f;
+    float fastforwardMovespeed;
 
     SpriteRenderer r;
     // Start is called before the first frame update
@@ -37,6 +37,7 @@ public class FightManager : MonoBehaviour
         health = gameObject.GetComponent<Warrior>().attributes.hp;
         damage = gameObject.GetComponent<Warrior>().attributes.damage;*/
         r = GetComponent<SpriteRenderer>();
+        fastforwardMovespeed = a.moveSpeed*2;
     }
 
     // Update is called once per frame
@@ -70,7 +71,7 @@ public class FightManager : MonoBehaviour
             if (!a.isFriendly)
             {
                 target = city;
-                movespeed=2f;
+                a.moveSpeed = fastforwardMovespeed;
             }
         }
         else
@@ -107,7 +108,7 @@ public class FightManager : MonoBehaviour
             if (target == null && !a.isFriendly)
             {
                 target = city;
-                movespeed=2f;
+                a.moveSpeed = fastforwardMovespeed;
             }
         }
     }
@@ -145,11 +146,11 @@ public class FightManager : MonoBehaviour
             }
             if (a.isFriendly)
             {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), movespeed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shift, target.transform.position.y), a.moveSpeed * Time.deltaTime);
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shift, target.transform.position.y), movespeed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shift, target.transform.position.y), a.moveSpeed * Time.deltaTime);
             }
         }
     }
@@ -211,7 +212,8 @@ public class FightManager : MonoBehaviour
             {
                 if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                 {
-                    AudioScript.curr.playAttackSound(this.gameObject);
+                    //AudioScript.curr.playAttackSound(this.gameObject);
+                    playAttackSound();
                 }
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
@@ -229,7 +231,8 @@ public class FightManager : MonoBehaviour
                 {
                     if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                     {
-                        AudioScript.curr.playAttackSound(this.gameObject);
+                        //AudioScript.curr.playAttackSound(this.gameObject);
+                        playAttackSound();
                     }
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
@@ -261,7 +264,8 @@ public class FightManager : MonoBehaviour
     {
         if(target != null && isAlive)
         {
-            AudioScript.curr.playAttackSound(this.gameObject);
+            //AudioScript.curr.playAttackSound(this.gameObject);
+            playAttackSound();
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }
@@ -299,25 +303,12 @@ public class FightManager : MonoBehaviour
         {
             FightManager victim = target.GetComponent<FightManager>();
             int damageDealt = a.damage;
-            Debug.Log("Victim hp before: "+victim.a.hp);
             if( (victim.a.hp-a.damage)<0 ){//if the damage will cause victim's health to fall below zero
                 damageDealt=victim.a.hp;
                 victim.a.hp=0;
-                if(a.isFriendly==false){
-                    Debug.Log("Enemy doing damage");
-                }else{
-                    Debug.Log("Friendly doing damage");
-                }
             }else{
                 victim.a.hp -= a.damage;
-                if(a.isFriendly==false){
-                    Debug.Log("Enemy doing damage");
-                }else{
-                    Debug.Log("Friendly doing damage");
-                }
             }
-            Debug.Log("Victim hp after: "+victim.a.hp);
-            Debug.Log("damage dealt: "+damageDealt);
             if(victim.a.isFriendly==false){
                 WaveBarController.curr.setHealth(WaveBarController.curr.getHealth()-damageDealt);
             }
@@ -386,13 +377,15 @@ public class FightManager : MonoBehaviour
             Global.curr.waveNum++;
             WaveBarController.curr.setText("Wave "+Global.curr.waveNum);
             WaveBarController.curr.setTopText("Next wave:");
+            //set gamephase to shop
             Global.curr.gamePhase = "shop";
+            Global.curr.shopButton.SetActive(true);
+            Global.curr.playButton.SetActive(true);
+            //////////////////////////
             Global.curr.resetShop();
-            Debug.Log("Defenders count: "+Global.curr.defenders.Count);
             foreach (GameObject current in Global.curr.defenders)
             {
                 current.transform.position = current.GetComponent<Warrior>().coordinates;
-                Debug.Log("resetting defender, coordinates:" + current.transform.position);
                 current.SetActive(true);
                 current.GetComponent<FightManager>().inCombat = false;
                 current.GetComponent<FightManager>().isAlive = true;
@@ -411,5 +404,10 @@ public class FightManager : MonoBehaviour
         goldAnim.GetComponentInChildren<GoldAnimation>().play(b);*/
         AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+"+a.bounty.ToString(), "coinFlip", 3);
         Global.curr.gold+=a.bounty;
+    }
+
+    void playAttackSound(){
+        Debug.Log("Play attack sound: "+a.attackSound);
+        AudioSystem.curr.createAndPlaySound(a.attackSound);
     }
 }

@@ -32,6 +32,6 @@ public class CityHealthManager : MonoBehaviour
     {
         Global.curr.startButtonEnabled=false;
         Global.curr.gameOver=true;
-        MessageSystem.curr.showMessage("Game over");
+        MessageSystem.curr.displayMessage("Game over", false);
     }
 }

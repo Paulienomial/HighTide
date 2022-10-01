@@ -27,10 +27,12 @@ public class WarriorAttributes : MonoBehaviour
             c.isFriendly=isFriendly;
             c.isRanged=isRanged;
             c.mergeCount=mergeCount;
-            c.attacksound = attacksound;
             c.description=description;
             c.bounty=bounty;
             c.cityDamage=cityDamage;
+            c.moveSpeed=moveSpeed;
+            c.attackSound=attackSound;
+            c.attackSoundAmount=attackSoundAmount;
 
             return c;
         }
@@ -42,9 +44,11 @@ public class WarriorAttributes : MonoBehaviour
         public bool isFriendly = true;
         public bool isRanged = false;
         public int mergeCount=1;//amount of units combine to make this unit
-        public string attacksound;
         public string description = "Basic melee unit";
         public int bounty=1;//bounty for killing a unit
         public int cityDamage=1;
+        public float moveSpeed=1f;
+        public string attackSound="sword";
+        public int attackSoundAmount=1;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random=UnityEngine.Random;
 
 public class SellWarrior : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class SellWarrior : MonoBehaviour
     public void sellWarrior(){
         if(HighlightSelected.curr.lastSelected!=null && HighlightSelected.curr.lastSelected.GetComponent<Warrior>()){
             GameObject g = HighlightSelected.curr.lastSelected;
+
+            WarriorAttributes.attr a = g.GetComponent<Warrior>().attributes;
+            AnimationController.curr.play("goldDrop", new Vector3(g.transform.position.x, g.transform.position.y, 0f), "+"+getSellPrice().ToString(), "coinFlip", 3);
+
             Global.curr.gold += getSellPrice();
             Global.curr.defenders.Remove(g);
             HighlightSelected.curr.deselect();

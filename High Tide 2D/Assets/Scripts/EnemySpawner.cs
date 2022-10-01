@@ -56,8 +56,8 @@ public class EnemySpawner : MonoBehaviour
                 if (Global.curr.waveNum == 1)
                 {
                     maxEnemies = 2;
-                }else if(Global.curr.waveNum == 8){
-                    maxEnemies = 10;
+                }else if(Global.curr.waveNum == 18){
+                    maxEnemies = 20;
                 }else{
                     //maxEnemies = (3 * Global.curr.waveNum) + Global.curr.waveNum;
                     maxEnemies = 1+Global.curr.waveNum;
@@ -79,6 +79,12 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.gamePhase != "fight")
         {
             Global.curr.gamePhase = "fight";
+            Global.curr.shopButton.SetActive(false);
+            Global.curr.playButton.SetActive(false);
+            ShopSystem.curr.shop.SetActive(false);
+            ShopSystem.curr.shopOpen=false;
+
+            
             StartCoroutine(spawnEnemy(1.5f, enemy));
         }
     }

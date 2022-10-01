@@ -23,6 +23,9 @@ public class Global : MonoBehaviour
     public float FXVolume = 0.5f;
     public float MusicVolume = 0.5f;
     public bool gamePaused = false;
+    public int maxCityHealth = 10;
+    public GameObject shopButton;
+    public GameObject playButton;
 
 
     void Awake(){

@@ -61,4 +61,11 @@ public class Events : MonoBehaviour
             onNotHoverCity();
         }
     }
+
+    public event Action onDraggedNewSpot;
+    public void draggedNewSpot(){
+        if(onDraggedNewSpot!=null){
+            onDraggedNewSpot();
+        }
+    }
 }

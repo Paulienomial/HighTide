@@ -88,7 +88,7 @@ public class CityUpgrade : MonoBehaviour
                 cityObject.transform.position = new Vector3(cityObject.transform.position.x-(.25f*(1f/18.9f)), cityObject.transform.position.y-(20f/18.9f)/2f, cityObject.transform.position.z);
                 //change highlight size
             }else{
-                AudioSystem.curr.createAndPlaySound("tadaFanfareA");
+                AudioSystem.curr.createAndPlaySound("ping1", Random.Range(.9f, 1.1f));
             }
         }else{
             Notify.curr.show("Not enough gold");

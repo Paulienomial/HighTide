@@ -62,6 +62,7 @@ public class GridSystem : MonoBehaviour
             //check if mouse down on placing object, but not yet up
             if(justPlacedObject==true){
                 if(Input.GetKeyUp(KeyCode.Mouse0)){
+                    Events.curr.purchaseDefender();//trigger event
                     justPlacedObject=false;
                 }
             }
@@ -138,7 +139,7 @@ public class GridSystem : MonoBehaviour
                     mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
                     //PURCHASE UNIT
                     Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                    Events.curr.purchaseDefender();//trigger event
+                    //Events.curr.purchaseDefender();//trigger event
                 }else{//if in a open valid grid spot
                     if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
                         Notify.curr.show("Unit capacity reached");
@@ -150,7 +151,7 @@ public class GridSystem : MonoBehaviour
                         Global.curr.defenders.AddLast(g);
                         //PURCHASE UNIT
                         Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                        Events.curr.purchaseDefender();//trigger event
+                        //Events.curr.purchaseDefender();//trigger event
                     }
                 }
                 
@@ -179,6 +180,9 @@ public class GridSystem : MonoBehaviour
                 if(!validPos(currObject)){//if released at invalid pos
                     currObject.transform.position=initPos;
                 }else{//merge defender
+                    if(!sameSpot(initPos, currObject.transform.position)){//if position changed with dragging
+                        Events.curr.draggedNewSpot();
+                    }
                     AudioScript.curr.playPlaceWarrior();
                     currObject.GetComponent<Warrior>().coordinates = new Vector3(currObject.transform.position.x, currObject.transform.position.y, 0f);
                     Events.curr.dropDefender();//trigger event
@@ -292,6 +296,17 @@ public class GridSystem : MonoBehaviour
         if(g1==null || g2==null) return false;
         float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
         if( Math.Abs(g1.transform.position.x-g2.transform.position.x)<tolerance && Math.Abs(g1.transform.position.y-g2.transform.position.y)<tolerance ){//same spot
+            return true;        
+        }
+        return false;
+    }
+
+    public bool sameSpot(Vector3 v1, Vector3 v2){
+        if(v1==null || v2==null) return false;
+        float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
+        Debug.Log("Init pos: "+v1);
+        Debug.Log("Dropped pos: "+v2);
+        if( Math.Abs(v1.x-v2.x)<tolerance && Math.Abs(v1.y-v2.y)<tolerance ){//same spot
             return true;        
         }
         return false;
