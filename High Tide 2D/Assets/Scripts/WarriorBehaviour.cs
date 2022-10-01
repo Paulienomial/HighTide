@@ -29,8 +29,26 @@ public class WarriorBehaviour : MonoBehaviour
         }else if(gameObject!=null){
             Debug.Log("Calling after wave for defender: "+thisWarrior.attributes.name);
             if(thisWarrior.attributes.name=="Farmer" && thisWarrior.diedLastWave==false){
+<<<<<<< Updated upstream
                 Debug.Log("Calling after wave func for farmer");
                 Global.curr.gold+=2;
+=======
+                if(thisWarrior.getLevel()==1){
+                    StatScreens.curr.farmGold += 2;
+                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    Global.curr.gold+=2;
+                }
+                else if(thisWarrior.getLevel()==2){
+                    StatScreens.curr.farmGold += 4;
+                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    Global.curr.gold+=4;
+                }
+                else if(thisWarrior.getLevel()==3){
+                    StatScreens.curr.farmGold += 6;
+                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    Global.curr.gold+=6;   
+                }
+>>>>>>> Stashed changes
             }
 
             gameObject.GetComponent<Warrior>().diedLastWave=false;

@@ -9,6 +9,8 @@ public class EnemySpawner : MonoBehaviour
     private int spawnCount = 0;
     public int maxEnemies;
     public int spawnComplete;
+    int groupCounter = 0;
+    float spawnDelay = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -24,9 +26,31 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator spawnEnemy(float delay, GameObject enemyType)
     {
+<<<<<<< Updated upstream
         yield return new WaitForSeconds(delay);
         GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(7f, 8.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
         newSpawn.GetComponent<Warrior>().setWarrior("Lizardman");
+=======
+        groupCounter++;
+        if (groupCounter >= 3)
+        {
+            spawnDelay = 2f; //Set spawnDelay after each group here
+            groupCounter = 0;
+        }
+        else
+        {
+            spawnDelay = 0f;
+        }
+        Debug.Log("Counter: " + groupCounter);
+        Debug.Log("Waiting for: " + spawnDelay + " seconds");
+        yield return new WaitForSeconds(spawnDelay);
+        GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(6f, 6.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
+        Warrior w = newSpawn.GetComponent<Warrior>(); 
+        w.setWarrior("Pokey boy");
+        w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
+        w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
+
+>>>>>>> Stashed changes
         Global.curr.enemies.AddLast(newSpawn);
         spawnCount++;
         if (spawnCount < maxEnemies)
@@ -40,6 +64,12 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {
+<<<<<<< Updated upstream
+=======
+                groupCounter = 0;
+                WaveBarController.curr.setTopText("Current wave:");
+
+>>>>>>> Stashed changes
                 AudioScript.curr.stopMainTheme();
                 AudioScript.curr.playButtonClickSound();
                 AudioScript.curr.playBattleHornSound();
@@ -66,7 +96,7 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.gamePhase != "fight")
         {
             Global.curr.gamePhase = "fight";
-            StartCoroutine(spawnEnemy(1.5f, enemy));
+            StartCoroutine(spawnEnemy(spawnDelay, enemy));
         }
     }
 }
