@@ -34,6 +34,8 @@ public class Tutorial : MonoBehaviour
     int tipCount=0;
     public TextMeshProUGUI tipCountText;
     bool showingWSTip=false;
+    public bool shouldShowTutorial=true;
+    public GameObject dontShowTutButton;
 
 
     //private attributes
@@ -47,7 +49,7 @@ public class Tutorial : MonoBehaviour
     {
         messageBox.SetActive(false);
 
-        //playTutorial();
+        playTutorial();
     }
 
     // Update is called once per frame
@@ -63,98 +65,104 @@ public class Tutorial : MonoBehaviour
     }
 
     public void step(){
-        currStep++;
-        hideMessage();
-        Highlight.curr.unFocus();
-        highlightGrid.SetActive(false);
-        messageButton.onClick.RemoveAllListeners();
-        if(currStep==1){//welcome
-            displayMessage("Welcome to High Tide!");
-            Highlight.curr.darkenAllExcept(messageBox);
-
+        if(shouldShowTutorial){
+            currStep++;
+            hideMessage();
+            Highlight.curr.unFocus();
+            highlightGrid.SetActive(false);
             messageButton.onClick.RemoveAllListeners();
-            messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
-                step();
-            } );
-        }
-        if(currStep==2){//explain goal
-            displayMessage("The goal of the game is to place units to protect the stronghold.");
-            Highlight.curr.darkenAllExcept(stronghold);
-            outline = Highlight.curr.outlineAnimate(stronghold,-.15f,0,-.15f,.15f);
-            messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
-                Destroy(outline);
-                step();
-            } );
-        }
-        if(currStep==3){//show gold
-            displayMessage("You have " + Global.curr.gold.ToString() + " available gold.");
-            Highlight.curr.darkenAllExcept(goldUI);
-            outline = Highlight.curr.outlineAnimate(goldUI,0,0,0,20);
-            messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
-                hideMessage();
-                Destroy(outline);
-                step();
-            } );
-        }
-        if(currStep==4){//highlight shop button
-            ShopSystem.curr.shopAvailable=true;
-            Highlight.curr.focus( shopButton );
+            dontShowTutButton.SetActive(false);
+            //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,105);
+            if(currStep==1){//welcome
+                //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,165);
+                displayMessage("Welcome to High Tide!");
+                Highlight.curr.darkenAllExcept(messageBox);
 
-            Button btn = shopButton.GetComponent<Button>();
-            btn.onClick.AddListener( ()=>{
-                if(currStep==4){
+                messageButton.onClick.RemoveAllListeners();
+                messageButton.onClick.AddListener( ()=>{
+                    AudioSystem.curr.createAndPlaySound("btnClick");
                     step();
+                } );
+            }
+            if(currStep==2){//explain goal
+                displayMessage("The goal of the game is to place units to protect the stronghold.");
+                Highlight.curr.darkenAllExcept(stronghold);
+                outline = Highlight.curr.outlineAnimate(stronghold,-.15f,0,-.15f,.15f);
+                messageButton.onClick.AddListener( ()=>{
+                    AudioSystem.curr.createAndPlaySound("btnClick");
+                    Destroy(outline);
+                    step();
+                } );
+            }
+            if(currStep==3){//show gold
+                displayMessage("You have " + Global.curr.gold.ToString() + " available gold.");
+                Highlight.curr.darkenAllExcept(goldUI);
+                outline = Highlight.curr.outlineAnimate(goldUI,0,0,0,20);
+                messageButton.onClick.AddListener( ()=>{
+                    AudioSystem.curr.createAndPlaySound("btnClick");
+                    hideMessage();
+                    Destroy(outline);
+                    step();
+                } );
+            }
+            if(currStep==4){//highlight shop button
+                ShopSystem.curr.shopAvailable=true;
+                Highlight.curr.focus( shopButton );
+
+                Button btn = shopButton.GetComponent<Button>();
+                btn.onClick.AddListener( ()=>{
+                    if(currStep==4){
+                        step();
+                    }
+                } );
+            }
+            if(currStep==5){//highlight shop
+                ShopSystem.curr.shopAvailable=false;
+                scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 165);
+                scroll.GetComponent<RectTransform>().localPosition = new Vector2(0,250);
+                displayMessage("Select a unit", false);
+                Highlight.curr.darkenAllExcept(cardsContainer);
+                foreach(Transform child in cardsContainer.transform){
+                    Button button = child.GetComponentInChildren<Button>();
+                    button.onClick.AddListener( ()=>{
+                        if(currStep==5){
+                            step();
+                        }
+                    } );
                 }
-            } );
-        }
-        if(currStep==5){//highlight shop
-            ShopSystem.curr.shopAvailable=false;
-            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 165);
-            scroll.GetComponent<RectTransform>().localPosition = new Vector2(0,250);
-            displayMessage("Select a unit", false);
-            Highlight.curr.darkenAllExcept(cardsContainer);
-            foreach(Transform child in cardsContainer.transform){
-                Button button = child.GetComponentInChildren<Button>();
-                button.onClick.AddListener( ()=>{
-                    if(currStep==5){
+            }
+            if(currStep==6){//place unit
+                highlightGrid.SetActive(true);
+                displayMessage("Place your unit.",false);
+                Events.curr.onPurchaseDefender += ()=>{
+                    if(currStep==6){
+                        step();
+                    }
+                };
+            }
+            if(currStep==7){//drag unit
+                highlightGrid.SetActive(true);
+                scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 200);
+                displayMessage("Click and drag your unit to move it around.", false);
+                Events.curr.onDraggedNewSpot += ()=>{
+                    if(currStep==7){
+                        step();
+                    }
+                };
+            }
+            if(currStep==8){//play button
+                Global.curr.startButtonEnabled=true;
+                displayMessage("Click on the play button to start your first fight.", false);
+                Highlight.curr.focus(playButton);
+                playButton.GetComponent<Button>().onClick.AddListener( ()=>{
+                    if(currStep==8){
+                        ShopSystem.curr.shopAvailable=true;
                         step();
                     }
                 } );
             }
         }
-        if(currStep==6){//place unit
-            highlightGrid.SetActive(true);
-            displayMessage("Place your unit.",false);
-            Events.curr.onPurchaseDefender += ()=>{
-                if(currStep==6){
-                    step();
-                }
-            };
-        }
-        if(currStep==7){//drag unit
-            highlightGrid.SetActive(true);
-            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 200);
-            displayMessage("Click and drag your unit to move it around.", false);
-            Events.curr.onDraggedNewSpot += ()=>{
-                if(currStep==7){
-                    step();
-                }
-            };
-        }
-        if(currStep==8){//play button
-            Global.curr.startButtonEnabled=true;
-            displayMessage("Click on the play button to start your first fight.", false);
-            Highlight.curr.focus(playButton);
-            playButton.GetComponent<Button>().onClick.AddListener( ()=>{
-                if(currStep==8){
-                    ShopSystem.curr.shopAvailable=true;
-                    step();
-                }
-            } );
-        }
+        
     }
 
     public void displayMessage(string m, bool showButton=true, string buttonText="NEXT"){
@@ -166,20 +174,23 @@ public class Tutorial : MonoBehaviour
     }
 
     public void displayTip(string m){
-        tipCount++;
-        AudioSystem.curr.createAndPlaySound("bell");
-        tipCountText.text = tipCount.ToString()+"/4:";
-        messageText.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-230f);
-        scroll.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
-        scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(800f, 450f);
+        if(shouldShowTutorial){
+            tipCount++;
+            AudioSystem.curr.createAndPlaySound("bell");
+            tipCountText.text = tipCount.ToString()+"/4:";
+            messageText.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-230f);
+            scroll.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
+            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(800f, 450f);
+            
+            displayMessage(m, true, "OK");
+            tipText.SetActive(true);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick");
+                messageBox.SetActive(false);
+                messageButton.onClick.RemoveAllListeners();
+            } );
+        }
         
-        displayMessage(m, true, "OK");
-        tipText.SetActive(true);
-        messageButton.onClick.AddListener( ()=>{
-            AudioSystem.curr.createAndPlaySound("btnClick");
-            messageBox.SetActive(false);
-            messageButton.onClick.RemoveAllListeners();
-        } );
     }
 
     public void hideMessage(){
@@ -187,6 +198,7 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showMergeTutorialTip(){
+        if(!shouldShowTutorial) return;
         if(Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(0).GetComponent<Warrior>().attributes.name!="Farmer" && !showedMergeTip){
             Highlight.curr.disableUI();
             showedMergeTip=true;
@@ -202,6 +214,7 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showLevelUnitTip(GameObject g){
+        if(!shouldShowTutorial) return;
         if(!showedLevelUnitTip){
             showingWSTip=true;
             string name = g.GetComponent<Warrior>().attributes.name;
@@ -222,6 +235,7 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showFarmerTip(){
+        if(!shouldShowTutorial) return;
         if(!showedFarmerTip && Global.curr.waveNum>=3){
             Highlight.curr.disableUI();
             showedFarmerTip=true;
@@ -236,6 +250,7 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showPopulationTip(){
+        if(!shouldShowTutorial) return;
         if(!showedPopulationTip && Global.curr.defenders.Count==Global.curr.unitCap){
             showingWSTip=true;
             Highlight.curr.disableUI();
@@ -248,5 +263,13 @@ public class Tutorial : MonoBehaviour
                 Destroy(outline);
             } );
         }
+    }
+
+    public void dontShowTutorial(){
+        shouldShowTutorial=false;
+        hideMessage();
+        Highlight.curr.unFocus();
+        highlightGrid.SetActive(false);
+        messageBox.SetActive(false);
     }
 }

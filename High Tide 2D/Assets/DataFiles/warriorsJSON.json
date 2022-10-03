@@ -49,8 +49,8 @@
       },
       {
         "name": "Pokey boy",
-        "damage": 40,
-        "hp": 250,
+        "damage": 20,
+        "hp": 180,
         "isFriendly": false,
         "description":"Beware, he pokes",
         "attackSound": "poke"
@@ -93,13 +93,46 @@
       },
       {
         "name": "Tree warrior",
-        "damage": 10,
+        "damage": 15,
         "hp": 200,
         "isFriendly":true,
         "description":"This tree bites!",
         "attackSound": "doorBump",
         "tier":999
+      },
+      {
+        "name": "Tooth ball",
+        "damage": 25,
+        "hp": 250,
+        "isFriendly": false,
+        "description":"Beware, he pokes",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Octupus",
+        "damage": 32,
+        "hp": 250,
+        "isFriendly": false,
+        "description":"Beware, he pokes",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Jellyfish",
+        "damage": 39,
+        "hp": 250,
+        "isFriendly": false,
+        "description":"So cute! It wants to kill you though.",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Dark wizard",
+        "damage": 45,
+        "hp": 250,
+        "isFriendly": false,
+        "description":"Beware, he pokes",
+        "attackSound": "poke"
       }
+      
       
     ]
 }

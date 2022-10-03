@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public int spawnComplete;
     int groupCounter = 0;
     float spawnDelay = 0;
+    public string[] enemies = {"Pokey boy","Jellyfish","Tooth ball","Octupus","Dark wizard"};
     
     // Start is called before the first frame update
     void Start()
@@ -41,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(spawnDelay);
         GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(6f, 6.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
         Warrior w = newSpawn.GetComponent<Warrior>(); 
-        w.setWarrior("Pokey boy");
+        w.setWarrior(enemies[ (Global.curr.waveNum-1)%5 ]);
         w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
         w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
 
@@ -113,21 +114,15 @@ public class EnemySpawner : MonoBehaviour
 
     float calcDamageMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
     {
-        if(waveNum==1){
-            return .5f;
-        }
-        if(waveNum==2){
+        if(waveNum<=5){
             return .75f;
-        }
-        if(waveNum==3){
-            return 1f;
         }
         //**** EQUATION ****//
         // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
         //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
 
-        float a=8f; //the horizontal asimptote
-        float r=.05f; //the rate of increase
+        float a=10f; //the horizontal asimptote
+        float r=.1f; //the rate of increase
 
         float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
         float multiplier = (n * Mathf.Atan( r *((float)(waveNum-3) - 1f ))) + 1f;
@@ -144,21 +139,15 @@ public class EnemySpawner : MonoBehaviour
 
     float calcHealthMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
     {
-        if(waveNum==1){
-            return .5f;
-        }
-        if(waveNum==2){
+        if(waveNum<=5){
             return .75f;
-        }
-        if(waveNum==3){
-            return 1f;
         }
         //**** EQUATION ****//
         // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
         //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
 
         float a=10f; //the horizontal asimptote
-        float r=.05f; //the rate of increase
+        float r=.1f; //the rate of increase
 
         float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
         float multiplier = (n * Mathf.Atan( r *((float)(waveNum-3) - 1f ))) + 1f;
