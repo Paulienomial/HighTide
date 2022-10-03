@@ -68,4 +68,11 @@ public class Events : MonoBehaviour
             onDraggedNewSpot();
         }
     }
+
+    public event Action onWaveStart;
+    public void waveStart(){
+        if(onWaveStart!=null){
+            onWaveStart();
+        }
+    }
 }

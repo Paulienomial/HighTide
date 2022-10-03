@@ -504,6 +504,8 @@ GameObject:
   - component: {fileID: 3806697475837053128}
   - component: {fileID: 72717300615189207}
   - component: {fileID: 6300993902567493486}
+  - component: {fileID: 7673979276700424897}
+  - component: {fileID: 6998838642976038203}
   m_Layer: 8
   m_Name: Warrior
   m_TagString: Untagged
@@ -600,10 +602,13 @@ MonoBehaviour:
     isFriendly: 1
     isRanged: 0
     mergeCount: 1
-    attacksound: 
     description: Basic melee unit
     bounty: 2
     cityDamage: 1
+    moveSpeed: 1
+    attackSound: sword
+    attackSoundAmount: 1
+    ability: 
   coordinates: {x: 0, y: 0, z: 0}
   maxHealth: 0
   diedLastWave: 0
@@ -736,6 +741,7 @@ MonoBehaviour:
   waveEnd: 0
   projectileInAir: 0
   waveLost: 0
+  unitPaused: 0
   a:
     name: foot soldier
     damage: 30
@@ -745,10 +751,13 @@ MonoBehaviour:
     isFriendly: 1
     isRanged: 0
     mergeCount: 1
-    attacksound: 
     description: Basic melee unit
     bounty: 2
     cityDamage: 1
+    moveSpeed: 1
+    attackSound: sword
+    attackSoundAmount: 1
+    ability: 
 --- !u!114 &72717300615189207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,6 +784,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5fcf6e531f2e5443bffea9752df0d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7673979276700424897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427604778648480945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4dbf332971ef0409efbe26e0a882fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+--- !u!114 &6998838642976038203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2427604778648480945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f5a419a8ee1d14d9bf3996c11d4c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bonfireObject: {fileID: 7570851180821140873, guid: 0297e3f031c9c7b40b91e6ebcc17d6ca, type: 3}
 --- !u!1 &3264083164075171421
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +930,7 @@ GameObject:
   - component: {fileID: 2250124725149936695}
   - component: {fileID: 8578404128090418753}
   m_Layer: 8
-  m_Name: Border (1)
+  m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

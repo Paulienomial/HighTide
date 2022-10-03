@@ -28,10 +28,11 @@ public class ShopCard : MonoBehaviour
             shop.SetActive(false);
             ShopSystem.curr.shopOpen=false;
             }else if(Global.curr.gold<warrior.price){
-                Notify.curr.show("Not enough gold");
-            }else if(Global.curr.defenders.Count>=Global.curr.unitCap){
+                //Notify.curr.show("Not enough gold");
+                Highlight.curr.negativeHighlight(Global.curr.goldUI,2.5f,-.15f,0,2,22);
+            }/*else if(Global.curr.defenders.Count>=Global.curr.unitCap){
                 Notify.curr.show("Unit capacity reached");
-            }
+            }*/
         }
     }
 
@@ -44,10 +45,11 @@ public class ShopCard : MonoBehaviour
             shop.SetActive(false);
             ShopSystem.curr.shopOpen=false;
             }else if(Global.curr.gold<w.price){
-                Notify.curr.show("Not enough gold");
-            }else if(Global.curr.defenders.Count>=Global.curr.unitCap){
+                //Notify.curr.show("Not enough gold");
+                Highlight.curr.negativeHighlight(Global.curr.goldUI, 2.5f,-.15f,0,2,22);
+            }/*else if(Global.curr.defenders.Count>=Global.curr.unitCap){
                 Notify.curr.show("Unit capacity reached");
-            }
+            }*/
         }
     }
 }

@@ -29,13 +29,11 @@ public class waveManager : MonoBehaviour
     {
         if (Global.curr.waveStart)
         {
-            //Debug.Log(Global.curr.enemyWaveDeathCount);
             if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
             {
                 CancelInvoke();
                 resetWave();
                 Global.curr.gold+=2;
-                Debug.Log("wave complete");
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
             }
@@ -55,8 +53,7 @@ public class waveManager : MonoBehaviour
     {
         if (!Global.curr.gameOver && Global.curr.gamePhase == "fight")
         {
-            StatScreens.curr.showAfterWaveScreen();
-            //Debug.Log("Resetting Wave");
+            //StatScreens.curr.showAfterWaveScreen();
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
             {
@@ -80,7 +77,7 @@ public class waveManager : MonoBehaviour
             foreach (GameObject current in Global.curr.defenders)
             {
                 current.transform.position = current.GetComponent<Warrior>().coordinates;
-                Debug.Log("Resetting positions");
+                //resetting positions
                 current.SetActive(true);
                 current.GetComponent<FightManager>().inCombat = false;
                 current.GetComponent<FightManager>().isAlive = true;

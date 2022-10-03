@@ -112,7 +112,11 @@ public class HighlightSelected : MonoBehaviour
             //Damage
             GameObject dmgIcon = currCard.transform.Find("dmgIcon").gameObject;
             GameObject damageText = dmgIcon.transform.Find("Damage").gameObject;
-            damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString();
+            if ( GlobalBehaviours.curr.globalDMGAura==0 || currWarrior.isFriendly==false ){
+                damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString();
+            }else{
+                damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString()+"+"+GlobalBehaviours.curr.globalDMGAura.ToString();
+            }
 
             //HP
             GameObject hpIcon = currCard.transform.Find("hpIcon").gameObject;
@@ -121,7 +125,13 @@ public class HighlightSelected : MonoBehaviour
 
             //Description
             GameObject description = currCard.transform.Find("para").gameObject;
-            description.GetComponent<TextMeshProUGUI>().text = currWarrior.description;
+            if(lastSelected.GetComponent<Warrior>().getLevel()==1){
+                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description;
+            }else if(lastSelected.GetComponent<Warrior>().getLevel()==2){
+                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description2;
+            }else if(lastSelected.GetComponent<Warrior>().getLevel()==3){
+                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description3;
+            }
 
             //Sell button
             GameObject sell = currCard.transform.Find("Sell").gameObject;

@@ -29,6 +29,7 @@ public class SellWarrior : MonoBehaviour
             Global.curr.defenders.Remove(g);
             HighlightSelected.curr.deselect();
             Destroy(g);
+            GlobalBehaviours.curr.applyAuraRangerBuff();
         }
     }
 

@@ -30,13 +30,12 @@ public class Triggers : MonoBehaviour
                 //then set drag to false
 
         if(!dragging){
-            //Debug.Log("not dragging");
+            //not dragging
             //raycast to warrior prefab
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, float.MaxValue, defenderMask);
             if(hit.collider!=null && ShopSystem.curr.shopOpen==false){
                 if(Input.GetKeyDown(KeyCode.Mouse0)){
                     //start dragging
-                    //Debug.Log("start dragging");
                     currObject=hit.collider.gameObject;
                     dragging=true;
                     Events.curr.defenderDrag(hit.collider.gameObject);//trigger event
@@ -46,11 +45,11 @@ public class Triggers : MonoBehaviour
 
         if(dragging){
             if(currObject!=null){
-                //Debug.Log("continue dragging");
+                //continue dragging
                 Events.curr.defenderDrag(currObject);
                 if(Input.GetKeyUp(KeyCode.Mouse0)){
                     //release
-                    //Debug.Log("stop dragging");
+                    //stop dragging
                     currObject=null;
                     dragging=false;
                     Events.curr.stopDefenderDrag(currObject);

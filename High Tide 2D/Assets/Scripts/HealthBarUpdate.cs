@@ -25,12 +25,6 @@ public class HealthBarUpdate : MonoBehaviour
         hpBar.setMaxHealth(gameObject.GetComponent<Warrior>().maxHealth);//displays current health
 
         if(Input.GetKeyDown(KeyCode.Z)){
-            /*if(gameObject.GetComponent<Warrior>().attributes.hp>0){
-                gameObject.GetComponent<Warrior>().attributes.hp-=20;
-                if(gameObject.GetComponent<Warrior>().attributes.hp<=0){
-                    gameObject.GetComponent<Warrior>().attributes.hp=0;
-                }
-            }*/
             Global.curr.defenders.First.Value.GetComponent<Warrior>().attributes.hp-=20;
         }
     }

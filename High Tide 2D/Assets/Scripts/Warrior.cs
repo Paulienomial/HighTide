@@ -55,4 +55,12 @@ public class Warrior : MonoBehaviour
         hpBar = gameObject.GetComponent<HealthBarUpdate>().hpBar;
         hpBar.setMaxHealth(h);
     }
+
+    public void takeDamage(int d){
+        if(attributes.hp>d){
+            attributes.hp-=d;
+        }else{
+            attributes.hp=0;
+        }
+    }
 }

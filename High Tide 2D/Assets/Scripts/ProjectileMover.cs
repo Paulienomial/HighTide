@@ -56,7 +56,7 @@ public class ProjectileMover : MonoBehaviour
         {
             if (shooter.GetComponent<Warrior>().attributes.isFriendly && !target.GetComponent<Warrior>().attributes.isFriendly || !shooter.GetComponent<Warrior>().attributes.isFriendly && target.GetComponent<Warrior>().attributes.isFriendly)
             {
-                //Debug.Log("Archer hit");
+                //Archer hit
                 startMoving = false;
                 if(target != null && shooter.GetComponent<FightManager>().isAlive)
                 {

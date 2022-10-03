@@ -6,6 +6,9 @@ public class WarriorBehaviour : MonoBehaviour
 {
     // Start is called before the first frame update
     Warrior thisWarrior;
+    public int auraRangerBonusDMG=10;
+    public int auraRangerBonusHP=20;
+    public bool receivedAuraRangerBuff=false;
     void Start()
     {
         
@@ -31,17 +34,14 @@ public class WarriorBehaviour : MonoBehaviour
             if(thisWarrior.attributes.name=="Farmer" && thisWarrior.diedLastWave==false){
                 if(thisWarrior.getLevel()==1){
                     StatScreens.curr.farmGold += 2;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
                     Global.curr.gold+=2;
                 }
                 else if(thisWarrior.getLevel()==2){
                     StatScreens.curr.farmGold += 4;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
                     Global.curr.gold+=4;
                 }
                 else if(thisWarrior.getLevel()==3){
                     StatScreens.curr.farmGold += 6;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
                     Global.curr.gold+=6;   
                 }
             }

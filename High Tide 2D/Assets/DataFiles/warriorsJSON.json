@@ -10,6 +10,8 @@
           "isRanged": false,
           "mergeCount":1,
           "description":"Basic melee unit",
+          "description2":"Lvl2 basic melee unit",
+          "description3":"Lvl3 basic melee unit",
           "bounty":1,
           "cityDamage":1,
           "moveSpeed":1,
@@ -23,6 +25,8 @@
           "isRanged": true,
           "isFriendly":true,
           "description":"Basic ranged unit",
+          "description2":"Lvl2 basic ranged unit",
+          "description3":"Lvl3 basic ranged unit",
           "attackSound": "bow"
       },
       {
@@ -31,6 +35,8 @@
         "hp": 180,
         "isFriendly": true,
         "description":"+2 gold after wave for each surviving farmer",
+        "description2":"+4 gold after wave for each surviving farmer",
+        "description3":"+6 gold after wave for each surviving farmer",
         "moveSpeed":0.5
       },
       {
@@ -48,6 +54,52 @@
         "isFriendly": false,
         "description":"Beware, he pokes",
         "attackSound": "poke"
+      },
+      {
+        "name": "Fire starter",
+        "damage": 20,
+        "hp": 150,
+        "isFriendly": true,
+        "description":"Creates a bonfire that deals 40 damage per second",
+        "description2":"Creates a bonfire that deals 60 damage per second",
+        "description3":"Creates a bonfire that deals 80 damage per second",
+        "ability":"Bonfire",
+        "tier":1,
+        "damagePerTick":20,
+        "dotTickRate":0.5
+      },
+      {
+        "name": "Aura ranger",
+        "damage": 35,
+        "hp": 200,
+        "isFriendly":true,
+        "description":"When alive give all defenders +10DMG. Effect does not stack",
+        "description2":"When alive give all defenders +20DMG. Effect does not stack",
+        "description3":"When alive give all defenders +30DMG. Effect does not stack",
+        "attackSound": "sword",
+        "tier":1
+      },
+      {
+        "name": "Nature ranger",
+        "damage": 35,
+        "hp": 200,
+        "isFriendly":true,
+        "description":"Spawns 2 small tree warriors to fight for you",
+        "description2":"Spawns 3 small tree warriors to fight for you",
+        "description3":"Spawns 4 small tree warriors to fight for you",
+        "attackSound": "doorBump",
+        "tier":1,
+        "ability":"SpawnTrees"
+      },
+      {
+        "name": "Tree warrior",
+        "damage": 10,
+        "hp": 200,
+        "isFriendly":true,
+        "description":"This tree bites!",
+        "attackSound": "doorBump",
+        "tier":999
       }
+      
     ]
 }

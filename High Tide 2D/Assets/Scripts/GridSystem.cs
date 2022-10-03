@@ -22,6 +22,7 @@ public class GridSystem : MonoBehaviour
     public float pixelsPerunit=18.9f;
     float verticalOffset;
     public bool justPlacedObject=false;
+    public GameObject popBackground;
 
 
     void Awake(){
@@ -93,7 +94,6 @@ public class GridSystem : MonoBehaviour
             if(currObject!=null && draggingPhase==true){
                 draggingPhase=false;
                 if(!validPos(currObject)){//if released at invalid pos
-                    Debug.Log("Released at invalid pos");
                     currObject.transform.position=initPos;
                 }else{//merge defender
                     AudioScript.curr.playPlaceWarrior();
@@ -139,6 +139,7 @@ public class GridSystem : MonoBehaviour
                     mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
                     //PURCHASE UNIT
                     Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
+                    GlobalBehaviours.curr.applyAuraRangerBuff();
                     //Events.curr.purchaseDefender();//trigger event
                 }else{//if in a open valid grid spot
                     if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
@@ -150,12 +151,26 @@ public class GridSystem : MonoBehaviour
                         g.GetComponent<Warrior>().coordinates = g.transform.position;
                         Global.curr.defenders.AddLast(g);
                         //PURCHASE UNIT
+                        GlobalBehaviours.curr.applyAuraRangerBuff();
                         Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
                         //Events.curr.purchaseDefender();//trigger event
+
+                        Tutorial.curr.showPopulationTip();
                     }
                 }
                 
-            }else{
+            }else{//if invalid placement
+                //check why placement is invalid
+                GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
+                if(mergeWith!=null){//if trying to merge different units
+                    //Notify.curr.show("Invalid position");
+                }else{//if placed at open spot, but unit cap reached
+                    if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
+                        //Notify.curr.show("Unit capacity reached");
+                        Highlight.curr.negativeHighlight(popBackground);
+                    }
+                }
+
                 Destroy(g);
                 card.gameObject.SetActive(true);
             }
@@ -178,6 +193,7 @@ public class GridSystem : MonoBehaviour
             if(currObject!=null && draggingPhase==true){
                 draggingPhase=false;
                 if(!validPos(currObject)){//if released at invalid pos
+                    Notify.curr.show("Invalid position");
                     currObject.transform.position=initPos;
                 }else{//merge defender
                     if(!sameSpot(initPos, currObject.transform.position)){//if position changed with dragging
@@ -210,7 +226,6 @@ public class GridSystem : MonoBehaviour
 
     private void dragObject(GameObject g){
         if(g==null){
-            //Debug.Log("g is null");
             return;
         }
         //HighlightSelected.curr.select(g);
@@ -263,11 +278,16 @@ public class GridSystem : MonoBehaviour
             }
         }
 
-        //if at a open spot, check if the unit cap allows it
-        if(Global.curr.defenders.Count > Global.curr.unitCap){
-            return false;
+        //if in open spot
+        if(placingPhase){
+            if(Global.curr.unitCap > Global.curr.defenders.Count){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
         }
-        return true;
     }
 
     public bool canMerge(GameObject g1, GameObject g2){
@@ -304,8 +324,6 @@ public class GridSystem : MonoBehaviour
     public bool sameSpot(Vector3 v1, Vector3 v2){
         if(v1==null || v2==null) return false;
         float tolerance = .1f;//sometimes they won't be EXACTLY on the same spot
-        Debug.Log("Init pos: "+v1);
-        Debug.Log("Dropped pos: "+v2);
         if( Math.Abs(v1.x-v2.x)<tolerance && Math.Abs(v1.y-v2.y)<tolerance ){//same spot
             return true;        
         }

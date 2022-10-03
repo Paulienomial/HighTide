@@ -157,7 +157,8 @@ public class ShopSystem : MonoBehaviour
             if(shop.activeSelf==false){
                 shopOpen=true;
                 shop.SetActive(true);
-                showMergeTutorialTip();
+                Tutorial.curr.showMergeTutorialTip();
+                Tutorial.curr.showFarmerTip();
             }else{
                 shopOpen=false;
                 shop.SetActive(false);
@@ -165,10 +166,5 @@ public class ShopSystem : MonoBehaviour
         }
     }
 
-    public void showMergeTutorialTip(){
-        if(Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(0).GetComponent<Warrior>().attributes.name!="Farmer"){
-            //Tutorial.curr.displayTip("You can combine two units of the same type by dragging them on top of each other");
-            //Highlight.curr.outlineAnimate((GameObject)cards[0]);
-        }
-    }
+    
 }

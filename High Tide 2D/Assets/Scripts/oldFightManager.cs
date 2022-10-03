@@ -66,7 +66,7 @@ public class oldFightManager : MonoBehaviour
 
         if (targetList.Count == 0)
         {
-            // Debug.Log("No Targets");
+            //No targets
             if (!a.isFriendly)
             {
                 target = city;
@@ -97,7 +97,7 @@ public class oldFightManager : MonoBehaviour
                     }
                     else
                     {
-                        //Debug.Log("Ignoring dead target");
+                        //Ignoring dead target
                     }
                 }
 
@@ -121,7 +121,7 @@ public class oldFightManager : MonoBehaviour
             {
                 if (Vector2.Distance(transform.position, target.transform.position) <= 3)
                 {
-                    //Debug.Log("Archer engaging");
+                    //Archer engaging
                     engageCombat(target);
                 }
             }
@@ -260,7 +260,6 @@ public class oldFightManager : MonoBehaviour
     {
         if (target != null && isAlive)
         {
-            Debug.Log("PROJECTILE BRAH");
             //AudioScript.curr.playAttackSound(this.gameObject);
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
@@ -271,13 +270,12 @@ public class oldFightManager : MonoBehaviour
     {
         if (Global.curr.waveStart)
         {
-            //Debug.Log(Global.curr.enemyWaveDeathCount);
             if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
             {
                 CancelInvoke();
                 gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
                 resetWave();
-                Debug.Log("wave complete");
+                //Wave complete
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
             }
@@ -338,7 +336,6 @@ public class oldFightManager : MonoBehaviour
         if (!a.isFriendly)
         {
             Global.curr.enemyWaveDeathCount--;
-            Debug.Log(Global.curr.enemyWaveDeathCount);
             inCombat = false;
             deleteEnemy();
             if (!waveLost)
@@ -366,7 +363,6 @@ public class oldFightManager : MonoBehaviour
     {
         if (!Global.curr.gameOver)
         {
-            //Debug.Log("Resetting Wave");
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
             {

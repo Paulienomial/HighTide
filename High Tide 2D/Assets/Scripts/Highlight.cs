@@ -16,6 +16,8 @@ public class Highlight : MonoBehaviour
     public GameObject canvas;
     public GameObject outlineAnimation;
     public GameObject outlineAnimationUI;
+    public GameObject uiOverlay;
+    bool busyPlayingOutline=false;
 
 
 
@@ -128,10 +130,10 @@ public class Highlight : MonoBehaviour
         unArrow();
     }
 
-    public GameObject outlineAnimate(GameObject g, float xOffset=0, float yOffset=0, float widthOffset=0, float heightOffset=0){
+    public GameObject outlineAnimate(GameObject g, float xOffset=0, float yOffset=0, float widthOffset=0, float heightOffset=0, bool showBackground=false){
         if(isUIElement(g)){//if ui element
             //get pos
-            Vector2 v = g.GetComponent<RectTransform>().localPosition;
+            Vector2 v = g.GetComponent<RectTransform>().anchoredPosition;
             //get dimensions
             float width = g.GetComponent<RectTransform>().rect.width;
             float height = g.GetComponent<RectTransform>().rect.height;
@@ -142,6 +144,10 @@ public class Highlight : MonoBehaviour
             outline.GetComponent<RectTransform>().localPosition = new Vector2(v.x+xOffset, v.y+yOffset);
             outline.GetComponent<RectTransform>().sizeDelta = new Vector2(width+widthOffset, height+heightOffset);
             outline.GetComponent<RectTransform>().localScale = new Vector2(1,1);
+
+            //show background
+            GameObject background = outline.transform.Find("Background").gameObject;
+            background.SetActive(showBackground);
 
             return outline;
 
@@ -156,7 +162,57 @@ public class Highlight : MonoBehaviour
             GameObject outline = Instantiate(outlineAnimation, new Vector3(v.x+xOffset, v.y+yOffset, v.z), Quaternion.identity);
             outline.GetComponent<SpriteRenderer>().size = new Vector3(width+widthOffset, height+heightOffset, width);
 
+            //show background
+            GameObject background = outline.transform.Find("Background").gameObject;
+            background.SetActive(showBackground);
+
             return outline;
+        }
+    }
+
+    public GameObject outlineAnimate(GameObject g, Color32 color, float xOffset=0, float yOffset=0, float widthOffset=0, float heightOffset=0, bool showBackground=false){
+        GameObject outline = outlineAnimate(g, xOffset, yOffset, widthOffset, heightOffset, showBackground);
+        if(isUIElement(outline)){
+            //set colour
+            outline.GetComponent<Image>().color = color;
+            GameObject background = outline.transform.Find("Background").gameObject;
+            background.GetComponent<Image>().color=color;
+            
+            return outline;
+        }else{
+            //set colour
+            outline.GetComponent<SpriteRenderer>().color = (Color)color;
+            GameObject background = outline.transform.Find("Background").gameObject;
+            background.GetComponent<SpriteRenderer>().color = (Color)color;
+
+            return outline;
+        }      
+    }
+
+
+    public void outlineAnimateDuration(GameObject g, Color32 color, float durationSeconds=2f, float xOffset=0, float yOffset=0, float widthOffset=0, float heightOffset=0, bool showBackground=false){
+        GameObject outline = outlineAnimate(g, xOffset, yOffset, widthOffset, heightOffset, showBackground);
+        if(isUIElement(outline)){
+            //set colour
+            outline.GetComponent<Image>().color = color;
+        }else{
+            //set colour
+            outline.GetComponent<SpriteRenderer>().color = (Color)color;
+        }
+        StartCoroutine(waitThenDestroy(outline, durationSeconds));
+    }
+
+    private IEnumerator waitThenDestroy(GameObject g, float durationSeconds){
+        busyPlayingOutline=true;
+        yield return new WaitForSeconds(durationSeconds);
+        busyPlayingOutline=false;
+        Destroy(g);
+    }
+
+    public void negativeHighlight(GameObject g, float durationSeconds=2.5f, float xOffset=0, float yOffset=0, float widthOffset=12, float heightOffset=12){
+        AudioSystem.curr.createAndPlaySound("sword",.75f,1f);
+        if(!busyPlayingOutline){
+            Highlight.curr.outlineAnimateDuration(g, new Color32(255,21,21,255), durationSeconds, xOffset, yOffset, widthOffset, heightOffset, true);//red
         }
     }
 
@@ -165,5 +221,13 @@ public class Highlight : MonoBehaviour
            return true;
         }
         return false;
+    }
+
+    public void disableUI(){
+        darken.SetActive(true);
+    }
+
+    public void enableUI(){
+        darken.SetActive(false);
     }
 }

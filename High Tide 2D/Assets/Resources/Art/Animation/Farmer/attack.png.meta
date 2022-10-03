@@ -109,8 +109,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 20
-        height: 20
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,8 +118,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ddb19dd7b99f6634495db90879cdaa41
-      internalID: -1076718399
+      spriteID: 6917b1b50838bee44b986b31ca658fa5
+      internalID: 1243580454
       vertices: []
       indices: 
       edges: []
@@ -128,10 +128,10 @@ TextureImporter:
       name: Attack_1
       rect:
         serializedVersion: 2
-        x: 20
+        x: 24
         y: 0
-        width: 20
-        height: 20
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -139,8 +139,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c686988f520f26e49a28193afdef19d1
-      internalID: 1541661539
+      spriteID: 881044c9dda91a040a9757a4cf0ec065
+      internalID: 760308257
       vertices: []
       indices: 
       edges: []
@@ -149,10 +149,10 @@ TextureImporter:
       name: Attack_2
       rect:
         serializedVersion: 2
-        x: 40
+        x: 48
         y: 0
-        width: 20
-        height: 20
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,8 +160,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43aae88d0efc3d9459a8276292424c67
-      internalID: -1133813564
+      spriteID: c5fb338b7beafa04480e61a2386f7505
+      internalID: 1153089436
       vertices: []
       indices: 
       edges: []
@@ -177,9 +177,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Attack_0: -1076718399
-      Attack_2: -1133813564
-      Attack_1: 1541661539
+      Attack_0: 1243580454
+      Attack_2: 1153089436
+      Attack_1: 760308257
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -26,6 +26,8 @@ public class Global : MonoBehaviour
     public int maxCityHealth = 10;
     public GameObject shopButton;
     public GameObject playButton;
+    public GameObject goldUI;
+    public GameObject warriorPrefab;
 
 
     void Awake(){
@@ -46,11 +48,22 @@ public class Global : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        /*if(Input.GetKeyDown(KeyCode.X)){
+            defenders.AddLast( Instantiate(fireStarter,new Vector2(0,0), Quaternion.identity) );
+            GameObject fireDude = defenders.Last.Value;
+            fireDude.GetComponent<Warrior>().setWarrior("Fire starter");
+        }*/
     }
 
     public void resetShop()
     {
         GetComponent<ShopSystem>().createShop();
+        Global.curr.gold-=1;
+    }
+    public void resetShop(int price)
+    {
+        GetComponent<ShopSystem>().createShop();
+        Global.curr.gold-=price;
+        AudioSystem.curr.createAndPlaySound("rerollPurchase", 1, 0.3f);
     }
 }

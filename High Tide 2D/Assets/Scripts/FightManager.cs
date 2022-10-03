@@ -25,7 +25,7 @@ public class FightManager : MonoBehaviour
     {
         a = gameObject.GetComponent<Warrior>().attributes;
         r = GetComponent<SpriteRenderer>();
-        fastforwardMovespeed = a.moveSpeed*2;
+        fastforwardMovespeed = a.moveSpeed*3f;
     }
 
     // Update is called once per frame
@@ -195,7 +195,7 @@ public class FightManager : MonoBehaviour
                 }
                 if (GetComponent<Warrior>().attributes.isRanged)
                 {
-                    Debug.Log("Friendly fires projectile");
+                    //Friendly fire projectile
                     fireProjectile();
 
                 }
@@ -215,13 +215,13 @@ public class FightManager : MonoBehaviour
                     }
                     if (GetComponent<Warrior>().attributes.isRanged)
                     {
-                        //Debug.Log("Enemy fires projectile");
+                        //Enemy fires projectile
                         fireProjectile();
                     }
                     else
                     {
                         doDamage();
-                        //Debug.Log("Enemy does melee damage");
+                        //Enemy does melee damage
                     }
                 }
                 else
@@ -257,15 +257,17 @@ public class FightManager : MonoBehaviour
         if (isAlive && !waveEnd && target != null && target.GetComponent<FightManager>().isAlive && !unitPaused)
         {
             FightManager victim = target.GetComponent<FightManager>();
-            int damageDealt = a.damage;
-            if ((victim.a.hp - a.damage) < 0)
+            int bonusDmg = 0;
+            if(a.isFriendly) bonusDmg = GlobalBehaviours.curr.globalDMGAura;
+            int damageDealt = a.damage + bonusDmg;
+            if ((victim.a.hp - damageDealt) < 0)
             {//if the damage will cause victim's health to fall below zero
                 damageDealt = victim.a.hp;
                 victim.a.hp = 0;
             }
             else
             {
-                victim.a.hp -= a.damage;
+                victim.a.hp -= damageDealt;
             }
             if (victim.a.isFriendly == false)
             {
@@ -299,7 +301,7 @@ public class FightManager : MonoBehaviour
 
     }
 
-    void takeDamage(int dmg)
+    public void takeDamage(int dmg)
     {
         int damageDealt = dmg;
         if ((a.hp - dmg) < 0)
@@ -313,7 +315,8 @@ public class FightManager : MonoBehaviour
         }
         else
         {
-            a.hp -= a.damage;
+            //a.hp -= a.damage;
+            a.hp -= dmg;
         }
     }
 
@@ -348,6 +351,7 @@ public class FightManager : MonoBehaviour
         {
             inCombat = false;
             gameObject.GetComponent<Warrior>().diedLastWave = true;
+            GlobalBehaviours.curr.applyAuraRangerBuff();
             gameObject.SetActive(false);
         }
     }
@@ -402,7 +406,6 @@ public class FightManager : MonoBehaviour
     }
 
     void playAttackSound(){
-        Debug.Log("Play attack sound: "+a.attackSound);
         AudioSystem.curr.createAndPlaySound(a.attackSound, Random.Range(0.9f, 1.1f));
     }
 }

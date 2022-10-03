@@ -38,8 +38,6 @@ public class EnemySpawner : MonoBehaviour
         {
             spawnDelay = 0f;
         }
-        Debug.Log("Counter: " + groupCounter);
-        Debug.Log("Waiting for: " + spawnDelay + " seconds");
         yield return new WaitForSeconds(spawnDelay);
         GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(6f, 6.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
         Warrior w = newSpawn.GetComponent<Warrior>(); 
@@ -60,6 +58,8 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {
+                GlobalBehaviours.curr.applyAuraRangerBuff();
+                Events.curr.waveStart();
                 groupCounter = 0;
                 WaveBarController.curr.setTopText("Current wave:");
 
@@ -113,6 +113,15 @@ public class EnemySpawner : MonoBehaviour
 
     float calcDamageMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
     {
+        if(waveNum==1){
+            return .5f;
+        }
+        if(waveNum==2){
+            return .75f;
+        }
+        if(waveNum==3){
+            return 1f;
+        }
         //**** EQUATION ****//
         // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
         //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
@@ -121,7 +130,7 @@ public class EnemySpawner : MonoBehaviour
         float r=.05f; //the rate of increase
 
         float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
-        float multiplier = (n * Mathf.Atan( r *((float)waveNum - 1f ))) + 1f;
+        float multiplier = (n * Mathf.Atan( r *((float)(waveNum-3) - 1f ))) + 1f;
         
         return multiplier;
     }
@@ -135,6 +144,15 @@ public class EnemySpawner : MonoBehaviour
 
     float calcHealthMultiplier(int waveNum)//return a damage or hp multiplier based on a wave number
     {
+        if(waveNum==1){
+            return .5f;
+        }
+        if(waveNum==2){
+            return .75f;
+        }
+        if(waveNum==3){
+            return 1f;
+        }
         //**** EQUATION ****//
         // m = (a-1)*(2/pi) * atan(r*(x-1)) + 1
         //m: multiplier, a: horizontal asimptote/ceiling, r: rate of increase, x: wave num
@@ -143,7 +161,7 @@ public class EnemySpawner : MonoBehaviour
         float r=.05f; //the rate of increase
 
         float n = (a-1) * (2f/Mathf.PI); //the left side of equation : n*atan(r*x)
-        float multiplier = (n * Mathf.Atan( r *((float)waveNum - 1f ))) + 1f;
+        float multiplier = (n * Mathf.Atan( r *((float)(waveNum-3) - 1f ))) + 1f;
 
         return multiplier;
     }

@@ -38,14 +38,14 @@ public class UpgradeDefender : MonoBehaviour
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount>=3 && gameObject.GetComponent<Warrior>().attributes.mergeCount<6){
             levelText.text="2";
-            if(gameObject.GetComponent<Warrior>().attributes.name=="Farmer"){
-                gameObject.GetComponent<Warrior>().attributes.description = "+4 gold after wave for each surviving farmer";
+            if(gameObject.GetComponent<Warrior>().attributes.name=="Fire starter"){
+                gameObject.GetComponent<Warrior>().attributes.damagePerTick=30;
             }
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount==6){
             levelText.text="3";
-            if(gameObject.GetComponent<Warrior>().attributes.name=="Farmer"){
-                gameObject.GetComponent<Warrior>().attributes.description = "+6 gold after wave for each surviving farmer";
+            if(gameObject.GetComponent<Warrior>().attributes.name=="Fire starter"){
+                gameObject.GetComponent<Warrior>().attributes.damagePerTick=40;
             }
         }
 
@@ -71,5 +71,8 @@ public class UpgradeDefender : MonoBehaviour
 
         //show this unit at currently selected
         HighlightSelected.curr.select(gameObject);
+
+        //Show tutprial tip
+        Tutorial.curr.showLevelUnitTip(gameObject);
     }
 }

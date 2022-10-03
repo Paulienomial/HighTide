@@ -72,7 +72,8 @@ public class CityUpgrade : MonoBehaviour
                 AudioSystem.curr.createAndPlaySound("fanfareCityLvl2");
                 AnimationController.curr.createAndPlay("cityUpgradeLvl2", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
                 //set animator
-                animator.SetInteger("state",2);
+                //animator.SetInteger("state",2);
+                animator.Play("building2Idle");
                 //set sprite
                 cityObject.GetComponent<SpriteRenderer>().sprite=city2;
             }else if(upgradeCount==6){//upgrade to level 3
@@ -82,7 +83,8 @@ public class CityUpgrade : MonoBehaviour
                 //play upgrade animation
                 AnimationController.curr.createAndPlay("cityUpgradeLvl3", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
                 //set animator
-                animator.SetInteger("state",3);
+                //animator.SetInteger("state",3);
+                animator.Play("building3Idle");
                 //set sprite
                 cityObject.GetComponent<SpriteRenderer>().sprite=city3;
                 cityObject.transform.position = new Vector3(cityObject.transform.position.x-(.25f*(1f/18.9f)), cityObject.transform.position.y-(20f/18.9f)/2f, cityObject.transform.position.z);
@@ -91,13 +93,26 @@ public class CityUpgrade : MonoBehaviour
                 AudioSystem.curr.createAndPlaySound("ping1", Random.Range(.9f, 1.1f));
             }
         }else{
-            Notify.curr.show("Not enough gold");
+            //Notify.curr.show("Not enough gold");
+            Highlight.curr.negativeHighlight(Global.curr.goldUI, 2.5f,-.15f,0,2,22);
         }
     }
 
     public void playDamageAnimation(int damageTaken){
-        animator.Play("buildingDamage");
+        //visual animation:
+        animator.Play("building"+ getCityLevel().ToString() +"Damage");
         AudioSystem.curr.createAndPlaySound("axe"+ Random.Range(1,3).ToString() );
+        //text animation:
         AnimationController.curr.play("cityDamage", new Vector3(cityHighlight.transform.position.x,cityHighlight.transform.position.y,cityHighlight.transform.position.z), "-"+damageTaken.ToString());
+    }
+
+    public int getCityLevel(){
+        if(upgradeCount<3){
+            return 1;
+        }else if(upgradeCount>=3 && upgradeCount<6){
+            return 2;
+        }else{
+            return 3;
+        }
     }
 }
