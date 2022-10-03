@@ -8,6 +8,8 @@ public class waveManager : MonoBehaviour
     public static waveManager curr;
     public bool waveEnd = false;
     public bool waveLost = false;
+    public int bonusGold = 2;
+    public int spawnGuide = 1;
 
     void Start()
     {
@@ -34,6 +36,12 @@ public class waveManager : MonoBehaviour
             {
                 CancelInvoke();
                 resetWave();
+<<<<<<< Updated upstream
+=======
+                Global.curr.gold+=bonusGold;
+                StatScreens.curr.extraGold = bonusGold;
+                StatScreens.curr.totalGold += bonusGold;
+>>>>>>> Stashed changes
                 Debug.Log("wave complete");
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
                 return true;
@@ -54,7 +62,6 @@ public class waveManager : MonoBehaviour
     {
         if (!Global.curr.gameOver && Global.curr.gamePhase == "fight")
         {
-            StatScreens.curr.showAfterWaveScreen();
             //Debug.Log("Resetting Wave");
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
@@ -87,6 +94,15 @@ public class waveManager : MonoBehaviour
             }
             //Global.curr.gold+=10;
             Events.curr.waveComplete();//trigger wave complete event
+            StatScreens.curr.showAfterWaveScreen();
+            if(spawnGuide < 6)
+            {
+                spawnGuide++;
+            }
+            else
+            {
+                spawnGuide = 1;
+            }
         }
     }
 }

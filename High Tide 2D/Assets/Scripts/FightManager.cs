@@ -241,6 +241,9 @@ public class FightManager : MonoBehaviour
             Debug.Log("Projectile instantiated");
             AudioScript.curr.playAttackSound(this.gameObject);
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+            string projectilePath = Application.dataPath + "/Assets/Art/Projectiles/" + a.projectile + ".png";
+            Debug.Log("Projectile path = " + projectilePath);
+            newProjectile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(projectilePath);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }
     }
@@ -280,6 +283,7 @@ public class FightManager : MonoBehaviour
                 else
                 {
                     StatScreens.curr.enemiesKilled++;
+                    StatScreens.curr.totalDeadFoes++;
                 }
                 victim.die();
             }
@@ -393,5 +397,6 @@ public class FightManager : MonoBehaviour
         AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+" + a.bounty.ToString(), "coinFlip", 3);
         Global.curr.gold += a.bounty;
         StatScreens.curr.enemyGold += a.bounty;
+        StatScreens.curr.totalGold += a.bounty;
     }
 }

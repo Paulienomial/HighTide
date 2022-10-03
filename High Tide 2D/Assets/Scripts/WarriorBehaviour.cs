@@ -29,17 +29,17 @@ public class WarriorBehaviour : MonoBehaviour
             if(thisWarrior.attributes.name=="Farmer" && thisWarrior.diedLastWave==false){
                 if(thisWarrior.getLevel()==1){
                     StatScreens.curr.farmGold += 2;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    StatScreens.curr.totalGold += 2;
                     Global.curr.gold+=2;
                 }
                 else if(thisWarrior.getLevel()==2){
                     StatScreens.curr.farmGold += 4;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    StatScreens.curr.totalGold += 4;
                     Global.curr.gold+=4;
                 }
                 else if(thisWarrior.getLevel()==3){
                     StatScreens.curr.farmGold += 6;
-                    //Debug.Log("Farmer gold = " + StatScreens.curr.farmGold);
+                    StatScreens.curr.totalGold += 6;
                     Global.curr.gold+=6;   
                 }
             }

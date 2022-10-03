@@ -22,6 +22,7 @@ public class ShopCard : MonoBehaviour
     public void purchaseUnit(){
         if(Global.curr.gamePhase != "fight"){
             if(Global.curr.gold >= warrior.price /*&& Global.curr.defenders.Count<Global.curr.unitCap*/){
+            StatScreens.curr.totalSpent += warrior.price;
             GridSystem.curr.startPlacingPhase(warrior.name, card);
             AudioScript.curr.playButtonClickSound();
             card.SetActive(false);
@@ -39,6 +40,7 @@ public class ShopCard : MonoBehaviour
         if(Global.curr.gamePhase != "fight"){
             WarriorAttributes.attr w = WarriorTypes.curr.find(name);
             if(Global.curr.gold >= w.price /*&& Global.curr.defenders.Count<Global.curr.unitCap*/){
+            StatScreens.curr.totalSpent += w.price;
             GridSystem.curr.startPlacingPhase(w.name, gameObject);
             AudioScript.curr.playButtonClickSound();
             shop.SetActive(false);

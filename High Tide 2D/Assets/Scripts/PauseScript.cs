@@ -78,4 +78,16 @@ public class PauseScript : MonoBehaviour
         //pauseScreen.active = true;
         settingsScreen.active = false;
     }
+
+    public void pauseButtonPress()
+    {
+        if (Global.curr.gamePaused)
+        {
+            resumeGame();
+        }
+        else
+        {
+            pauseGame();
+        }
+    }
 }

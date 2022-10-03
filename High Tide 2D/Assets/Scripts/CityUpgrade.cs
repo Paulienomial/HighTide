@@ -49,7 +49,21 @@ public class CityUpgrade : MonoBehaviour
         upgradePopPrice=oldPrice;
     }
     public void upgradePop(){
+<<<<<<< Updated upstream
         if(Global.curr.gold>=upgradePopPrice && Global.curr.unitCap<maxUnitCap){//if you can afford the upgrade
+=======
+        if(Global.curr.gold>=upgradePopPrice){//if you can afford the upgrade
+            StatScreens.curr.totalSpent += upgradePopPrice;
+            upgradeCount++;
+            int barVal;
+            if(upgradeCount<6){
+                barVal = upgradeCount%3;
+            }else{
+                barVal=3;
+            }
+            CityUpgradeBarController.curr.setVal(barVal);
+
+>>>>>>> Stashed changes
             Global.curr.gold-=upgradePopPrice;
             if(Global.curr.unitCap+popUpgradeAmount <= maxUnitCap){//if the upgrade won't exceed the maximum unit cap
                 Global.curr.unitCap+=popUpgradeAmount;//increase unit cap

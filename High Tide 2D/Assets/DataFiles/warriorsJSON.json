@@ -20,8 +20,14 @@
           "hp": 200,
           "isRanged": true,
           "isFriendly":true,
+<<<<<<< Updated upstream
           "attacksound": "bow",
           "description":"Basic ranged unit"
+=======
+          "description":"Basic ranged unit",
+          "attackSound": "bow",
+          "projectile": "arrow"
+>>>>>>> Stashed changes
       },
       {
         "name": "Farmer",
@@ -46,8 +52,64 @@
         "hp": 200,
         "isRanged": true,
         "isFriendly": false,
+<<<<<<< Updated upstream
         "attacksound": "enemymelee",
         "description":"Beware, he pokes"
+=======
+        "description":"Beware, he pokes",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Dark wizard",
+        "damage": 45,
+        "hp": 100,
+        "isRanged": true,
+        "isFriendly": false,
+        "description": "Beware, he has some shocking powers",
+        "attackSound": "lighning",
+        "projectile": "lightning bolt"
+      },
+      {
+        "name": "Fire wizard",
+        "damage": 45,
+        "hp": 100,
+        "isRanged": true,
+        "isFriendly": false,
+        "description": "Beware, he seems too hot to handle",
+        "attackSound": "firebomb"
+      },
+      {
+        "name": "Jellyfish",
+        "damage": 45,
+        "hp": 100,
+        "isFriendly": false,
+        "description": "Beware, it may look cute, but it's deadly'",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Grim reaper",
+        "damage": 45,
+        "hp": 100,
+        "isFriendly": false,
+        "description": "Beware, it... where did it go?",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Octopus",
+        "damage": 50,
+        "hp": 300,
+        "isFriendly": false,
+        "description": "Beware, some of it's legs are sharper than others",
+        "attackSound": "poke"
+      },
+      {
+        "name": "Tooth ball",
+        "damage": 60,
+        "hp": 40,
+        "isFriendly": false,
+        "description": "Beware, it's round but still sharp",
+        "attackSound": "poke"
+>>>>>>> Stashed changes
       }
     ]
 }

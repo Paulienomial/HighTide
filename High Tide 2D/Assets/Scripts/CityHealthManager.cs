@@ -32,6 +32,10 @@ public class CityHealthManager : MonoBehaviour
     {
         Global.curr.startButtonEnabled=false;
         Global.curr.gameOver=true;
+<<<<<<< Updated upstream
         MessageSystem.curr.showMessage("Game over");
+=======
+        StatScreens.curr.showGameOverScreen();
+>>>>>>> Stashed changes
     }
 }

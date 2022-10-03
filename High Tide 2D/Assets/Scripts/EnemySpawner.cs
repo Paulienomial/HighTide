@@ -43,9 +43,45 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(spawnDelay);
         GameObject newSpawn = Instantiate(enemyType, new Vector2(Random.Range(6f, 6.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity);
         Warrior w = newSpawn.GetComponent<Warrior>(); 
-        w.setWarrior("Pokey boy");
-        w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
-        w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
+        if(waveManager.curr.spawnGuide == 3)
+        {
+            w.setWarrior("Jellyfish");
+        }
+
+        if (waveManager.curr.spawnGuide == 2)
+        {
+            w.setWarrior("Tooth ball");
+        }
+
+        if (waveManager.curr.spawnGuide == 1)
+        {
+            w.setWarrior("Dark wizard");
+        }
+        if (waveManager.curr.spawnGuide == 4)
+        {
+            w.setWarrior("Fire wizard");
+        }
+        if (waveManager.curr.spawnGuide == 5)
+        {
+            w.setWarrior("Grim reaper");
+        }
+        if (waveManager.curr.spawnGuide == 6)
+        {
+            w.setWarrior("Octopus");
+        }
+        //w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
+        //w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
+
+        if(Global.curr.waveNum > 6) //TEMPORARY, MUST FIX FOR FINAL SUBMISSION
+        {
+            if (Global.curr.waveNum % 7 == 0)
+            {
+                Debug.Log("INCREASING ENEMY DAMAGE AND HP");
+                w.attributes.damage = w.attributes.damage + 10;   //TEMPORARY, MUST FIX FOR FINAL SUBMISSION
+                w.setHealth(w.attributes.hp + 10); //TEMPORARY, MUST FIX FOR FINAL SUBMISSION
+            }
+        }
+        
 
         Global.curr.enemies.AddLast(newSpawn);
         spawnCount++;

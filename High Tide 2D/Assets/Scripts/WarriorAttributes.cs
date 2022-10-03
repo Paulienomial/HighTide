@@ -31,6 +31,13 @@ public class WarriorAttributes : MonoBehaviour
             c.description=description;
             c.bounty=bounty;
             c.cityDamage=cityDamage;
+<<<<<<< Updated upstream
+=======
+            c.moveSpeed=moveSpeed;
+            c.attackSound=attackSound;
+            c.attackSoundAmount=attackSoundAmount;
+            c.projectile = projectile;
+>>>>>>> Stashed changes
 
             return c;
         }
@@ -46,5 +53,12 @@ public class WarriorAttributes : MonoBehaviour
         public string description = "Basic melee unit";
         public int bounty=1;//bounty for killing a unit
         public int cityDamage=1;
+<<<<<<< Updated upstream
+=======
+        public float moveSpeed=1f;
+        public string attackSound="sword";
+        public int attackSoundAmount=1;
+        public string projectile = "arrow";
+>>>>>>> Stashed changes
     }
 }
