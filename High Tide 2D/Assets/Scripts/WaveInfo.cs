@@ -43,6 +43,7 @@ public class WaveInfo : MonoBehaviour
     }
 
     public void drawWaveInfo(){
+        if(Global.curr.waveNum>Waves.curr.waves.Count) return;
         waveInfoTitle.text = "WAVE "+Global.curr.waveNum+":";
         int groupsCount = Waves.curr.waves[Global.curr.waveNum-1].enemyGroups.Count;
         enemiesContainer.GetComponent<RectTransform>().SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, 430*groupsCount);

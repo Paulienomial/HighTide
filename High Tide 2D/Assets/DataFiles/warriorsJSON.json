@@ -234,7 +234,7 @@
       },
       {
         "name": "Da big boss",
-        "damage": 300,
+        "damage": 240,
         "hp": 30000,
         "ability": "Green ring",
         "isRanged": true,
@@ -246,7 +246,7 @@
       },
       {
         "name":"Black dragon",
-        "damage":120,
+        "damage":75,
         "hp":3500,
         "attackModifiers":["splash"],
         "descriptions":["Extremely powerful dragon with splash attack","",""],

@@ -99,6 +99,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public void startFight2(){
+        if(Global.curr.waveNum>Waves.curr.waves.Count) return;
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {

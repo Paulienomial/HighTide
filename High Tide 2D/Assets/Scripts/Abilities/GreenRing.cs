@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GreenRing : Ability
 {
-    public int damage=275;
+    public int damage=200;
     public float freezeTime = 5f;
     public float interval = 5f;
     void Start()
