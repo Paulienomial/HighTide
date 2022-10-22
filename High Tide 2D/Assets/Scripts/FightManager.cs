@@ -8,8 +8,8 @@ public class FightManager : MonoBehaviour
     GameObject city;
     [SerializeField]
     GameObject projectile;
-    private GameObject target = null;
-    LinkedList<GameObject> targetList;
+    public GameObject target = null;
+    public List<GameObject> targetList;
     public bool inCombat = false;
     public bool isAlive = true;
     public bool waveEnd = false;
@@ -18,24 +18,32 @@ public class FightManager : MonoBehaviour
     public bool waveLost = false;
     public bool unitPaused = false;
     public WarriorAttributes.attr a;
+    public Warrior w;
     float fastforwardMovespeed;
+    public int minusDmg=0;
+    public float msMultiplier=1;
+    public int plusDmg;
+    public float dmgMultiplier;
 
     SpriteRenderer r;
     void Start()
     {
+        w = gameObject.GetComponent<Warrior>();
         a = gameObject.GetComponent<Warrior>().attributes;
         r = GetComponent<SpriteRenderer>();
         fastforwardMovespeed = a.moveSpeed*3f;
+        dmgMultiplier=1f;
     }
 
     // Update is called once per frame
     void Update()
     {
         waveEnd = waveManager.curr.waveComplete();
-        if (!inCombat && Global.curr.waveStart && !waveManager.curr.waveEnd)
+        if (!inCombat && Global.curr.waveStart && !waveManager.curr.waveEnd /*&& !isEnemyAndDead(gameObject)*/)
         {
             findTarget();
-            if (!unitPaused)
+            if(target==null || gameObject==null || !this) return;
+            if (!unitPaused && !isEnemyAndDead(gameObject))
             {
                 moveToTarget();
             }
@@ -44,12 +52,13 @@ public class FightManager : MonoBehaviour
 
     void findTarget()
     {
-
+        if(isEnemyAndDead(gameObject)) return;
         setTargetList();
 
         if (targetList.Count == 0)
         {
             //There are no potential targets for this unit
+            target=null;
 
             if (!a.isFriendly)
             {
@@ -68,7 +77,7 @@ public class FightManager : MonoBehaviour
             {
                 if (current != null)
                 {
-                    if (!a.isFriendly)
+                    if (!a.isFriendly)//alive enemy
                     {
                         flag = current.GetComponent<FightManager>().isAlive;
                     }
@@ -89,8 +98,12 @@ public class FightManager : MonoBehaviour
                 }
 
             }
+            GameObject prevTarget = target;
             target = bestTarget;
-            if (target == null && !a.isFriendly)
+            if(target != prevTarget || isEnemyAndDead(gameObject)){//if target changed or this is a dead enemy
+                CancelInvoke();
+            }
+            if (target == null && !a.isFriendly)//enemy and no target
             {
                 target = city;
                 a.moveSpeed = fastforwardMovespeed;
@@ -98,9 +111,18 @@ public class FightManager : MonoBehaviour
         }
     }
 
+    public static bool deadEnemy(GameObject g){
+        return Global.curr.deadEnemies.Contains(g);
+    }
+
+    public static bool isEnemyAndDead(GameObject g){
+        return g.GetComponent<Warrior>().attributes.isFriendly==false && deadEnemy(g);
+    }
+
     void moveToTarget()
     {
-        if (target != null)
+        if(isEnemyAndDead(gameObject)) return;
+        if (target != null)//if target alive
         {
             if (!inCombat && !waveEnd)
             {
@@ -122,21 +144,22 @@ public class FightManager : MonoBehaviour
                 if (a.isFriendly)
                 {
                     //Ensures that friendly unit will always be on the left and enemy unit on the right.
-                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shiftX, target.transform.position.y + shiftY), a.moveSpeed * Time.deltaTime);
+                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x - shiftX, target.transform.position.y + shiftY), (a.moveSpeed*msMultiplier) * Time.deltaTime);
                 }
                 else
                 {
-                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shiftX, target.transform.position.y + shiftY), a.moveSpeed * Time.deltaTime);
+                    if(target==null || gameObject==null || !this) return;
+                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(target.transform.position.x + shiftX, target.transform.position.y + shiftY), (a.moveSpeed*msMultiplier) * Time.deltaTime);
                 }
             }
         }
     }
 
-    void OnTriggerStay2D(Collider2D target)
+    void OnTriggerStay2D(Collider2D c)
     {
-        if (!GetComponent<Warrior>().attributes.isRanged)
+        if (!a.isRanged)
         {
-            engageCombat(target.gameObject);
+            engageCombat(c.gameObject);
         }
     }
 
@@ -144,10 +167,16 @@ public class FightManager : MonoBehaviour
     {
         if (opponent.GetComponent<Warrior>() != null && !waveEnd) //Checking that target is a warrior and not the grid since grid also has a Rigidbody and thus triggers this
         {
-            bool bothAlive = true;
+            /*bool bothAlive = true;
             if (!a.isFriendly)
             {
                 bothAlive = opponent.GetComponent<FightManager>().isAlive;
+            }*/
+            bool bothAlive=true;
+            if(a.isFriendly){
+                bothAlive = isAlive && !deadEnemy(opponent);
+            }else{
+                bothAlive = !deadEnemy(gameObject) && opponent.GetComponent<FightManager>().isAlive;
             }
             bool targetExists = opponent.GetComponent<Warrior>() != null;
             bool checkFriendlyFire = opponent.GetComponent<Warrior>().attributes.isFriendly != gameObject.GetComponent<Warrior>().attributes.isFriendly;
@@ -162,10 +191,10 @@ public class FightManager : MonoBehaviour
         }
         else
         {
-            if (opponent.GetComponent<CityHealthManager>() != null && !GetComponent<Warrior>().attributes.isFriendly)
+            if (opponent.GetComponent<CityHealthManager>() != null && !a.isFriendly && !isEnemyAndDead(gameObject))//enemy, that's targeting a city
             {
                 waveLost = true;
-                opponent.GetComponent<CityHealthManager>().takeDamage();
+                opponent.GetComponent<CityHealthManager>().takeDamage( a.cityDamage );
                 StatScreens.curr.lostLives++;
                 if (Global.curr.enemyWaveDeathCount == 1)//if last enemy to damage city
                 {
@@ -184,7 +213,12 @@ public class FightManager : MonoBehaviour
 
     void fight()
     {
-        if (target != null && !waveEnd && !unitPaused)
+        float distance=0;
+        if(gameObject!=null && target!=null){
+            distance = Vector2.Distance (transform.position, target.transform.position);
+            if(distance<0) distance*=-1;
+        }
+        if (target != null && !waveEnd && !unitPaused && target.GetComponent<FightManager>().isAlive && distance<3.5f)
         {
             if (a.isFriendly && isAlive && isActiveAndEnabled && target.GetComponent<FightManager>().isAlive)
             {
@@ -201,12 +235,12 @@ public class FightManager : MonoBehaviour
                 }
                 else
                 {
-                    doDamage();
+                    doAttackDamage();
                 }
             }
             else//enemy
             {
-                if (target.GetComponent<FightManager>().isAlive && !waveEnd && !unitPaused && target.GetComponent<CityHealthManager>() == null)
+                if (target.GetComponent<FightManager>().isAlive && !waveEnd && !unitPaused && target.GetComponent<CityHealthManager>() == null && !isEnemyAndDead(gameObject))
                 {
                     if (!gameObject.GetComponent<Warrior>().attributes.isRanged)
                     {
@@ -220,7 +254,7 @@ public class FightManager : MonoBehaviour
                     }
                     else
                     {
-                        doDamage();
+                        doAttackDamage();
                         //Enemy does melee damage
                     }
                 }
@@ -248,6 +282,7 @@ public class FightManager : MonoBehaviour
             //AudioScript.curr.playAttackSound(this.gameObject);
             playAttackSound();
             GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+            newProjectile.GetComponent<ProjectileMover>().setProjectileSprite(a.projectile);
             newProjectile.GetComponent<ProjectileMover>().moveProjectile(this.gameObject, target);
         }
     }
@@ -257,9 +292,9 @@ public class FightManager : MonoBehaviour
         if (isAlive && !waveEnd && target != null && target.GetComponent<FightManager>().isAlive && !unitPaused)
         {
             FightManager victim = target.GetComponent<FightManager>();
-            int bonusDmg = 0;
-            if(a.isFriendly) bonusDmg = GlobalBehaviours.curr.globalDMGAura;
-            int damageDealt = a.damage + bonusDmg;
+            
+            //int damageDealt = a.damage + plusDmg - minusDmg;
+            int damageDealt = Mathf.RoundToInt((a.damage+plusDmg)*dmgMultiplier);
             if ((victim.a.hp - damageDealt) < 0)
             {//if the damage will cause victim's health to fall below zero
                 damageDealt = victim.a.hp;
@@ -269,6 +304,8 @@ public class FightManager : MonoBehaviour
             {
                 victim.a.hp -= damageDealt;
             }
+            Events.curr.hit(gameObject ,victim.gameObject);
+            
             if (victim.a.isFriendly == false)
             {
                 WaveBarController.curr.setHealth(WaveBarController.curr.getHealth() - damageDealt);
@@ -276,12 +313,12 @@ public class FightManager : MonoBehaviour
 
             if (victim.a.hp <= 0)
             {
-                victim.inCombat = false;
+                victim.inCombat = false;//yes
                 inCombat = false;
                 //if (!a.isFriendly)
-                victim.isAlive = false;
-                CancelInvoke();
-                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
+                victim.isAlive = false;//yes
+                CancelInvoke();//yes
+                gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);//yes
                 if (victim.GetComponent<Warrior>().attributes.isFriendly)
                 {
                     StatScreens.curr.fallenBrothers++;
@@ -290,7 +327,7 @@ public class FightManager : MonoBehaviour
                 {
                     StatScreens.curr.enemiesKilled++;
                 }
-                victim.die();
+                victim.die();//yes
             }
         }
         else
@@ -301,23 +338,58 @@ public class FightManager : MonoBehaviour
 
     }
 
-    public void takeDamage(int dmg)
+    public void doAttackDamage(){
+
+        doAttackDamage(target.GetComponent<FightManager>());
+    }
+
+    public void doAttackDamage(FightManager victim){
+
+        doDamage(victim, a.damage);
+
+        Events.curr.hit(gameObject, victim.gameObject);
+    }
+
+    public void doDamage(FightManager victim, int dmg){
+
+        int modifiedDamage = getModifiedDamage(dmg);//other classes, like Aura ranger might change the plusDmg or dmgMultiplier attributes
+        victim.takeDamage(modifiedDamage, gameObject);
+    }
+
+    public void takeDamage(int dmg, GameObject damageDealer=null)
     {
+        if(isEnemyAndDead(gameObject)) return;
         int damageDealt = dmg;
-        if ((a.hp - dmg) < 0)
-        {//if the damage will cause victim's health to fall below zero
+        if ((a.hp - dmg) <= 0)
+        {//if the damage will cause victim's health to be smaller or equal to zero
             damageDealt = a.hp;
             a.hp = 0;
             inCombat = false;
+            if(damageDealer!=null){
+                damageDealer.GetComponent<FightManager>().inCombat=false;
+            }
             isAlive = false;
             CancelInvoke();
+            gameObject.GetComponent<WarriorRender>().animator.SetInteger("state", 0);
             die();
         }
         else
         {
             //a.hp -= a.damage;
-            a.hp -= dmg;
+            a.hp -= damageDealt;    
         }
+        if (a.isFriendly == false)
+        {
+            WaveBarController.curr.setHealth(WaveBarController.curr.getHealth() - damageDealt);
+        }
+    }
+
+    public int getExtraDamage(){
+        return Mathf.RoundToInt( getModifiedDamage(a.damage) - (a.damage) );//eg (15+0)*1 -(15)=0
+    }
+
+    public int getModifiedDamage(int d){
+        return Mathf.RoundToInt((d+plusDmg)*dmgMultiplier);
     }
 
     public void pauseUnit()
@@ -335,25 +407,31 @@ public class FightManager : MonoBehaviour
 
     public void die()
     {
-        if (!a.isFriendly)
+        isAlive=false;
+        if (!a.isFriendly && !isEnemyAndDead(gameObject))
         {
             Global.curr.enemyWaveDeathCount--;
             inCombat = false;
-            deleteEnemy();
+            //deleteEnemy();
             if (!waveLost)
             {
                 playGoldAnimation(a.bounty);
             }
-            Destroy(gameObject);
-            //gameObject.SetActive(false);
+            //Destroy(gameObject);
+            Global.curr.enemies.Remove(gameObject);
+            Global.curr.deadEnemies.Add(gameObject);
+            target=null;
+            gameObject.GetComponent<SpriteRenderer>().enabled=false;
+            gameObject.GetComponent<WarriorRender>().canvas.GetComponent<Canvas>().enabled=false;
+            //gameObject.transform.position = new Vector2(14f,14f);
         }
         else
         {
             inCombat = false;
             gameObject.GetComponent<Warrior>().diedLastWave = true;
-            GlobalBehaviours.curr.applyAuraRangerBuff();
             gameObject.SetActive(false);
         }
+        Events.curr.die(gameObject);
     }
 
     void deleteEnemy()
@@ -378,6 +456,7 @@ public class FightManager : MonoBehaviour
 
     void pointTowardsTarget()
     {
+        if(target==null || gameObject==null || !this) return;
         if (transform.position.x - target.transform.position.x < 0) //Ensuring that the unit always faces the direction it is moving.
         {
             if (!facingRight)
@@ -396,16 +475,21 @@ public class FightManager : MonoBehaviour
         }
     }
 
+    
+
     void playGoldAnimation(int b)
     {
-        /*GameObject goldAnim = Instantiate(goldAnimation, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), Quaternion.identity);
-        goldAnim.GetComponentInChildren<GoldAnimation>().play(b);*/
-        AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+" + a.bounty.ToString(), "coinFlip", 3);
-        Global.curr.gold += a.bounty;
-        StatScreens.curr.enemyGold += a.bounty;
+        if(b>0){
+            AnimationController.curr.play("goldDrop", new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0f), "+" + a.bounty.ToString(), "coinFlip", 3);
+            Global.curr.gold += a.bounty;
+            StatScreens.curr.enemyGold += a.bounty;
+        }
     }
 
     void playAttackSound(){
-        AudioSystem.curr.createAndPlaySound(a.attackSound, Random.Range(0.9f, 1.1f));
+        float pitch = a.attackPitch;
+        float minPitch = pitch-.1f;
+        float maxPitch = pitch+.1f;
+        AudioSystem.curr.createAndPlaySound(a.attackSound, Random.Range(minPitch, maxPitch), a.attackVolume);
     }
 }

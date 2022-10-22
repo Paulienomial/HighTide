@@ -7,6 +7,9 @@ public class ShopCard : MonoBehaviour
     public WarriorAttributes.attr warrior;
     public GameObject card;
     public GameObject shop;
+    public GameObject lockBorder;
+    public GameObject lockBtn;
+
     // Start is called before the first frame update
     void Start()
     {

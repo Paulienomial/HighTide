@@ -10,10 +10,12 @@ public class Fire : MonoBehaviour
     public float duration=5;
     public bool active=false;
     public float tickRate=.5f;
+    static List<GameObject> affectedEnemies;
 
     
     void Awake(){
-        destroyAfterTime(duration);
+        //destroyAfterTime(duration);
+        affectedEnemies = new List<GameObject>();
     }
     void Start()
     {
@@ -31,8 +33,9 @@ public class Fire : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision){
         if(Global.curr.gamePhase=="fight" && active){
             if(collision.gameObject!=null){
-                if(collision.gameObject.GetComponent<Warrior>()!=null && collision.gameObject.GetComponent<Warrior>().attributes.isFriendly!=isFriendly){
-                    GameObject g = collision.gameObject;
+                GameObject g = collision.gameObject;
+                if(g.GetComponent<Warrior>()!=null && g.GetComponent<Warrior>().attributes.isFriendly!=isFriendly && !affectedEnemies.Contains(g)){
+                    affectedEnemies.Add(g);
                     g.GetComponent<DamageOverTime>().takeDOT(dmg, tickRate);
                 }
             }
@@ -42,8 +45,9 @@ public class Fire : MonoBehaviour
     void OnTriggerExit2D(Collider2D collision){
         if(Global.curr.gamePhase=="fight"){
             if(collision.gameObject!=null){
-                if(collision.gameObject.GetComponent<Warrior>()!=null && collision.gameObject.GetComponent<Warrior>().attributes.isFriendly!=isFriendly){
-                    GameObject g = collision.gameObject;
+                GameObject g = collision.gameObject;
+                if(g.GetComponent<Warrior>()!=null && g.GetComponent<Warrior>().attributes.isFriendly!=isFriendly && affectedEnemies.Contains(g)){
+                    affectedEnemies.Remove(g);
                     g.GetComponent<DamageOverTime>().stopDOT();
                 }
             }

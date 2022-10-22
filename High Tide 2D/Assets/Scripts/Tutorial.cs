@@ -9,6 +9,9 @@ using System.Linq;
 
 public class Tutorial : MonoBehaviour
 {
+    public GameObject playTutMessage;
+    public Button yesBtn;
+    public Button noBtn;
     public static Tutorial curr;
     public GameObject messageBox;
     public GameObject scroll;
@@ -31,11 +34,16 @@ public class Tutorial : MonoBehaviour
     public bool showedLevelUnitTip=false;
     public bool showedFarmerTip=false;
     public bool showedPopulationTip=false;
+    public bool showedLockTip=false;
     int tipCount=0;
     public TextMeshProUGUI tipCountText;
     bool showingWSTip=false;
     public bool shouldShowTutorial=true;
+    bool showTips=true;
     public GameObject dontShowTutButton;
+    public GameObject lockBtn;
+    public GameObject strongholdUpgradeBar;
+    bool showedCityLvlTip=false;
 
 
     //private attributes
@@ -47,9 +55,12 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
+        playTutMessage.SetActive(false);
+        dontShowTutButton.SetActive(false);
         messageBox.SetActive(false);
 
-        playTutorial();
+        askForTutorial();
+        //playTutorial();
     }
 
     // Update is called once per frame
@@ -58,111 +69,126 @@ public class Tutorial : MonoBehaviour
         
     }
 
+    public void askForTutorial(){
+        playTutMessage.SetActive(true);
+        Highlight.curr.unFocus();
+        Highlight.curr.darkenAllExcept(playTutMessage);
+    }
+
+    public void dontPlayTut(){
+        AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+        Highlight.curr.unFocus();
+        showTips=false;
+        playTutMessage.SetActive(false);
+    }
+
     public void playTutorial(){
+        AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+        playTutMessage.SetActive(false);
+        showTips=true;
         ShopSystem.curr.shopAvailable=false;
         Global.curr.startButtonEnabled=false;
         step();
     }
 
     public void step(){
-        if(shouldShowTutorial){
-            currStep++;
-            hideMessage();
-            Highlight.curr.unFocus();
-            highlightGrid.SetActive(false);
+        currStep++;
+        hideMessage();
+        Highlight.curr.unFocus();
+        highlightGrid.SetActive(false);
+        messageButton.onClick.RemoveAllListeners();
+        dontShowTutButton.SetActive(false);
+        //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,105);
+        if(currStep==1){//welcome
+            //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,165);
+            displayMessage("Welcome to High Tide!");
+            Highlight.curr.darkenAllExcept(messageBox);
+
             messageButton.onClick.RemoveAllListeners();
-            dontShowTutButton.SetActive(false);
-            //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,105);
-            if(currStep==1){//welcome
-                //messageButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,165);
-                displayMessage("Welcome to High Tide!");
-                Highlight.curr.darkenAllExcept(messageBox);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+                step();
+            } );
+        }
+        if(currStep==2){//explain goal
+            displayMessage("The goal of the game is to place units to protect the stronghold.");
+            Highlight.curr.darkenAllExcept(stronghold);
+            outline = Highlight.curr.outlineAnimate(stronghold,-.15f,0,-.15f,.15f);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+                Destroy(outline);
+                step();
+            } );
+        }
+        if(currStep==3){//show gold
+            displayMessage("You have " + Global.curr.gold.ToString() + " gold available.");
+            Highlight.curr.darkenAllExcept(goldUI);
+            outline = Highlight.curr.outlineAnimate(goldUI,0,0,0,20);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+                hideMessage();
+                Destroy(outline);
+                step();
+            } );
+        }
+        if(currStep==4){//highlight shop button
+            ShopSystem.curr.shopAvailable=true;
+            Highlight.curr.focus( shopButton );
 
-                messageButton.onClick.RemoveAllListeners();
-                messageButton.onClick.AddListener( ()=>{
-                    AudioSystem.curr.createAndPlaySound("btnClick");
+            Button btn = shopButton.GetComponent<Button>();
+            btn.onClick.AddListener( ()=>{
+                if(currStep==4){
                     step();
-                } );
-            }
-            if(currStep==2){//explain goal
-                displayMessage("The goal of the game is to place units to protect the stronghold.");
-                Highlight.curr.darkenAllExcept(stronghold);
-                outline = Highlight.curr.outlineAnimate(stronghold,-.15f,0,-.15f,.15f);
-                messageButton.onClick.AddListener( ()=>{
-                    AudioSystem.curr.createAndPlaySound("btnClick");
-                    Destroy(outline);
-                    step();
-                } );
-            }
-            if(currStep==3){//show gold
-                displayMessage("You have " + Global.curr.gold.ToString() + " available gold.");
-                Highlight.curr.darkenAllExcept(goldUI);
-                outline = Highlight.curr.outlineAnimate(goldUI,0,0,0,20);
-                messageButton.onClick.AddListener( ()=>{
-                    AudioSystem.curr.createAndPlaySound("btnClick");
-                    hideMessage();
-                    Destroy(outline);
-                    step();
-                } );
-            }
-            if(currStep==4){//highlight shop button
-                ShopSystem.curr.shopAvailable=true;
-                Highlight.curr.focus( shopButton );
-
-                Button btn = shopButton.GetComponent<Button>();
-                btn.onClick.AddListener( ()=>{
-                    if(currStep==4){
-                        step();
-                    }
-                } );
-            }
-            if(currStep==5){//highlight shop
-                ShopSystem.curr.shopAvailable=false;
-                scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 165);
-                scroll.GetComponent<RectTransform>().localPosition = new Vector2(0,250);
-                displayMessage("Select a unit", false);
-                Highlight.curr.darkenAllExcept(cardsContainer);
-                foreach(Transform child in cardsContainer.transform){
-                    Button button = child.GetComponentInChildren<Button>();
-                    button.onClick.AddListener( ()=>{
-                        if(currStep==5){
-                            step();
-                        }
-                    } );
                 }
-            }
-            if(currStep==6){//place unit
-                highlightGrid.SetActive(true);
-                displayMessage("Place your unit.",false);
-                Events.curr.onPurchaseDefender += ()=>{
-                    if(currStep==6){
-                        step();
-                    }
-                };
-            }
-            if(currStep==7){//drag unit
-                highlightGrid.SetActive(true);
-                scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 200);
-                displayMessage("Click and drag your unit to move it around.", false);
-                Events.curr.onDraggedNewSpot += ()=>{
-                    if(currStep==7){
-                        step();
-                    }
-                };
-            }
-            if(currStep==8){//play button
-                Global.curr.startButtonEnabled=true;
-                displayMessage("Click on the play button to start your first fight.", false);
-                Highlight.curr.focus(playButton);
-                playButton.GetComponent<Button>().onClick.AddListener( ()=>{
-                    if(currStep==8){
-                        ShopSystem.curr.shopAvailable=true;
+            } );
+        }
+        if(currStep==5){//highlight shop
+            ShopSystem.curr.shopAvailable=false;
+            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 226);
+            scroll.GetComponent<RectTransform>().localPosition = new Vector2(0,250);
+            displayMessage("At the start of each round, the shop provides you with 5 random units", false);
+            Highlight.curr.darkenAllExcept(cardsContainer);
+            foreach(Transform child in cardsContainer.transform){
+                Button button = child.GetComponentInChildren<Button>();
+                button.onClick.AddListener( ()=>{
+                    if(currStep==5){
                         step();
                     }
                 } );
             }
         }
-        
+        if(currStep==6){//place unit
+            highlightGrid.SetActive(true);
+            displayMessage("Place your unit.",false);
+            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 165);
+            Events.curr.onPurchaseDefender += (GameObject purchasedD)=>{
+                if(currStep==6){
+                    step();
+                }
+            };
+        }
+        if(currStep==7){//drag unit
+            highlightGrid.SetActive(true);
+            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 165);
+            displayMessage("Click and drag your unit to move it around.", false);
+            Events.curr.onDraggedNewSpot += ()=>{
+                if(currStep==7){
+                    step();
+                }
+            };
+        }
+        if(currStep==8){//play button
+            Global.curr.startButtonEnabled=true;
+            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 226);
+            displayMessage("Click on the play button to start \nyour first fight.", false);
+            Highlight.curr.focus(playButton);
+            playButton.GetComponent<Button>().onClick.AddListener( ()=>{
+                if(currStep==8){
+                    ShopSystem.curr.shopAvailable=true;
+                    step();
+                }
+            } );
+        }  
     }
 
     public void displayMessage(string m, bool showButton=true, string buttonText="NEXT"){
@@ -174,23 +200,21 @@ public class Tutorial : MonoBehaviour
     }
 
     public void displayTip(string m){
-        if(shouldShowTutorial){
-            tipCount++;
-            AudioSystem.curr.createAndPlaySound("bell");
-            tipCountText.text = tipCount.ToString()+"/4:";
-            messageText.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-230f);
-            scroll.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
-            scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(800f, 450f);
-            
-            displayMessage(m, true, "OK");
-            tipText.SetActive(true);
-            messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
-                messageBox.SetActive(false);
-                messageButton.onClick.RemoveAllListeners();
-            } );
-        }
+        if(!showTips) return;
+        tipCount++;
+        AudioSystem.curr.createAndPlaySound("bell");
+        tipCountText.text = tipCount.ToString()+"/6:";
+        messageText.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-40);
+        scroll.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
+        scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(800f, 550);
         
+        displayMessage(m, true, "OK");
+        tipText.SetActive(true);
+        messageButton.onClick.AddListener( ()=>{
+            AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+            messageBox.SetActive(false);
+            messageButton.onClick.RemoveAllListeners();
+        } );
     }
 
     public void hideMessage(){
@@ -198,15 +222,15 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showMergeTutorialTip(){
-        if(!shouldShowTutorial) return;
+        if(!showTips) return;
         if(Global.curr.waveNum==2 && Global.curr.defenders.Count>=1 && Global.curr.defenders.ElementAt(0).GetComponent<Warrior>().attributes.name!="Farmer" && !showedMergeTip){
             Highlight.curr.disableUI();
             showedMergeTip=true;
             string name = Global.curr.defenders.ElementAt(0).GetComponent<Warrior>().attributes.name;
-            displayTip("You found another "+name+"! You can combine two units of the same type by placing them on top of each other.");
+            displayTip("You found another "+name+"! You can combine two units of the same type by placing them on top of \neach other.");
             GameObject outline = Highlight.curr.outlineAnimate((GameObject)(ShopSystem.curr.cards[0]), -960,0,20,30);
             messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
                 Highlight.curr.enableUI();
                 Destroy(outline);
             } );
@@ -214,35 +238,35 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showLevelUnitTip(GameObject g){
-        if(!shouldShowTutorial) return;
+        if(!showTips) return;
         if(!showedLevelUnitTip){
             showingWSTip=true;
             string name = g.GetComponent<Warrior>().attributes.name;
             showedLevelUnitTip=true;
-            displayTip("You've upgraded your " + name + "! When the upgrade bar above the unit fills up, then the unit will level up!");
+            displayTip("You've upgraded your " + name + "! When the upgrade bar above the unit fills up, then the unit \nwill level up!");
             if(g.transform.position.x<0){
-                scroll.GetComponent<RectTransform>().localPosition = new Vector2(480, 112);
+                scroll.GetComponent<RectTransform>().localPosition = new Vector2(480, 80);
             }else{
-                scroll.GetComponent<RectTransform>().localPosition = new Vector2(-480, 112);
+                scroll.GetComponent<RectTransform>().localPosition = new Vector2(-480, 80);
             }
             //scroll.GetComponent<RectTransform>().sizeDelta = new Vector2(577.5f, 490.5f);
             GameObject outline = Highlight.curr.outlineAnimate(g,0,.2f,.7f,.7f);
             messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
                 Destroy(outline);
             } );
         }
     }
 
     public void showFarmerTip(){
-        if(!shouldShowTutorial) return;
+        if(!showTips) return;
         if(!showedFarmerTip && Global.curr.waveNum>=3){
             Highlight.curr.disableUI();
             showedFarmerTip=true;
             displayTip("You can purchase farmers to boost your gold income.");
             GameObject outline = Highlight.curr.outlineAnimate(farmerButton, -960f, 0, 20, 30);
             messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
                 Highlight.curr.enableUI();
                 Destroy(outline);
             } );
@@ -250,7 +274,7 @@ public class Tutorial : MonoBehaviour
     }
 
     public void showPopulationTip(){
-        if(!shouldShowTutorial) return;
+        if(!showTips) return;
         if(!showedPopulationTip && Global.curr.defenders.Count==Global.curr.unitCap){
             showingWSTip=true;
             Highlight.curr.disableUI();
@@ -258,18 +282,41 @@ public class Tutorial : MonoBehaviour
             displayTip("You've reached max capacity. You can upgrade your unit capacity using the stronghold.");
             GameObject outline = Highlight.curr.outlineAnimate(stronghold,-.15f,0,-.15f,.15f);
             messageButton.onClick.AddListener( ()=>{
-                AudioSystem.curr.createAndPlaySound("btnClick");
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
                 Highlight.curr.enableUI();
                 Destroy(outline);
             } );
         }
     }
 
-    public void dontShowTutorial(){
-        shouldShowTutorial=false;
-        hideMessage();
-        Highlight.curr.unFocus();
-        highlightGrid.SetActive(false);
-        messageBox.SetActive(false);
+    public void showLockTip(){
+        if(!showTips) return;
+        if(!showedLockTip && Global.curr.waveNum>=4){
+            Highlight.curr.disableUI();
+            showedLockTip=true;
+            displayTip("You can lock a unit to ensure that it will remain when you reroll the shop, or when a new wave starts.");
+            GameObject outline = Highlight.curr.outlineAnimate(lockBtn, -960f, 0, 20, 30);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+                Highlight.curr.enableUI();
+                Destroy(outline);
+            } );
+        }
+    }
+
+    public void showCityLvlTip(){
+        if(!showTips) return;
+        if(!showedCityLvlTip){
+            //showingWSTip=true;
+            showedCityLvlTip=true;
+            Highlight.curr.disableUI();
+            displayTip("You've upgraded your stronghold, when the upgrade bar above the stronghold fills up, you will receive 5 bonus lives.");
+            GameObject outline = Highlight.curr.outlineAnimate(strongholdUpgradeBar,-.0f,0,32f,32f);
+            messageButton.onClick.AddListener( ()=>{
+                AudioSystem.curr.createAndPlaySound("btnClick",1,1);
+                Highlight.curr.enableUI();
+                Destroy(outline);
+            } );
+        }
     }
 }

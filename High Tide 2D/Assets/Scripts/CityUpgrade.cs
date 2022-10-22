@@ -18,11 +18,17 @@ public class CityUpgrade : MonoBehaviour
     public TextMeshProUGUI upgradeText;
     public TextMeshProUGUI priceText;
     public GameObject upgradeButton;
+    public GameObject lvlButton;
+    public TextMeshProUGUI lvlPriceText;
+    public TextMeshProUGUI lvlUpgradeText;
     
     void Awake(){
+        lvlButton.SetActive(false);
         curr=this;
         upgradeText.text = "+" + popUpgradeAmount.ToString();
+        lvlUpgradeText.text = "+" + popUpgradeAmount.ToString();
         priceText.text = upgradePopPrice.ToString();
+        lvlPriceText.text = upgradePopPrice.ToString();
     }
     
     // Start is called before the first frame update
@@ -62,12 +68,23 @@ public class CityUpgrade : MonoBehaviour
             Global.curr.gold-=upgradePopPrice;
             Global.curr.unitCap+=popUpgradeAmount;//increase unit cap
 
+            if(upgradeCount==2 || upgradeCount==5){
+                lvlButton.SetActive(true);
+            }else{
+                lvlButton.SetActive(false);
+            }
+
             if(upgradeCount==3){//upgrade to level 2
+                //show button with city hp increase
+                //increase city hp
+                Global.curr.CityHealth +=5;
                 //increase amount and price of upgrade
                 popUpgradeAmount*=2;
                 upgradePopPrice*=2;
                 upgradeText.text = "+" + popUpgradeAmount.ToString();
+                lvlUpgradeText.text = "+" + popUpgradeAmount.ToString();
                 priceText.text = upgradePopPrice.ToString();
+                lvlPriceText.text = upgradePopPrice.ToString();
                 //play upgrade animation
                 AudioSystem.curr.createAndPlaySound("fanfareCityLvl2");
                 AnimationController.curr.createAndPlay("cityUpgradeLvl2", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
@@ -77,8 +94,11 @@ public class CityUpgrade : MonoBehaviour
                 //set sprite
                 cityObject.GetComponent<SpriteRenderer>().sprite=city2;
             }else if(upgradeCount==6){//upgrade to level 3
+                //increase city hp
+                Global.curr.CityHealth +=5;
                 //hide upgrade button
                 upgradeButton.SetActive(false);
+                lvlButton.SetActive(false);
                 //AudioSystem.curr.createAndPlaySound("fanfareCityLvl3");
                 //play upgrade animation
                 AnimationController.curr.createAndPlay("cityUpgradeLvl3", new Vector3(cityObject.transform.position.x, cityObject.transform.position.y, 0f));
@@ -92,6 +112,7 @@ public class CityUpgrade : MonoBehaviour
             }else{
                 AudioSystem.curr.createAndPlaySound("ping1", Random.Range(.9f, 1.1f));
             }
+            Tutorial.curr.showCityLvlTip();
         }else{
             //Notify.curr.show("Not enough gold");
             Highlight.curr.negativeHighlight(Global.curr.goldUI, 2.5f,-.15f,0,2,22);

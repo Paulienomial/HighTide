@@ -21,10 +21,14 @@ public class UpgradeDefender : MonoBehaviour
 
     public void merge(GameObject g){//merge g into this unit
         //upgrade the unit
+        Warrior myWarrior = gameObject.GetComponent<Warrior>();
         WarriorAttributes.attr myAttr = gameObject.GetComponent<Warrior>().attributes;
         WarriorAttributes.attr otherAttr = g.GetComponent<Warrior>().attributes;
+        int otherHP = otherAttr.hp;
+        int otherDMG = otherAttr.damage;
 
-        gameObject.GetComponent<Warrior>().attributes.mergeCount+=g.GetComponent<Warrior>().attributes.mergeCount;
+        upgradeMergeCount( g.GetComponent<Warrior>().attributes.mergeCount );
+        /*gameObject.GetComponent<Warrior>().attributes.mergeCount+=g.GetComponent<Warrior>().attributes.mergeCount;
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount<3){//1,2
             upgradeBar.setMax(2);
             upgradeBar.setVal(gameObject.GetComponent<Warrior>().attributes.mergeCount-1);
@@ -38,16 +42,10 @@ public class UpgradeDefender : MonoBehaviour
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount>=3 && gameObject.GetComponent<Warrior>().attributes.mergeCount<6){
             levelText.text="2";
-            if(gameObject.GetComponent<Warrior>().attributes.name=="Fire starter"){
-                gameObject.GetComponent<Warrior>().attributes.damagePerTick=30;
-            }
         }
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount==6){
             levelText.text="3";
-            if(gameObject.GetComponent<Warrior>().attributes.name=="Fire starter"){
-                gameObject.GetComponent<Warrior>().attributes.damagePerTick=40;
-            }
-        }
+        }*/
 
         if(gameObject.GetComponent<Warrior>().attributes.mergeCount==3){//upgrade to level 2
             AnimationController.curr.play("lvl2Upgrade", new Vector3(g.transform.position.x,g.transform.position.y-.5f,0f),"","tadaTrumpet",1,"image");
@@ -57,8 +55,8 @@ public class UpgradeDefender : MonoBehaviour
             AudioSystem.curr.createAndPlaySound("ping"+Random.Range(4,7).ToString(), 10f);//merge sound
         }
 
-        gameObject.GetComponent<Warrior>().attributes.damage+=g.GetComponent<Warrior>().attributes.damage/2;
-        gameObject.GetComponent<Warrior>().attributes.hp+=g.GetComponent<Warrior>().attributes.hp/2;
+        gameObject.GetComponent<Warrior>().attributes.damage += Mathf.RoundToInt( g.GetComponent<Warrior>().attributes.damage/2f );
+        gameObject.GetComponent<Warrior>().attributes.hp += Mathf.RoundToInt( g.GetComponent<Warrior>().attributes.hp/2f);
         gameObject.GetComponent<Warrior>().maxHealth=gameObject.GetComponent<Warrior>().attributes.hp;
 
         //remove old unit from defenders list, if it was on the list
@@ -68,11 +66,40 @@ public class UpgradeDefender : MonoBehaviour
 
         //destroy other unit
         Destroy(g);
-
         //show this unit at currently selected
         HighlightSelected.curr.select(gameObject);
 
         //Show tutprial tip
         Tutorial.curr.showLevelUnitTip(gameObject);
+        //Trigger event
+        Events.curr.upgradeDefender(gameObject, otherHP, otherDMG);
+    }
+
+    public void upgradeMergeCount(int amount){
+        gameObject.GetComponent<Warrior>().attributes.mergeCount+=amount;
+        if(gameObject.GetComponent<Warrior>().attributes.mergeCount<3){//1,2
+            upgradeBar.setMax(2);
+            upgradeBar.setVal(gameObject.GetComponent<Warrior>().attributes.mergeCount-1);
+        }else{//3,4,5,6
+            upgradeBar.setMax(3);
+            upgradeBar.setVal(gameObject.GetComponent<Warrior>().attributes.mergeCount-3);
+        }
+
+        if(gameObject.GetComponent<Warrior>().attributes.mergeCount<3){
+            levelText.text="1";
+        }
+        if(gameObject.GetComponent<Warrior>().attributes.mergeCount>=3 && gameObject.GetComponent<Warrior>().attributes.mergeCount<6){
+            levelText.text="2";
+        }
+        if(gameObject.GetComponent<Warrior>().attributes.mergeCount==6){
+            levelText.text="3";
+        }
+    }
+
+    public int calcMergeDamage(WarriorAttributes.attr a){
+        WarriorAttributes.attr baseA = WarriorTypes.curr.find(a.name);
+        int halfBaseDmg = Mathf.RoundToInt(baseA.damage/2f);
+        //int mergeDamage = baseA
+        return 0;
     }
 }

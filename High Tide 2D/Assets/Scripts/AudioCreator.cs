@@ -33,11 +33,12 @@ public class AudioCreator : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.spatialBlend = 0;
             audioSource.pitch = pitch;
-            audioSource.volume = volume;
+            audioSource.volume = volume * Global.curr.FXVolume;
             audioSource.clip = audioClip;
             audioSource.Play();
             startedPlaying=true;
         }else{
+            Debug.Log("Could not find sound: "+name);
             Destroy(gameObject);
         }
     }

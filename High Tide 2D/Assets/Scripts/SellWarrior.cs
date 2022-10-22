@@ -28,8 +28,8 @@ public class SellWarrior : MonoBehaviour
             Global.curr.gold += getSellPrice();
             Global.curr.defenders.Remove(g);
             HighlightSelected.curr.deselect();
+            Events.curr.sellDefender(g);
             Destroy(g);
-            GlobalBehaviours.curr.applyAuraRangerBuff();
         }
     }
 

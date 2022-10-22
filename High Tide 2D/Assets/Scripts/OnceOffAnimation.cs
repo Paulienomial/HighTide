@@ -8,6 +8,7 @@ using UnityEngine.Audio;
 public class OnceOffAnimation : MonoBehaviour
 {
     Animator anim;
+    Animation lightningAnim;
     // Start is called before the first frame update
     void Start()
     {

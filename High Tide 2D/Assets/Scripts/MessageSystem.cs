@@ -83,7 +83,7 @@ public class MessageSystem : MonoBehaviour
             HighlightElement.curr.unHighlight();
             shopBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             //HighlightElement.curr.arrow(shop);
-            Events.curr.onPurchaseDefender += ()=>{
+            Events.curr.onPurchaseDefender += (GameObject purchasedD)=>{
                 if(step==4){
                     nextStep();
                 }

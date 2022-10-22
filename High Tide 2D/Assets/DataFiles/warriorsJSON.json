@@ -1,18 +1,21 @@
 {
     "warriors":[
       {
+        "comment":"****________________ FRIENDLY UNITS: ___________________****",
+        "tier":999
+      },
+      {
           "name": "Foot soldier",
-          "damage": 20,
-          "hp": 500,
+          "damage": 25,
+          "hp": 550,
           "tier": 1,
           "price": 3,
           "isFriendly": true,
           "isRanged": false,
           "mergeCount":1,
-          "description":"Basic melee unit",
-          "description2":"Lvl2 basic melee unit",
-          "description3":"Lvl3 basic melee unit",
-          "bounty":1,
+          "ability":"",
+          "descriptions":["Basic melee unit", "Lvl2 basic melee unit", "Lvl3 basic melee unit"],
+          "bounty":0,
           "cityDamage":1,
           "moveSpeed":1,
           "attackSound": "sword",
@@ -20,119 +23,240 @@
       },
       {
           "name": "Archer",
-          "damage": 45,
-          "hp": 100,
+          "damage": 70,
+          "hp": 175,
           "isRanged": true,
           "isFriendly":true,
-          "description":"Basic ranged unit",
-          "description2":"Lvl2 basic ranged unit",
-          "description3":"Lvl3 basic ranged unit",
+          "descriptions":["Basic ranged unit", "Lvl2 basic ranged unit", "Lvl3 basic ranged unit"],
           "attackSound": "bow"
       },
       {
         "name": "Farmer",
-        "damage": 35,
-        "hp": 180,
+        "damage": 15,
+        "hp": 250,
         "isFriendly": true,
-        "description":"+2 gold after wave for each surviving farmer",
-        "description2":"+4 gold after wave for each surviving farmer",
-        "description3":"+6 gold after wave for each surviving farmer",
-        "moveSpeed":0.5
+        "descriptions":["+2 gold after wave for each surviving farmer", "+4 gold after wave for each surviving farmer", "+6 gold after wave for each surviving farmer"],
+        "moveSpeed":0.75,
+        "attackSound": "shovelHit"
       },
       {
-        "name": "Lizardman",
+        "name": "Fire starter",
         "damage": 30,
-        "hp": 200,
-        "isFriendly": false,
-        "description":"Beware, this lizard seems angry",
+        "hp": 400,
+        "ability":"Bonfire"
+      },
+      {
+        "name": "Aura ranger",
+        "damage": 25,
+        "hp": 350,
+        "ability": "Aura ranger buff",
+        "moveSpeed":0.9
+      },
+      {
+        "name": "Nature ranger",
+        "damage": 30,
+        "hp": 350,
+        "attackSound": "doorBump",
+        "attackVolume":1,
+        "ability":"Spawn trees"
+      },
+      {
+        "name": "Tree warrior",
+        "damage": 5,
+        "hp": 300,
+        "descriptions":["This tree bites","",""],
+        "attackSound": "doorBump",
+        "attackVolume":1,
+        "tier":999
+      },
+      {
+        "name":"Bandit ranger",
+        "attackModifiers":["Bandit damage reduction"],
+        "damage":50,
+        "hp":250,
+        "isRanged":true,
+        "attackSound":"bow"
+      },
+      {
+        "name":"Rogue ranger",
+        "damage":52,
+        "hp":220,
+        "isRanged":true,
+        "attackSound":"bow"
+      },
+      {
+        "name":"Chef",
+        "damage":30,
+        "hp":350,
+        "ability":"Delicious meal",
+        "attackSound": "forkHit",
+        "attackVolume":0.7
+      },
+      {
+        "name":"Dragon egg",
+        "damage":0,
+        "hp":1,
+        "ability":"Egg",
+        "descriptions":[
+          "Gains 1XP at the end of every round, when the egg reaches Lvl3, a random powerfull dragon will hatch", 
+          "Gains 1XP at the end of every round, when the egg reaches Lvl3, a random powerfull dragon will hatch",
+          "Gains 1XP at the end of every round, when the egg reaches Lvl3, a random powerfull dragon will hatch"
+        ]
+      },
+      {
+        "name":"Red dragon",
+        "damage":120,
+        "hp":1000,
+        "attackModifiers":["splash"],
+        "isRanged":true,
+        "projectile":"fireball",
+        "ability":"Splash attack",
+        "descriptions":[
+          "A powerfull dragon with splash attack", 
+          "A powerfull dragon with splash attack",
+          "A powerfull dragon with splash attack"
+        ],
+        "attackSound": "fireLit",
+        "attackVolume":0.8,
+        "tier":4
+      },
+      {
+        "name":"Blue dragon",
+        "damage":110,
+        "hp":875,
+        "attackModifiers":["splash","Dragon slow"],
+        "isRanged":true,
+        "projectile":"fireball blue",
+        "attackSound": "fireLit",
+        "attackVolume":0.8,
+        "tier":4
+      },
+      {
+        "name":"Green dragon",
+        "damage":100,
+        "hp":750,
+        "attackModifiers":["splash","Dragon damage reduction"],
+        "isRanged":true,
+        "projectile":"fireball green",
+        "attackSound": "fireLit",
+        "attackVolume":0.8,
+        "tier":4
+      },
+      {
+        "comment":"****________________ ENEMY UNITS: ___________________****",
         "tier":999
       },
       {
         "name": "Pokey boy",
-        "damage": 20,
-        "hp": 180,
+        "damage": 18,
+        "hp": 140,
         "isFriendly": false,
-        "description":"Beware, he pokes",
+        "descriptions":["Beware, he pokes!","",""],
         "attackSound": "poke"
       },
       {
-        "name": "Fire starter",
-        "damage": 20,
-        "hp": 150,
-        "isFriendly": true,
-        "description":"Creates a bonfire that deals 40 damage per second",
-        "description2":"Creates a bonfire that deals 60 damage per second",
-        "description3":"Creates a bonfire that deals 80 damage per second",
-        "ability":"Bonfire",
-        "tier":1,
-        "damagePerTick":20,
-        "dotTickRate":0.5
-      },
-      {
-        "name": "Aura ranger",
-        "damage": 35,
-        "hp": 200,
-        "isFriendly":true,
-        "description":"When alive give all defenders +10DMG. Effect does not stack",
-        "description2":"When alive give all defenders +20DMG. Effect does not stack",
-        "description3":"When alive give all defenders +30DMG. Effect does not stack",
-        "attackSound": "sword",
-        "tier":1
-      },
-      {
-        "name": "Nature ranger",
-        "damage": 35,
-        "hp": 200,
-        "isFriendly":true,
-        "description":"Spawns 2 small tree warriors to fight for you",
-        "description2":"Spawns 3 small tree warriors to fight for you",
-        "description3":"Spawns 4 small tree warriors to fight for you",
-        "attackSound": "doorBump",
-        "tier":1,
-        "ability":"SpawnTrees"
-      },
-      {
-        "name": "Tree warrior",
-        "damage": 15,
-        "hp": 200,
-        "isFriendly":true,
-        "description":"This tree bites!",
-        "attackSound": "doorBump",
-        "tier":999
-      },
-      {
-        "name": "Tooth ball",
+        "name": "Pirate",
         "damage": 25,
-        "hp": 250,
+        "isRanged": true,
+        "projectile": "laser",
+        "hp": 140,
         "isFriendly": false,
-        "description":"Beware, he pokes",
-        "attackSound": "poke"
-      },
-      {
-        "name": "Octupus",
-        "damage": 32,
-        "hp": 250,
-        "isFriendly": false,
-        "description":"Beware, he pokes",
-        "attackSound": "poke"
+        "descriptions":["He shoots laser beams. Arrrrr!","",""],
+        "attackSound": "laser"
       },
       {
         "name": "Jellyfish",
-        "damage": 39,
-        "hp": 250,
+        "damage": 35,
+        "hp": 30,
+        "ability": "Explode on death",
         "isFriendly": false,
-        "description":"So cute! It wants to kill you though.",
+        "descriptions":["So cute! It explodes on death though.","",""],
         "attackSound": "poke"
       },
       {
-        "name": "Dark wizard",
+        "name": "Ocean farmer",
         "damage": 45,
-        "hp": 250,
+        "hp": 350,
+        "ability":"Teleport",
         "isFriendly": false,
-        "description":"Beware, he pokes",
-        "attackSound": "poke"
+        "descriptions":["Teleports to the back of the battlefield.","",""],
+        "attackSound": "sword"
+      },
+      {
+        "name": "Tooth ball",
+        "damage": 55,
+        "hp": 450,
+        "isFriendly": false,
+        "descriptions":["Gross!!","",""]
+      },
+      {
+        "name": "Octupus",
+        "damage": 55,
+        "hp": 800,
+        "isFriendly": false,
+        "descriptions":["Slimey","",""],
+        "bounty": 2
+      },
+      {
+        "name": "Dark wizard",
+        "damage": 400,
+        "hp": 4000,
+        "isFriendly": false,
+        "descriptions":["Deals fatal damage to your highest health defender","",""],
+        "ability":"Lightning",
+        "bounty":5,
+        "cityDamage":5
+      },
+      {
+        "name": "Large Jeffrey",
+        "damage": 75,
+        "hp": 1200,
+        "isFriendly": false,
+        "descriptions":["He splits up into smaller Jeffreys","",""],
+        "ability":"Split 1",
+        "bounty":2
+      },
+      {
+        "name": "Medium Jeffrey",
+        "damage": 50,
+        "hp": 300,
+        "isFriendly": false,
+        "descriptions":["Good ol' medium size Jeffrey","",""],
+        "ability":"Split 2"
+      },
+      {
+        "name": "Tiny Jeffrey",
+        "damage": 45,
+        "hp": 200,
+        "isFriendly": false,
+        "descriptions":["Tiny Jeffrey still hits hard!","",""],
+        "cityDamage": 0
+      },
+      {
+        "name": "Da big boss",
+        "damage": 300,
+        "hp": 30000,
+        "ability": "Green ring",
+        "isRanged": true,
+        "projectile": "green laser",
+        "isFriendly": false,
+        "descriptions":["The final hurdle! Does area of affect damage.","",""],
+        "attackSound": "laser",
+        "cityDamage": 20
+      },
+      {
+        "name":"Black dragon",
+        "damage":120,
+        "hp":3500,
+        "attackModifiers":["splash"],
+        "descriptions":["Extremely powerful dragon with splash attack","",""],
+        "isRanged":true,
+        "projectile":"fireball",
+        "attackSound": "fireLit",
+        "attackVolume":0.8,
+        "isFriendly":false,
+        "cityDamage":2,
+        "tier":4
       }
-      
-      
     ]
 }

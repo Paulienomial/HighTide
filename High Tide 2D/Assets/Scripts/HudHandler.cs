@@ -27,5 +27,6 @@ public class HudHandler : MonoBehaviour
         gold.text = global.gold.ToString();
         cityHealthBar.value = Global.curr.CityHealth;
         cityHealthBar.maxValue = Global.curr.maxCityHealth;
+        WaveBarController.curr.setText("Wave " + Global.curr.waveNum +"/"+Waves.curr.waves.Count);
     }
 }

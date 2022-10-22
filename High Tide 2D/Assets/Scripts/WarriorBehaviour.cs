@@ -31,6 +31,7 @@ public class WarriorBehaviour : MonoBehaviour
         if(!this){//if awaiting deletion, the don't exec any code
             //Destroy(gameObject);
         }else if(gameObject!=null){
+            gameObject.GetComponent<SpriteRenderer>().flipX=false;
             if(thisWarrior.attributes.name=="Farmer" && thisWarrior.diedLastWave==false){
                 if(thisWarrior.getLevel()==1){
                     StatScreens.curr.farmGold += 2;

@@ -9,11 +9,13 @@ public class Warrior : MonoBehaviour
     public int maxHealth;
     public bool diedLastWave=false;
     private HealthBar hpBar;
+    FightManager fm;
+    public GameObject xpObject;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        fm = gameObject.GetComponent<FightManager>();
     }
 
     // Update is called once per frame
@@ -34,6 +36,10 @@ public class Warrior : MonoBehaviour
                 //set the max health for the hp bar
                 hpBar = gameObject.GetComponent<HealthBarUpdate>().hpBar;
                 hpBar.setMaxHealth(maxHealth);
+                //setDescription();
+                //dont show xp stuff if, it's an enemy
+                if( !attributes.isFriendly) xpObject.SetActive(false);
+                Events.curr.setDefender(gameObject);
                 return;
             }
         }
@@ -47,6 +53,9 @@ public class Warrior : MonoBehaviour
         }else{
             return 3;
         }
+    }
+    public int lvlIndex(){
+        return getLevel()-1;
     }
 
     public void setHealth(int h){

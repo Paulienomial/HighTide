@@ -32,9 +32,9 @@ public class waveManager : MonoBehaviour
             if (Global.curr.enemyWaveDeathCount == 0 && !waveEnd)
             {
                 CancelInvoke();
-                resetWave();
-                Global.curr.gold+=2;
                 WaveBarController.curr.setHealth(WaveBarController.curr.getMaxHealth());
+                resetWave();
+
                 return true;
             }
             else
@@ -53,6 +53,10 @@ public class waveManager : MonoBehaviour
     {
         if (!Global.curr.gameOver && Global.curr.gamePhase == "fight")
         {
+            foreach(GameObject deadEnemy in Global.curr.deadEnemies){
+                Destroy(deadEnemy);
+            }
+            Global.curr.deadEnemies.Clear();
             //StatScreens.curr.showAfterWaveScreen();
             AudioScript.curr.stopBattleTheme();
             if (waveLost)
@@ -65,15 +69,13 @@ public class waveManager : MonoBehaviour
             }
             waveLost = false;
             Global.curr.waveStart = false;
-            Global.curr.waveNum++;
-            WaveBarController.curr.setText("Wave " + Global.curr.waveNum);
-            WaveBarController.curr.setTopText("Next wave:");
+            
+            
             //set gamephase to shop
             Global.curr.gamePhase = "shop";
             Global.curr.shopButton.SetActive(true);
             Global.curr.playButton.SetActive(true);
             //////////////////////////
-            Global.curr.resetShop();
             foreach (GameObject current in Global.curr.defenders)
             {
                 current.transform.position = current.GetComponent<Warrior>().coordinates;
@@ -87,7 +89,17 @@ public class waveManager : MonoBehaviour
                 current.GetComponent<Warrior>().attributes.hp = current.GetComponent<Warrior>().maxHealth;
 
             }
-            //Global.curr.gold+=10;
+            Global.curr.gold+= Waves.curr.waves[Global.curr.waveNum-1].bonusGold;
+
+            if(Global.curr.waveNum == Waves.curr.waves.Count && Global.curr.CityHealth>0){
+                Events.curr.winGame();
+                return;
+            }
+
+            Global.curr.waveNum++;
+            Global.curr.resetShop();
+            
+            WaveBarController.curr.setTopText("Next wave:");
             Events.curr.waveComplete();//trigger wave complete event
         }
     }

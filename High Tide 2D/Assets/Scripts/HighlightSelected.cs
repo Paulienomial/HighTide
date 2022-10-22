@@ -92,6 +92,7 @@ public class HighlightSelected : MonoBehaviour
         if(lastSelected!=null && lastSelected.GetComponent<Warrior>()){
             GameObject currCard = warriorInfo;
             WarriorAttributes.attr currWarrior = lastSelected.GetComponent<Warrior>().attributes;
+            Warrior w = lastSelected.GetComponent<Warrior>();
             
             //Preview image
             GameObject previewBackground = currCard.transform.Find("PreviewBackground").gameObject;
@@ -112,10 +113,14 @@ public class HighlightSelected : MonoBehaviour
             //Damage
             GameObject dmgIcon = currCard.transform.Find("dmgIcon").gameObject;
             GameObject damageText = dmgIcon.transform.Find("Damage").gameObject;
-            if ( GlobalBehaviours.curr.globalDMGAura==0 || currWarrior.isFriendly==false ){
+            if ( lastSelected.GetComponent<FightManager>().getExtraDamage()==0 ){
                 damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString();
-            }else{
-                damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString()+"+"+GlobalBehaviours.curr.globalDMGAura.ToString();
+            }
+            if ( lastSelected.GetComponent<FightManager>().getExtraDamage()>0 ){
+                damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString()+ "+" + w.GetComponent<FightManager>().getExtraDamage();
+            }
+            if(lastSelected.GetComponent<FightManager>().getExtraDamage()<0 ){
+                damageText.GetComponent<TextMeshProUGUI>().text = currWarrior.damage.ToString() + w.GetComponent<FightManager>().getExtraDamage();
             }
 
             //HP
@@ -125,13 +130,7 @@ public class HighlightSelected : MonoBehaviour
 
             //Description
             GameObject description = currCard.transform.Find("para").gameObject;
-            if(lastSelected.GetComponent<Warrior>().getLevel()==1){
-                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description;
-            }else if(lastSelected.GetComponent<Warrior>().getLevel()==2){
-                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description2;
-            }else if(lastSelected.GetComponent<Warrior>().getLevel()==3){
-                description.GetComponent<TextMeshProUGUI>().text = currWarrior.description3;
-            }
+            description.GetComponent<TextMeshProUGUI>().text = currWarrior.descriptions[w.getLevel()-1];
 
             //Sell button
             GameObject sell = currCard.transform.Find("Sell").gameObject;

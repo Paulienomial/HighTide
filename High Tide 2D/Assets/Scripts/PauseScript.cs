@@ -30,7 +30,7 @@ public class PauseScript : MonoBehaviour
     public void pauseGame()
     {
         pauseScreen.active = true;
-        AudioScript.curr.pauseMusic();
+        //AudioScript.curr.pauseMusic();
         Time.timeScale = 0;
         Global.curr.gamePaused = true;
     }
@@ -38,19 +38,14 @@ public class PauseScript : MonoBehaviour
     public void restartGame()
     {
         AudioScript.curr.playButtonClickSound();
-        PlayerPrefs.SetFloat("mainvol", Global.curr.MainVolume);
-        PlayerPrefs.SetFloat("fxvol", Global.curr.FXVolume);
-        PlayerPrefs.SetFloat("musicvol", Global.curr.MusicVolume);
         resumeGame();
         SceneManager.LoadScene("SampleScene");
+        WaveInfo.curr.drawWaveInfo();
     }
 
     public void toMenu()
     {
         AudioScript.curr.playButtonClickSound();
-        PlayerPrefs.SetFloat("mainvol", Global.curr.MainVolume);
-        PlayerPrefs.SetFloat("fxvol", Global.curr.FXVolume);
-        PlayerPrefs.SetFloat("musicvol", Global.curr.MusicVolume);
         resumeGame();
         SceneManager.LoadScene("MainMenu");
     }
@@ -60,7 +55,7 @@ public class PauseScript : MonoBehaviour
         AudioScript.curr.playButtonClickSound();
         pauseScreen.active = false;
         settingsScreen.active = false;
-        AudioScript.curr.resumeMusic();
+        //AudioScript.curr.resumeMusic();
         Time.timeScale = 1;
         Global.curr.gamePaused = false;
     }

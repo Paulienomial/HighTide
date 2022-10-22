@@ -55,6 +55,7 @@ public class GridSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(Input.GetKeyDown(KeyCode.G)){
             Global.curr.gold+=100;
         }
@@ -63,7 +64,10 @@ public class GridSystem : MonoBehaviour
             //check if mouse down on placing object, but not yet up
             if(justPlacedObject==true){
                 if(Input.GetKeyUp(KeyCode.Mouse0)){
-                    Events.curr.purchaseDefender();//trigger event
+                    Events.curr.purchaseDefender(currObject);//trigger event
+                    if(card!=null && currObject!=null && currObject.GetComponent<Warrior>() && !(currObject.GetComponent<Warrior>().attributes.name=="Farmer")){
+                        card.GetComponent<CardLock>().placed=true;
+                    }
                     justPlacedObject=false;
                 }
             }
@@ -139,8 +143,6 @@ public class GridSystem : MonoBehaviour
                     mergeWith.GetComponent<UpgradeDefender>().merge(currObject);//if merging is possible, then do merge(also destroys object being dragged in)
                     //PURCHASE UNIT
                     Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                    GlobalBehaviours.curr.applyAuraRangerBuff();
-                    //Events.curr.purchaseDefender();//trigger event
                 }else{//if in a open valid grid spot
                     if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
                         Notify.curr.show("Unit capacity reached");
@@ -149,11 +151,9 @@ public class GridSystem : MonoBehaviour
                     }else{
                         g.GetComponent<SpriteRenderer>().sortingOrder=10018;
                         g.GetComponent<Warrior>().coordinates = g.transform.position;
-                        Global.curr.defenders.AddLast(g);
+                        Global.curr.defenders.Add(g);
                         //PURCHASE UNIT
-                        GlobalBehaviours.curr.applyAuraRangerBuff();
                         Global.curr.gold -= g.GetComponent<Warrior>().attributes.price;
-                        //Events.curr.purchaseDefender();//trigger event
 
                         Tutorial.curr.showPopulationTip();
                     }
@@ -163,7 +163,7 @@ public class GridSystem : MonoBehaviour
                 //check why placement is invalid
                 GameObject mergeWith = getMergeDefender();//check if there is an already placed unit to merge with
                 if(mergeWith!=null){//if trying to merge different units
-                    //Notify.curr.show("Invalid position");
+                    Notify.curr.show("Invalid position");
                 }else{//if placed at open spot, but unit cap reached
                     if(Global.curr.defenders.Count>=Global.curr.unitCap){//if unit cap reached
                         //Notify.curr.show("Unit capacity reached");
@@ -176,6 +176,11 @@ public class GridSystem : MonoBehaviour
             }
             tileHighlight.SetActive(false);
             //grid.GetComponent<SpriteRenderer>().color=(Color)(new Color32(0,0,0,0));//fully transparent
+            placingPhase=false;
+        }else if(Input.GetKeyDown(KeyCode.Mouse1)){
+            Destroy(g);
+            card.gameObject.SetActive(true);
+            tileHighlight.SetActive(false);
             placingPhase=false;
         }
     }
@@ -296,6 +301,7 @@ public class GridSystem : MonoBehaviour
         if(a1.name==a2.name && a1.mergeCount+a2.mergeCount<=Global.curr.maxMergeCount){
             return true;
         }
+
         return false;
     }
 
@@ -306,6 +312,13 @@ public class GridSystem : MonoBehaviour
             if( defender!=g && sameSpot(g, defender) ){//same spot
                 if(canMerge(g, defender)){//can merge with unit at same spot      
                     return defender;
+                }else{
+                    WarriorAttributes.attr a1 = g.GetComponent<Warrior>().attributes;
+                    WarriorAttributes.attr a2 = defender.GetComponent<Warrior>().attributes;
+                    if(a1.name==a2.name && a1.mergeCount+a2.mergeCount>Global.curr.maxMergeCount){
+                        Notify.curr.show("Unit is at max level");
+                        AudioSystem.curr.createAndPlaySound("sword",.75f,1f);
+                    }
                 }
             }
         }

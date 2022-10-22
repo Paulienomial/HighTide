@@ -31,9 +31,9 @@ public class Notify : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.N)){
             show("Awesome!");
         }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("notifyShow")){
+        /*if (animator.GetCurrentAnimatorStateInfo(0).IsName("notifyShow")){
             // Avoid any reload.
-        }
+        }*/
     }
 
     public void show(string message){

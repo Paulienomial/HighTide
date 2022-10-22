@@ -8,6 +8,7 @@ public class WarriorRender : MonoBehaviour
     public GameObject warrior;
     public Animator animator;
     AnimatorOverrideController animOverride;
+    public GameObject canvas;
 
     // Start is called before the first frame update
     void Awake()

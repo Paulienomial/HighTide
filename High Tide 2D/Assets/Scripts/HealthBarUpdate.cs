@@ -21,11 +21,11 @@ public class HealthBarUpdate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hpBar.setHealth(gameObject.GetComponent<Warrior>().attributes.hp);//displays current health
+        hpBar.setHealth(gameObject.GetComponent<Warrior>().attributes.hp);//displays max health
         hpBar.setMaxHealth(gameObject.GetComponent<Warrior>().maxHealth);//displays current health
 
         if(Input.GetKeyDown(KeyCode.Z)){
-            Global.curr.defenders.First.Value.GetComponent<Warrior>().attributes.hp-=20;
+            Global.curr.defenders[0].GetComponent<Warrior>().attributes.hp-=20;
         }
     }
 }

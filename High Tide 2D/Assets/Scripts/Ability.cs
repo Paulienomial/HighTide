@@ -4,24 +4,16 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-    //public
-    public GameObject bonfireObject;
-
-    
-    //private
-    Warrior w;
-    Global global = Global.curr;
-    
-    void Awake(){
-        w = gameObject.GetComponent<Warrior>();
-        Events.curr.onWaveStart += startAbility;
-        Events.curr.onWaveComplete += waveComplete;
-        startAbilityEnemy();
-    }
-
-    void Start()
+    public Warrior w;
+    public WarriorAttributes.attr a;
+    public FightManager fm;
+    public Global global;
+    void Awake()
     {
-        
+        w = gameObject.GetComponent<Warrior>();
+        a = w.attributes;
+        global= Global.curr;
+        fm = gameObject.GetComponent<FightManager>();
     }
 
     // Update is called once per frame
@@ -30,80 +22,45 @@ public class Ability : MonoBehaviour
         
     }
 
-    void waveComplete(){
-        if(!this){
-            return;
-        }
-        if(w.attributes.name=="Tree warrior"){
-            Global.curr.defenders.Remove(gameObject);
-            Destroy(gameObject);
-        }
+    public virtual void go(){//does ability
+        
     }
 
-    public void startAbility(){
-        if(!this){
-            return;
-        }
-        Debug.Log("Wave start ability");
-        if(w.attributes.isFriendly){
-            Debug.Log(w.attributes.ability);
-            if(w.attributes.ability=="Bonfire"){
-                Debug.Log("Bonfire");
-                StartCoroutine(bonfire());
+    public virtual void go(GameObject g){
+        
+    }
+
+    public virtual void go2(){//does ability
+        
+    }
+
+    public virtual void go3(GameObject g,int i1,int i2){
+
+    }
+
+    public GameObject getDefenderAhead(){
+        float tolerance = .05f;
+        foreach(GameObject defender in global.defenders){
+            Vector2 pos = gameObject.transform.position;
+            Vector2 defenderPos = defender.transform.position;
+            if(defender!=gameObject){
+                if(defenderPos.y <= pos.y+tolerance && defenderPos.y >= pos.y-tolerance){//correct y
+                    float x = pos.x+GridSystem.curr.gridCellSize;
+                    if(defenderPos.x <= x+tolerance  && defenderPos.x >= x-tolerance){//correct x
+                        return defender;
+                    }
+                }
             }
-            if(w.attributes.ability=="SpawnTrees"){
-                StartCoroutine(spawnTrees());
-            }
         }
+        return null;
     }
 
-    public void startAbilityEnemy(){
-        if(w.attributes.ability=="Bonfire"){
-            StartCoroutine(bonfire());
-        }
-    }
-
-    IEnumerator bonfire(){
-        //wait X seconds before casting
-        yield return new WaitForSeconds(4);
-
-        //wait for a target
-        while(noTargets()){}
-
-        //the following code might not be thread safe
-        //find closest enemy and create bonfire beneath it
-        GameObject closestEnemy = findClosestEnemy();
-        if(closestEnemy!=null){
-            float x = closestEnemy.transform.position.x;
-            float y = closestEnemy.transform.position.y;
-            GameObject fire = Instantiate(bonfireObject, new Vector2(x, y), Quaternion.identity);
-            fire.GetComponent<Fire>().dmg = w.attributes.damagePerTick;
-            fire.GetComponent<Fire>().activate();
-            AudioSystem.curr.createAndPlaySound("fireLit");
-            yield return new WaitForSeconds(5);
-            Destroy(fire);
-        }else{
-
-        }
-    }
-
-    IEnumerator spawnTrees(){
-        //wait X seconds before casting
-        yield return new WaitForSeconds(0);
-
-        for(int i=0; i<gameObject.GetComponent<Warrior>().getLevel()+1; i++){
-            global.defenders.AddLast( Instantiate(global.warriorPrefab, new Vector2(gameObject.transform.position.x+1.5f, gameObject.transform.position.y+.5f-.5f*i), Quaternion.identity) );
-            GameObject treeDude = global.defenders.Last.Value;
-            treeDude.GetComponent<Warrior>().setWarrior("Tree warrior");
-        }
-    }
-
-    bool noTargets(){
+    public bool noTargets(){
         return global.enemies.Count==0 && global.gamePhase=="fight";
     }
 
     public GameObject findClosestEnemy(){
-        LinkedList<GameObject> enemies;
+        List<GameObject> enemies;
         if(w.attributes.isFriendly){
             enemies=Global.curr.enemies;
         }else{
@@ -112,7 +69,7 @@ public class Ability : MonoBehaviour
 
         float minDistance = float.MaxValue;
         GameObject closestEnemy=null;
-        foreach(GameObject enemy in Global.curr.enemies){
+        foreach(GameObject enemy in enemies){
             float currDistance = Vector2.Distance( gameObject.transform.position, enemy.transform.position);
             if(currDistance<minDistance){
                 closestEnemy=enemy;
@@ -120,5 +77,25 @@ public class Ability : MonoBehaviour
             }
         }
         return closestEnemy;
+    }
+
+    public GameObject findHighestHPEnemy(){
+        List<GameObject> enemies;
+        if(w.attributes.isFriendly){
+            enemies=Global.curr.enemies;
+        }else{
+            enemies=Global.curr.defenders;
+        }
+
+        int maxHP = 0;
+        GameObject highestHPEnemy=null;
+        foreach(GameObject enemy in enemies){
+            int currHP = enemy.GetComponent<Warrior>().maxHealth;
+            if(currHP > maxHP){
+                highestHPEnemy=enemy;
+                maxHP=currHP;
+            }
+        }
+        return highestHPEnemy;
     }
 }

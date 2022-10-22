@@ -12,11 +12,16 @@ public class EnemySpawner : MonoBehaviour
     int groupCounter = 0;
     float spawnDelay = 0;
     public string[] enemies = {"Pokey boy","Jellyfish","Tooth ball","Octupus","Dark wizard"};
+
+    public List<WaveStats> waves;
+    Global global;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        global = Global.curr;
+        waves = new List<WaveStats>();
+        waves = Waves.curr.waves;
     }
 
     // Update is called once per frame
@@ -26,6 +31,8 @@ public class EnemySpawner : MonoBehaviour
             AudioScript.curr.playBattleTheme();
         }
     }
+
+    
 
     private IEnumerator spawnEnemy(float delay, GameObject enemyType)
     {
@@ -46,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
         w.attributes.damage = calcNewDamage(newSpawn.GetComponent<Warrior>().attributes.damage, Global.curr.waveNum);
         w.setHealth( calcNewHealth(w.attributes.hp, Global.curr.waveNum) );
 
-        Global.curr.enemies.AddLast(newSpawn);
+        Global.curr.enemies.Add(newSpawn);
         spawnCount++;
         if (spawnCount < maxEnemies)
         {
@@ -59,8 +66,6 @@ public class EnemySpawner : MonoBehaviour
         if (Global.curr.startButtonEnabled){
             if (!Global.curr.waveStart)
             {
-                GlobalBehaviours.curr.applyAuraRangerBuff();
-                Events.curr.waveStart();
                 groupCounter = 0;
                 WaveBarController.curr.setTopText("Current wave:");
 
@@ -71,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
 
                 if (Global.curr.waveNum == 1)
                 {
-                    maxEnemies = 2;
+                    maxEnemies = 1;
                 }else if(Global.curr.waveNum == 18){
                     maxEnemies = 20;
                 }else{
@@ -86,6 +91,72 @@ public class EnemySpawner : MonoBehaviour
                 Global.curr.enemyWaveDeathCount = maxEnemies;
                 Global.curr.waveStart = true;
                 startCoroutines();
+
+
+                Events.curr.waveStart();
+            }
+        }
+    }
+
+    public void startFight2(){
+        if (Global.curr.startButtonEnabled){
+            if (!Global.curr.waveStart)
+            {
+                WaveBarController.curr.setTopText("Current wave:");
+
+                AudioScript.curr.stopMainTheme();
+                AudioScript.curr.playButtonClickSound();
+                AudioScript.curr.playBattleHornSound();
+                AudioScript.curr.playBattleTheme();
+
+                WaveBarController.curr.setMaxHealth( waves[global.waveNum-1].totalHP() );
+                WaveBarController.curr.setHealth( waves[global.waveNum-1].totalHP() );
+
+                spawnCount = 0;
+                Global.curr.enemyWaveDeathCount = waves[global.waveNum-1].totalEnemies();
+                Global.curr.waveStart = true;
+
+                if(Global.curr.gamePhase!="fight"){
+                    Global.curr.gamePhase = "fight";
+                    Global.curr.shopButton.SetActive(false);
+                    Global.curr.playButton.SetActive(false);
+                    ShopSystem.curr.shop.SetActive(false);
+                    ShopSystem.curr.shopOpen=false;
+                }
+                
+                Events.curr.waveStart();
+                foreach(EnemyGroup eg in waves[global.waveNum-1].enemyGroups){
+                    StartCoroutine(spawnWaves(eg));
+                }
+            }
+        }
+    }
+
+    IEnumerator spawnWaves(EnemyGroup eg){
+        //Wait for freeze time before starting to spawn
+        yield return new WaitForSeconds(eg.freezeTime);
+        int totalSpawns=0;
+        bool done=false;
+        while(!done){
+            //spawn bundleSize amount of units at a time
+            for(int i=0; i<eg.bundleSize; i++){
+                if(totalSpawns==eg.count){
+                    done=true;
+                }else{
+                    GameObject enemy = Instantiate(global.warriorPrefab, new Vector2(Random.Range(6f, 7.5f), Random.Range(-4.6f, 4.6f)), Quaternion.identity );
+                    Warrior enemyW = enemy.GetComponent<Warrior>();
+                    enemyW.setWarrior(eg.name);
+                    enemyW.setHealth( eg.getUnitHP() );
+                    enemyW.attributes.damage = eg.getUnitDMG();
+                    Global.curr.enemies.Add(enemy);
+                    totalSpawns++;
+
+                    //Events.curr.spawnEnemy(enemy);
+                }
+            }
+            //wait spawn interval amount of seconds
+            if(!done){
+                yield return new WaitForSeconds(eg.spawnInterval);
             }
         }
     }
