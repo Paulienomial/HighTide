@@ -22,7 +22,7 @@ public class WarriorRender : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q)){
+        /*if(Input.GetKeyDown(KeyCode.Q)){
             animator.SetInteger("state",0);//do idle animation
         }
         if(Input.GetKeyDown(KeyCode.W)){
@@ -33,7 +33,7 @@ public class WarriorRender : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.R)){
             animator.SetInteger("state",3);//do dead animation
-        }
+        }*/
     }
 
     public void setSprite(){

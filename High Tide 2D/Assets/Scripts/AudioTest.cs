@@ -16,9 +16,6 @@ public class AudioTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L)){
-            GameObject a = Instantiate(audioCreator, new Vector3(0,0,0), Quaternion.identity);
-            a.GetComponent<AudioCreator>().createAndPlaySound("axe1");
-        }
+        
     }
 }

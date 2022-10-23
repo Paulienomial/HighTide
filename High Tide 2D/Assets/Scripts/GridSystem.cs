@@ -56,9 +56,7 @@ public class GridSystem : MonoBehaviour
     void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.G)){
-            Global.curr.gold+=100;
-        }
+        
 
         if(Global.curr.gamePhase=="shop"){
             //check if mouse down on placing object, but not yet up

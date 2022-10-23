@@ -28,9 +28,7 @@ public class Notify : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.N)){
-            show("Awesome!");
-        }
+        
         /*if (animator.GetCurrentAnimatorStateInfo(0).IsName("notifyShow")){
             // Avoid any reload.
         }*/

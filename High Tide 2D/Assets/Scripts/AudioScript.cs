@@ -14,6 +14,8 @@ public class AudioScript : MonoBehaviour
     public AudioSource BattleTheme1;
     public AudioSource BattleTheme2;
     public AudioSource BattleTheme3;
+    public AudioSource BattleTheme4;
+    public AudioSource BattleTheme5;
     public AudioSource BossTheme1;
     public AudioSource BossTheme2;
     public AudioSource VictorySound;
@@ -303,7 +305,7 @@ public class AudioScript : MonoBehaviour
             else
             {
                 int PlayNum = BattleThemeLooper;
-                if(PlayNum == 1)
+                /*if(PlayNum == 1)
                 {
                     BattleThemeLooper = 2;
                     BattleTheme1.Play();
@@ -323,6 +325,27 @@ public class AudioScript : MonoBehaviour
                         BattleTheme3.Play();
                         currMusic = 7;
                     }
+                }*/
+                if(PlayNum==1){
+                    BattleThemeLooper=2;
+                    BattleTheme1.Play();
+                    currMusic=1;
+                }else if(PlayNum==2){
+                    BattleThemeLooper=3;
+                    BattleTheme2.Play();
+                    currMusic=6;
+                }else if(PlayNum==3){
+                    BattleThemeLooper=4;
+                    BattleTheme3.Play();
+                    currMusic=7;
+                }else if(PlayNum==4){
+                    BattleThemeLooper=5;
+                    BattleTheme4.Play();
+                    currMusic=8;
+                }else if(PlayNum==5){
+                    BattleThemeLooper=1;
+                    BattleTheme5.Play();
+                    currMusic=9;
                 }
                 
             }
@@ -339,6 +362,8 @@ public class AudioScript : MonoBehaviour
         BattleTheme1.Stop();
         BattleTheme2.Stop();
         BattleTheme3.Stop();
+        BattleTheme4.Stop();
+        BattleTheme5.Stop();
         BossTheme1.Stop();
         BossTheme2.Stop();
     }
@@ -438,6 +463,12 @@ public class AudioScript : MonoBehaviour
                 break;
             case 7:
                 BattleTheme3.Play();
+                break;
+            case 8:
+                BattleTheme4.Play();
+                break;
+            case 9:
+                BattleTheme5.Play();
                 break;
         }
     }

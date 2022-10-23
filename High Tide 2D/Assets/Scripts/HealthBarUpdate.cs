@@ -24,8 +24,6 @@ public class HealthBarUpdate : MonoBehaviour
         hpBar.setHealth(gameObject.GetComponent<Warrior>().attributes.hp);//displays max health
         hpBar.setMaxHealth(gameObject.GetComponent<Warrior>().maxHealth);//displays current health
 
-        if(Input.GetKeyDown(KeyCode.Z)){
-            Global.curr.defenders[0].GetComponent<Warrior>().attributes.hp-=20;
-        }
+        
     }
 }

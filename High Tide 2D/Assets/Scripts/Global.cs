@@ -57,16 +57,45 @@ public class Global : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if(Input.GetKeyDown(KeyCode.X)){
-            defenders.AddLast( Instantiate(fireStarter,new Vector2(0,0), Quaternion.identity) );
-            GameObject fireDude = defenders.Last.Value;
-            fireDude.GetComponent<Warrior>().setWarrior("Fire starter");
-        }*/
-        if(Input.GetKeyDown(KeyCode.H)){
-            defenders.Add( Instantiate(warriorPrefab, new Vector2(0, 0), Quaternion.identity) );
+        if(Input.GetKeyDown(KeyCode.F1)){//gold cheat
+            Global.curr.gold+=10;
+        }
+        if(Input.GetKeyDown(KeyCode.F2)){//reroll cheat
+            ShopSystem.curr.createShop();
+        }
+        if(Input.GetKeyDown(KeyCode.F3)){//wavenum-- cheat
+            if(Global.curr.waveNum>1){
+                Global.curr.waveNum--;
+                WaveInfo.curr.drawWaveInfo();
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.F4)){//wavenum++ cheat
+            if(Global.curr.waveNum<20){
+                Global.curr.waveNum++;
+                WaveInfo.curr.drawWaveInfo();
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.F5)){//cityhealth++ cheat
+            Global.curr.CityHealth+=20;
+        }
+        if(Input.GetKeyDown(KeyCode.F6)){//city upgrade cheat
+            CityUpgrade.curr.upgradePop(0);
+        }
+        if(Input.GetKeyDown(KeyCode.F11)){//strong soldier cheat
+            if(defenders.Count>=Global.curr.unitCap) return;
+            defenders.Add( Instantiate(warriorPrefab, new Vector2(-0.793651f, -0.1587303f), Quaternion.identity) );
+            GameObject soldier = defenders.Last();
+            soldier.GetComponent<Warrior>().setWarrior("Foot soldier");
+            soldier.GetComponent<Warrior>().attributes.hp=10000;
+            soldier.GetComponent<Warrior>().coordinates = new Vector3( -0.793651f,-0.1587303f, 0 );
+        }
+        if(Input.GetKeyDown(KeyCode.F12)){//very strong dragon cheat
+            if(defenders.Count>=Global.curr.unitCap) return;
+            defenders.Add( Instantiate(warriorPrefab, new Vector2(-0.793651f, -0.1587303f), Quaternion.identity) );
             GameObject dragon = defenders.Last();
             dragon.GetComponent<Warrior>().setWarrior("Red dragon");
-            dragon.GetComponent<Warrior>().coordinates = new Vector3( 0,0, 0 );
+            dragon.GetComponent<Warrior>().attributes.hp=200000;
+            dragon.GetComponent<Warrior>().coordinates = new Vector3( -0.793651f,-0.1587303f, 0 );
         }
     }
 

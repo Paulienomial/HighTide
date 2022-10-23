@@ -187,7 +187,8 @@
         "damage": 55,
         "hp": 450,
         "isFriendly": false,
-        "descriptions":["Gross!!","",""]
+        "descriptions":["Gross!!","",""],
+        "attackSound":"poke"
       },
       {
         "name": "Octupus",
@@ -195,7 +196,8 @@
         "hp": 800,
         "isFriendly": false,
         "descriptions":["Slimey","",""],
-        "bounty": 2
+        "bounty": 2,
+        "attackSound":"poke"
       },
       {
         "name": "Dark wizard",
@@ -214,7 +216,8 @@
         "isFriendly": false,
         "descriptions":["He splits up into smaller Jeffreys","",""],
         "ability":"Split 1",
-        "bounty":2
+        "bounty":2,
+        "attackSound":"poke"
       },
       {
         "name": "Medium Jeffrey",
@@ -222,7 +225,8 @@
         "hp": 300,
         "isFriendly": false,
         "descriptions":["Good ol' medium size Jeffrey","",""],
-        "ability":"Split 2"
+        "ability":"Split 2",
+        "attackSound":"poke"
       },
       {
         "name": "Tiny Jeffrey",
@@ -230,7 +234,8 @@
         "hp": 200,
         "isFriendly": false,
         "descriptions":["Tiny Jeffrey still hits hard!","",""],
-        "cityDamage": 0
+        "cityDamage": 0,
+        "attackSound":"poke"
       },
       {
         "name": "Da big boss",

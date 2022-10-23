@@ -28,12 +28,7 @@ public class HighlightElement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A)){
-            highlight(element);
-        }
-        if(Input.GetKeyDown(KeyCode.S)){
-            unHighlight();
-        }
+        
     }
     
     public void highlight(GameObject g){

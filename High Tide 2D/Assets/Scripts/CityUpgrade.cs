@@ -40,12 +40,7 @@ public class CityUpgrade : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.U)){
-            upgradePop(0);
-        }
-        if(Input.GetKeyDown(KeyCode.B)){
-            playDamageAnimation(1);
-        }
+        
     }
 
     public void upgradePop(int price){

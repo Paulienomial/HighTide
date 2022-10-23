@@ -34,12 +34,7 @@ public class Highlight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.D)){
-            focus(stronghold);
-        }
-        if(Input.GetKeyDown(KeyCode.F)){
-            focus(go);
-        }
+        
     }
 
     public void darkenAllExcept(GameObject g){
