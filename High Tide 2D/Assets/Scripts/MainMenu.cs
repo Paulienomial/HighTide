@@ -13,6 +13,10 @@ public class MainMenu : MonoBehaviour
     public Slider FXVolSlider;
     public Slider MusicVolSlider;
 
+    public static float mainPref = -1f;
+    public static float fxPref = -1f;
+    public static float musicPref = -1f;
+
     [SerializeField]
     GameObject SettingsPopup;
 
