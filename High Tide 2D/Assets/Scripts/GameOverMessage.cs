@@ -37,7 +37,7 @@ public class GameOverMessage : MonoBehaviour
     void winGame(){
         goMessage.SetActive(true);
         goHeading.text = "VICTORY!!";
-        goText.text = "You completed wave "+Global.curr.waveNum+ "/" + Waves.curr.waves.Count + "!!";
+        goText.text = "You completed wave "+Waves.curr.waves.Count+ "/" + Waves.curr.waves.Count + "!!";
         btnText.text = "GO AGAIN";
     }
 }

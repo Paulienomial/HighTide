@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class Lock : MonoBehaviour
 {
     public static Lock curr;
+    public bool askingLock = false;
     // Start is called before the first frame update
-    void Awale()
+    void Awake()
     {
         curr=this;
+        askingLock=false;
     }
 
     // Update is called once per frame
@@ -18,7 +20,21 @@ public class Lock : MonoBehaviour
         
     }
 
+    public void hideAskLock(){
+        Debug.Log("asdfadsf");
+        if(askingLock){
+            askingLock=false;
+            Highlight.curr.unFocus();
+            //De-activate the lock buttons for the cards
+            foreach(Transform child in Tutorial.curr.cardsContainer.transform){
+                CardLock cl = child.gameObject.GetComponent<CardLock>();
+                cl.lockBtn.SetActive(false);
+            }
+        }
+    }
+
     public void askLock(){
+        askingLock=true;
         AudioSystem.curr.createAndPlaySound("btnClick",1,1);
 
         //Set scroll dimensions and pos

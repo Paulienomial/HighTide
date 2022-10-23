@@ -38,5 +38,7 @@ public class CardLock : MonoBehaviour
             CardLock cl = child.gameObject.GetComponent<CardLock>();
             cl.lockBtn.SetActive(false);
         }
+
+        Lock.curr.askingLock=false;
     }
 }

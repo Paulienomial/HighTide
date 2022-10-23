@@ -12,6 +12,10 @@ public class MainMenu : MonoBehaviour
     public Slider MainVolSlider;
     public Slider FXVolSlider;
     public Slider MusicVolSlider;
+    public static float mainPref = -1f;
+    public static float fxPref = -1f;
+    public static float musicPref = -1f;
+    public static float defaultVol=.2f;
 
     [SerializeField]
     GameObject SettingsPopup;
@@ -33,7 +37,8 @@ public class MainMenu : MonoBehaviour
     bool mouseDownOnFX=false;
 
     void Start(){
-        updateVolumes();
+        //updateVolumes();
+        setInitVols();
     }
 
     public void Update()
@@ -47,6 +52,9 @@ public class MainMenu : MonoBehaviour
         }
 
         if(Input.GetKeyUp(KeyCode.Mouse0)){
+            if(currentInteraction!=-1){
+                setPlayerPrefs();
+            }
             int oldInteraction = currentInteraction;
             currentInteraction=-1;
             if(oldInteraction==0){
@@ -96,9 +104,6 @@ public class MainMenu : MonoBehaviour
         }else{
             changeMusicVolume( MusicVolSlider.value );
         }
-        
-        
-        
     }
 
     //Charl
@@ -192,6 +197,37 @@ public class MainMenu : MonoBehaviour
         if(currentInteraction!=1){
             menuTheme.volume = MusicVolSlider.value;
         }
+    }
+
+    void setInitVols(){
+        setInitPlayerPrefs();
+        setSlidersToPrefs();
+        updateVolumes();
+    }
+    void setInitPlayerPrefs(){
+        Debug.Log("setting init player prefs");
+        if( mainPref==-1 ){
+            Debug.Log("could not find main v");
+            mainPref =defaultVol;
+        }
+        if( fxPref==-1 ){
+            fxPref=defaultVol;
+        }
+        if( musicPref==-1 ){
+            musicPref=defaultVol;
+        }
+    }
+
+    void setSlidersToPrefs(){
+        MainVolSlider.value = mainPref;
+        FXVolSlider.value = fxPref;
+        MusicVolSlider.value = musicPref;
+    }
+
+    void setPlayerPrefs(){
+        mainPref = MainVolSlider.value;
+        fxPref = FXVolSlider.value;
+        musicPref = MusicVolSlider.value;
     }
 
     ///////////////////////////////////////////////////////////////////

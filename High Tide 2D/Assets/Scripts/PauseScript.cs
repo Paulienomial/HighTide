@@ -29,7 +29,7 @@ public class PauseScript : MonoBehaviour
 
     public void pauseGame()
     {
-        pauseScreen.active = true;
+        pauseScreen.SetActive(true);
         //AudioScript.curr.pauseMusic();
         Time.timeScale = 0;
         Global.curr.gamePaused = true;
@@ -53,8 +53,8 @@ public class PauseScript : MonoBehaviour
     public void resumeGame()
     {
         AudioScript.curr.playButtonClickSound();
-        pauseScreen.active = false;
-        settingsScreen.active = false;
+        pauseScreen.SetActive(false);
+        settingsScreen.SetActive(false);
         //AudioScript.curr.resumeMusic();
         Time.timeScale = 1;
         Global.curr.gamePaused = false;
@@ -64,13 +64,13 @@ public class PauseScript : MonoBehaviour
     {
         AudioScript.curr.playButtonClickSound();
         //pauseScreen.active = false;
-        settingsScreen.active = true;
+        settingsScreen.SetActive(true);
     }
 
     public void CloseSettings()
     {
         AudioScript.curr.playButtonClickSound();
         //pauseScreen.active = true;
-        settingsScreen.active = false;
+        settingsScreen.SetActive(false);
     }
 }

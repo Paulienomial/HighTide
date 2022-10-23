@@ -226,7 +226,7 @@
       },
       {
         "name": "Tiny Jeffrey",
-        "damage": 45,
+        "damage": 50,
         "hp": 200,
         "isFriendly": false,
         "descriptions":["Tiny Jeffrey still hits hard!","",""],

@@ -46,12 +46,16 @@ public class AudioScript : MonoBehaviour
 
     private void Start()
     {
-        updateVolumes();
+        //updateVolumes();
+        setInitVols();
     }
 
     public void Update()
     {
         if(Input.GetKeyUp(KeyCode.Mouse0)){
+            if(currentInteraction!=-1){
+                setPlayerPrefs();
+            }
             int oldInteraction=currentInteraction;
             currentInteraction=-1;
             if(oldInteraction==0){
@@ -164,6 +168,37 @@ public class AudioScript : MonoBehaviour
 
     void playFXPreview(){
         AudioSystem.curr.createAndPlaySound("sword", 1, 1f);
+    }
+
+    void setInitVols(){
+        setInitPlayerPrefs();
+        setSlidersToPrefs();
+        updateVolumes();
+    }
+    void setInitPlayerPrefs(){
+        Debug.Log("setting init player prefs");
+        if( MainMenu.mainPref==-1 ){
+            Debug.Log("could not find main v");
+            MainMenu.mainPref =MainMenu.defaultVol;
+        }
+        if( MainMenu.fxPref==-1 ){
+            MainMenu.fxPref=MainMenu.defaultVol;
+        }
+        if( MainMenu.musicPref==-1 ){
+            MainMenu.musicPref=MainMenu.defaultVol;
+        }
+    }
+
+    void setSlidersToPrefs(){
+        MainVolSlider.value = MainMenu.mainPref;
+        FXVolSlider.value = MainMenu.fxPref;
+        MusicVolSlider.value = MainMenu.musicPref;
+    }
+
+    void setPlayerPrefs(){
+        MainMenu.mainPref = MainVolSlider.value;
+        MainMenu.fxPref = FXVolSlider.value;
+        MainMenu.musicPref = MusicVolSlider.value;
     }
 
     public void changeMainVolume(float vol)

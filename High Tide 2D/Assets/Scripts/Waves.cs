@@ -102,8 +102,8 @@ public class Waves : MonoBehaviour
         waves[5].enemyGroups[0].bundleSize = 4;
         waves[5].enemyGroups[0].freezeTime = .5f;
         waves[5].enemyGroups[0].spawnInterval = 4;
-        waves[5].enemyGroups[0].hpMultiplier = 1f;
-        waves[5].enemyGroups[0].dmgMultiplier = 1f;
+        waves[5].enemyGroups[0].hpMultiplier = 1.2f;
+        waves[5].enemyGroups[0].dmgMultiplier = 1.2f;
 
         //WAVE 7: Teleporters+melee
         waves.Add(new WaveStats());
@@ -115,8 +115,8 @@ public class Waves : MonoBehaviour
         waves[6].enemyGroups[0].bundleSize = 2;
         waves[6].enemyGroups[0].freezeTime = .5f;
         waves[6].enemyGroups[0].spawnInterval = 4;
-        waves[6].enemyGroups[0].hpMultiplier = 1f;
-        waves[6].enemyGroups[0].dmgMultiplier = 1f;
+        waves[6].enemyGroups[0].hpMultiplier = 1.2f;
+        waves[6].enemyGroups[0].dmgMultiplier = 1.2f;
 
         waves[6].enemyGroups.Add(new EnemyGroup());
         waves[6].enemyGroups[1].name = "Ocean farmer";
@@ -124,8 +124,8 @@ public class Waves : MonoBehaviour
         waves[6].enemyGroups[1].bundleSize = 3;
         waves[6].enemyGroups[1].freezeTime = 1.5f;
         waves[6].enemyGroups[1].spawnInterval = 3;
-        waves[6].enemyGroups[1].hpMultiplier = 1f;
-        waves[6].enemyGroups[1].dmgMultiplier = 1f;
+        waves[6].enemyGroups[1].hpMultiplier = 1.2f;
+        waves[6].enemyGroups[1].dmgMultiplier = 1.2f;
 
         //WAVE 8: Nesting units
         waves.Add(new WaveStats());
@@ -138,8 +138,8 @@ public class Waves : MonoBehaviour
         waves[7].enemyGroups[0].bundleSize = 2;
         waves[7].enemyGroups[0].freezeTime = .5f;
         waves[7].enemyGroups[0].spawnInterval = 3;
-        waves[7].enemyGroups[0].hpMultiplier = 1f;
-        waves[7].enemyGroups[0].dmgMultiplier = 1f;
+        waves[7].enemyGroups[0].hpMultiplier = .5f;
+        waves[7].enemyGroups[0].dmgMultiplier = .5f;
 
         //WAVE 9: Nesting + ranged units
         waves.Add(new WaveStats());

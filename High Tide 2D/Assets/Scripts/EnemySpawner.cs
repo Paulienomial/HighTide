@@ -12,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
     int groupCounter = 0;
     float spawnDelay = 0;
     public string[] enemies = {"Pokey boy","Jellyfish","Tooth ball","Octupus","Dark wizard"};
+    public GameObject pauseMenu;
 
     public List<WaveStats> waves;
     Global global;
