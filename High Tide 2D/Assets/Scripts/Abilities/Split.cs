@@ -24,6 +24,7 @@ public class Split : Ability
 
     IEnumerator split(){
         yield return new WaitForSeconds(0f);
+        AudioSystem.curr.createAndPlaySound("jeffreySplit", 1, 1);
         float x = transform.position.x;
         float y = transform.position.y;
         string warriorName="";

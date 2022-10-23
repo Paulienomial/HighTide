@@ -25,6 +25,7 @@ public class Teleport : Ability
     IEnumerator teleport(){
         yield return new WaitForSeconds(delay);
         if(GetComponent<FightManager>()!=null){
+            AudioSystem.curr.createAndPlaySound("teleport", 1, 0.5f);
             GetComponent<FightManager>().pauseUnit();
             float x = transform.position.x;
             float y = transform.position.y;

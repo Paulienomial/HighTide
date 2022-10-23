@@ -17,6 +17,10 @@ public class MainMenu : MonoBehaviour
     public static float musicPref = -1f;
     public static float defaultVol=.2f;
 
+    public static float mainPref = -1f;
+    public static float fxPref = -1f;
+    public static float musicPref = -1f;
+
     [SerializeField]
     GameObject SettingsPopup;
 

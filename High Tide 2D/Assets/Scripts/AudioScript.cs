@@ -11,7 +11,11 @@ public class AudioScript : MonoBehaviour
     public AudioSource enemyAttack;
     public AudioSource swordAttack;
     public AudioSource MainTheme;
-    public AudioSource BattleTheme;
+    public AudioSource BattleTheme1;
+    public AudioSource BattleTheme2;
+    public AudioSource BattleTheme3;
+    public AudioSource BossTheme1;
+    public AudioSource BossTheme2;
     public AudioSource VictorySound;
     public AudioSource waveFailed;
     public AudioSource placeWarrior;
@@ -31,6 +35,8 @@ public class AudioScript : MonoBehaviour
     int currentInteraction=-1;
     public LayerMask sliderMask;
     bool mouseDownOnFX=false;
+
+    int BattleThemeLooper = 1;
     /*
     0: Main Theme
     1: Battle Theme
@@ -213,7 +219,11 @@ public class AudioScript : MonoBehaviour
 
         if(currentInteraction!=1){
             MainTheme.volume = vol;
-            BattleTheme.volume = vol;
+            BattleTheme1.volume = vol;
+            BattleTheme2.volume = vol;
+            BattleTheme3.volume = vol;
+            BossTheme1.volume = vol;
+            BossTheme2.volume = vol;
             VictorySound.volume = vol;
             waveFailed.volume = vol;
         }  
@@ -235,7 +245,11 @@ public class AudioScript : MonoBehaviour
         Global.curr.MusicVolume = vol;
         if(currentInteraction!=1){
             MainTheme.volume = vol;
-            BattleTheme.volume = vol;
+            BattleTheme1.volume = vol;
+            BattleTheme2.volume = vol;
+            BattleTheme3.volume = vol;
+            BossTheme1.volume = vol;
+            BossTheme2.volume = vol;
             VictorySound.volume = vol;
             waveFailed.volume = vol;
         }  
@@ -274,25 +288,72 @@ public class AudioScript : MonoBehaviour
 
     public void playBattleTheme()
     {
-        currMusic = 1;
-        BattleTheme.Play();
+        if(Global.curr.waveNum == 10)
+        {
+            BossTheme1.Play();
+            currMusic = 4;
+        }
+        else
+        {
+            if (Global.curr.waveNum == 20)
+            {
+                BossTheme2.Play();
+                currMusic = 5;
+            }
+            else
+            {
+                int PlayNum = BattleThemeLooper;
+                if(PlayNum == 1)
+                {
+                    BattleThemeLooper = 2;
+                    BattleTheme1.Play();
+                    currMusic = 1;
+                }
+                else
+                {
+                    if(PlayNum == 2)
+                    {
+                        BattleThemeLooper = 3;
+                        BattleTheme2.Play();
+                        currMusic = 6;
+                    }
+                    else
+                    {
+                        BattleThemeLooper = 1;
+                        BattleTheme3.Play();
+                        currMusic = 7;
+                    }
+                }
+                
+            }
+        }    
     }
 
     public void stopMainTheme()
     {
-        MainTheme.Stop();
+        MainTheme.Pause();
     }
 
     public void stopBattleTheme()
     {
-        BattleTheme.Stop();
+        BattleTheme1.Stop();
+        BattleTheme2.Stop();
+        BattleTheme3.Stop();
+        BossTheme1.Stop();
+        BossTheme2.Stop();
     }
 
     public void playVictoryAndMain()
     {
         VictorySound.Play();
-        MainTheme.PlayDelayed(5);
+        StartCoroutine(playDelayedMain());
         currMusic = 0;
+    }
+
+    IEnumerator playDelayedMain()
+    {
+        yield return new WaitForSeconds(5);
+        MainTheme.Play();
     }
 
     public void playWaveFailedAndMain()
@@ -317,7 +378,11 @@ public class AudioScript : MonoBehaviour
         }
         else
         {
-            BattleTheme.Pause();
+            BattleTheme1.Pause();
+            BattleTheme2.Pause();
+            BattleTheme3.Pause();
+            BossTheme1.Pause();
+            BossTheme2.Pause();
             battleHorn.Stop();
         }
     }
@@ -332,7 +397,7 @@ public class AudioScript : MonoBehaviour
         {
             if (currMusic == 1)
             {
-                BattleTheme.Play();
+                BattleTheme1.Play();
             }
             else
             {
@@ -346,6 +411,34 @@ public class AudioScript : MonoBehaviour
                 }
             }
 
+        }
+
+        switch (currMusic)
+        {
+            case 0:
+                MainTheme.Play();
+                break;
+            case 1:
+                BattleTheme1.Play();
+                break;
+            case 2:
+                VictorySound.Play();
+                break;
+            case 3:
+                waveFailed.Play();
+                break;
+            case 4:
+                BossTheme1.Play();
+                break;
+            case 5:
+                BossTheme2.Play();
+                break;
+            case 6:
+                BattleTheme2.Play();
+                break;
+            case 7:
+                BattleTheme3.Play();
+                break;
         }
     }
 }

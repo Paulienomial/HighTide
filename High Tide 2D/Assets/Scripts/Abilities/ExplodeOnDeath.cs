@@ -30,7 +30,7 @@ public class ExplodeOnDeath : Ability
         GameObject explosion = Instantiate(gameObject.GetComponent<InstanceAbility>().explode, new Vector2(x, y), Quaternion.identity);
         explosion.GetComponent<DeathExplode>().damage = gameObject.GetComponent<FightManager>().getModifiedDamage(damage);
         explosion.GetComponent<DeathExplode>().activate();
-        AudioSystem.curr.createAndPlaySound("fireWhoosh");
+        AudioSystem.curr.createAndPlaySound("jellyfishBoom", 1, 1);
         yield return new WaitForSeconds(.25f);
         Destroy(explosion);
     }

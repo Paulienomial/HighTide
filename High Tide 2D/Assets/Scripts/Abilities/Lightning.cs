@@ -39,7 +39,7 @@ public class Lightning : Ability
             float y = enemy.transform.position.y;
             GameObject lightning = Instantiate(gameObject.GetComponent<InstanceAbility>().lightning, new Vector2(x, y), Quaternion.identity);
             enemy.GetComponent<FightManager>().takeDamage( fm.getModifiedDamage(damage) );
-            AudioSystem.curr.createAndPlaySound("lightning", 1, 1);
+            AudioSystem.curr.createAndPlaySound("thunder", 1, 1);
         }else{
 
         }
